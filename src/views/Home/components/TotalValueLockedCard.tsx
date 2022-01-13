@@ -9,17 +9,17 @@ import CardValue from './CardValue'
 const StyledTotalValueLockedCard = styled(Card)`
   align-items: center;
   display: flex;
-  flex: 1;
+
 `
 
-const TotalValueLockedCard = () => {
+const TotalValueLockedCard = (props) => {
   const TranslateString = useI18n()
   // const data = useGetStats()
   const totalValue = useTotalValue();
   // const tvl = totalValue.toFixed(2);
 
   return (
-    <StyledTotalValueLockedCard>
+    <StyledTotalValueLockedCard {...props}>
       <CardBody>
         <Heading size="lg" mb="24px">
           {TranslateString(999, 'Total Value Locked (TVL)')}

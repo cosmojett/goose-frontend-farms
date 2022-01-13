@@ -22,7 +22,7 @@ const Row = styled.div`
   margin-bottom: 8px;
 `
 
-const CakeStats = () => {
+const CakeStats = (props) => {
   const TranslateString = useI18n()
   const totalSupply = useTotalSupply()
   const burnedBalance = useBurnedBalance(getCakeAddress())
@@ -38,7 +38,7 @@ const CakeStats = () => {
   }
 
   return (
-    <StyledCakeStats>
+    <StyledCakeStats {...props}>
       <CardBody>
         <Heading size="xl" mb="24px">
           {TranslateString(534, 'Egg Stats')}

@@ -2,11 +2,6 @@ import { MenuEntry } from '@pancakeswap-libs/uikit'
 
 const config: MenuEntry[] = [
   {
-    label: 'Home',
-    icon: 'HomeIcon',
-    href: '/',
-  },
-  {
     label: 'Trade',
     icon: 'TradeIcon',
     items: [
@@ -21,12 +16,21 @@ const config: MenuEntry[] = [
     ],
   },
   {
-    label: 'Farms',
+    label: 'Earn',
     icon: 'FarmIcon',
-    href: '/farms',
+    items : [
+      {
+        label: 'Farms',
+        href: 'https://exchange.goosedefi.com/',
+      },
+      {
+        label: 'Pools',
+        href: 'https://exchange.goosedefi.com/#/pool',
+      },
+    ]
   },
   {
-    label: 'Nests',
+    label: 'Indexes',
     icon: 'PoolIcon',
     href: '/nests',
   },
@@ -84,21 +88,6 @@ const config: MenuEntry[] = [
         href: 'https://goosefinance.medium.com/',
       },
     ],
-  },
-  {
-    label: 'Partnerships/IFO',
-    icon: 'GooseIcon',
-    href: 'https://docs.google.com/forms/d/e/1FAIpQLSe7ycrw8Dq4C5Vjc9WNlRtTxEhFDB1Ny6jlAByZ2Y6qBo7SKg/viewform?usp=sf_link',
-  },
-  {
-    label: 'Audit by Hacken',
-    icon: 'AuditIcon',
-    href: 'https://www.goosedefi.com/files/hackenAudit.pdf',
-  },
-  {
-    label: 'Audit by CertiK',
-    icon: 'AuditIcon',
-    href: 'https://certik.org/projects/goose-finance',
   },
 ]
 

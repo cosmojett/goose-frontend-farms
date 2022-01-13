@@ -6,14 +6,24 @@ const Page = styled(Container)`
   padding-top: 16px;
   padding-bottom: 16px;
 
+  max-width : 90%;
+
   ${({ theme }) => theme.mediaQueries.sm} {
     padding-top: 24px;
     padding-bottom: 24px;
+
   }
 
   ${({ theme }) => theme.mediaQueries.lg} {
     padding-top: 32px;
     padding-bottom: 32px;
+      margin-right : 240px;
+  }
+
+  ${({ theme }) => theme.mediaQueries.xl} {
+    padding-top: 32px;
+    padding-bottom: 32px;
+      margin-right : 240px;
   }
 `
 

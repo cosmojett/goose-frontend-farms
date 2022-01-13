@@ -23,11 +23,11 @@ const Row = styled.div`
   margin-bottom: 8px;
 `
 
-const TwitterCard = () => {
+const TwitterCard = (props) => {
   const TranslateString = useI18n()
 
   return (
-    <StyledTwitterCard>
+    <StyledTwitterCard {...props}> 
       <CardBody>
         <Heading size="xl" mb="24px">
           {TranslateString(10003, 'Announcements')}

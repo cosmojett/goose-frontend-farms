@@ -44,7 +44,7 @@ const StyledCardAccent = styled.div`
   rgba(255, 0, 0, 1) 100%);
   background-size: 300% 300%;
   animation: ${RainbowLight} 2s linear infinite;
-  border-radius: 16px;
+  border-radius: 8px;
   filter: blur(6px);
   position: absolute;
   top: -2px;
@@ -57,7 +57,7 @@ const StyledCardAccent = styled.div`
 const FCard = styled.div`
   align-self: baseline;
   background: ${(props) => props.theme.card.background};
-  border-radius: 32px;
+  border-radius: 8px;
   box-shadow: 0px 2px 12px -8px rgba(25, 19, 38, 0.1), 0px 1px 1px rgba(25, 19, 38, 0.05);
   display: flex;
   flex-direction: column;
@@ -159,8 +159,8 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, bnbPrice,
         </Flex>
       )}
       <Flex justifyContent='space-between'>
-        <Text>{TranslateString(318, 'Earn')}:</Text>
-        <Text bold>{earnLabel}</Text>
+        <Text >{TranslateString(318, 'Earn')}:</Text>
+        <Text color="primary" bold>{earnLabel}</Text>
       </Flex>
       <Flex justifyContent='space-between'>
         <Text style={{ fontSize: '24px' }}>{TranslateString(10001, 'Deposit Fee')}:</Text>

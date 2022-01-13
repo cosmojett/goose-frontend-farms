@@ -39,7 +39,7 @@ const Actions = styled.div`
   margin-top: 24px;
 `
 
-const FarmedStakingCard = () => {
+const FarmedStakingCard = (props) => {
   const [pendingTx, setPendingTx] = useState(false)
   const { account } = useWallet()
   const TranslateString = useI18n()
@@ -66,7 +66,7 @@ const FarmedStakingCard = () => {
   }, [onReward])
 
   return (
-    <StyledFarmStakingCard>
+    <StyledFarmStakingCard {...props}>
       <CardBody>
         <Heading size="xl" mb="24px">
           {TranslateString(542, 'Farms & Staking')}

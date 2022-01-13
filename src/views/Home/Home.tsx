@@ -31,13 +31,15 @@ const Hero = styled.div`
 `
 
 const Cards = styled(BaseLayout)`
+  display : flex; 
   align-items: stretch;
-  justify-content: stretch;
+  justify-content : stretch;
+  flex-wrap : wrap;
   margin-bottom: 48px;
 
   & > div {
     grid-column: span 6;
-    width: 100%;
+    width : 45%;
   }
 
   ${({ theme }) => theme.mediaQueries.sm} {
@@ -68,8 +70,8 @@ const Home: React.FC = () => {
         <Cards>
           <FarmStakingCard />
           <TwitterCard/>
+          <TotalValueLockedCard/>
           <CakeStats />
-          <TotalValueLockedCard />
         </Cards>
       </div>
     </Page>
