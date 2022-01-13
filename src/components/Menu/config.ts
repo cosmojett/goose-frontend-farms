@@ -7,11 +7,11 @@ const config: MenuEntry[] = [
     items: [
       {
         label: 'Exchange',
-        href: 'https://exchange.goosedefi.com/',
+        href: 'https://dex.aerospace.finance/',
       },
       {
         label: 'Liquidity',
-        href: 'https://exchange.goosedefi.com/#/pool',
+        href: 'https://dex.aerospace.finance/#/pool',
       },
     ],
   },
@@ -20,12 +20,12 @@ const config: MenuEntry[] = [
     icon: 'FarmIcon',
     items : [
       {
-        label: 'Farms',
-        href: 'https://exchange.goosedefi.com/',
+        label: 'Stake',
+        href: '/pools',
       },
       {
-        label: 'Pools',
-        href: 'https://exchange.goosedefi.com/#/pool',
+        label: 'Farms',
+        href: '/farms',
       },
     ]
   },
@@ -33,6 +33,25 @@ const config: MenuEntry[] = [
     label: 'Indexes',
     icon: 'PoolIcon',
     href: '/nests',
+  },
+  {
+    label: 'Options',
+    icon: 'FarmIcon',
+    items : [
+      {
+        label: 'Call',
+        href: '/options/call',
+      },
+      {
+        label: 'Put',
+        href: '/options/put',
+      },
+    ]
+  },
+  {
+    label: 'Zap',
+    icon: 'PoolIcon',
+    href: '/zap',
   },
   // {
   //   label: 'Pools',
@@ -50,42 +69,20 @@ const config: MenuEntry[] = [
   //   href: '/nft',
   // },
   {
-    label: 'Info',
-    icon: 'InfoIcon',
-    items: [
-      {
-        label: 'PancakeSwap',
-        href: 'https://pancakeswap.info/token/0xF952Fc3ca7325Cc27D15885d37117676d25BfdA6',
-      },
-      {
-        label: 'CoinGecko',
-        href: 'https://www.coingecko.com/en/coins/goose-finance',
-      },
-      {
-        label: 'CoinMarketCap',
-        href: 'https://coinmarketcap.com/currencies/goose-finance/',
-      },
-      {
-        label: 'AstroTools',
-        href: 'https://app.astrotools.io/pancake-pair-explorer/0x19e7cbecdd23a16dfa5573df54d98f7caae03019',
-      },
-    ],
-  },
-  {
-    label: 'More',
+    label: 'Links',
     icon: 'MoreIcon',
     items: [
       {
         label: 'Github',
-        href: 'https://github.com/goosedefi/',
+        href: 'https://github.com/aerospacefinance/',
       },
       {
         label: 'Docs',
-        href: 'https://goosedefi.gitbook.io/goose-finance/',
+        href: 'https://docs.aerospace.finance/',
       },
       {
         label: 'Blog',
-        href: 'https://goosefinance.medium.com/',
+        href: 'https://medium.com/@aerosfinance/',
       },
     ],
   },
