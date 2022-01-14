@@ -27,4 +27,9 @@ export default {
     56: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
     97: '',
   },
+  // 43114 -> mainnet
+  wavax : {
+    43114 : '0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7',
+    43113 : '0xd00ae08403b9bbb9124bb305c09058e32c39a48c'
+  }
 }

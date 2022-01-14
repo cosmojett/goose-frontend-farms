@@ -32,7 +32,7 @@ const config: MenuEntry[] = [
   {
     label: 'Indexes',
     icon: 'PoolIcon',
-    href: '/nests',
+    href: '/indexes',
   },
   {
     label: 'Options',

@@ -36,7 +36,9 @@ export enum PoolCategory {
 
 export interface Address {
   97?: string
-  56: string
+  56?: string
+  43114?: string
+  43113?: string
 }
 
 export interface FarmConfig {
@@ -83,4 +85,18 @@ export type Nft = {
   blurImage: string
   sortOrder: number
   bunnyId: number
+}
+
+export type IndexToken = {
+  name: string
+  contract : Address
+}
+
+export type Indexes = {
+  id: number
+  name: string
+  image: string
+  creator: string
+  tokens: IndexToken[]
+  contract: string
 }

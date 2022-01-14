@@ -17,6 +17,7 @@ const Farms = lazy(() => import('./views/Farms'))
 // const Pools = lazy(() => import('./views/Pools'))
 // const Ifos = lazy(() => import('./views/Ifos'))
 const NotFound = lazy(() => import('./views/NotFound'))
+const Indexes = lazy(() => import('./views/Indexes'))
 // const Nft = lazy(() => import('./views/Nft'))
 
 // This config is required for number formating
@@ -50,6 +51,9 @@ const App: React.FC = () => {
             </Route>
             <Route path="/nests">
               <Farms tokenMode/>
+            </Route>
+            <Route path="/indexes">
+              <Indexes />
             </Route>
             {/* <Route path="/pools"> */}
             {/*  <Pools /> */}
