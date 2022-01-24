@@ -17,6 +17,8 @@ const farms: FarmConfig[] = [
     },
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
+    image : './images/farm_bg/1.png',
+    earnToken : 'BUZZ'
   },
   {
     pid: 1,
@@ -33,6 +35,8 @@ const farms: FarmConfig[] = [
     },
     quoteTokenSymbol: QuoteToken.BNB,
     quoteTokenAdresses: contracts.wbnb,
+    image : './images/farm_bg/2.png',
+    earnToken : 'BUZZ'
   },
   {
     pid: 2,

@@ -58,6 +58,8 @@ export interface FarmConfig {
     earnLabel: string
     endBlock: number
   }
+  image?: string
+  earnToken?: string
 }
 
 export interface PoolConfig {

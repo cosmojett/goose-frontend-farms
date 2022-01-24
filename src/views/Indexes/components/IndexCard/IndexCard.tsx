@@ -52,46 +52,41 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
                 tokens={tokenNames}
             />
             <CardBody>
-                <Heading size="xs" style={{ textAlign: 'center' }}>
+                <Heading size="xs" style={{ alignItems: 'flex-start' }}>
                     Tokens
                 </Heading>
-                <Flex alignItems='center'>
-                            <Text bold style={{ display: 'flex', alignItems: 'center',justifyContent: 'flex-start', width : '33.3%' }}>Token Name</Text>
-                            <Text bold style={{ display: 'flex', alignItems: 'center',justifyContent: 'center', width : '33.3%' }}>% USD</Text>
-                            <Text bold style={{ display: 'flex', alignItems: 'center',justifyContent: 'flex-end', width : '33.3%' }}>% Amount</Text>
+                <Flex alignItems='center' justifyContent='space-between'>
+                            <Text bold  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>Token Name</Text>
+                            <Text bold  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>% Amount</Text>
                 </Flex>
                     {tokens.map(token => (
-                        <Flex alignItems='center'>
-                            <Text  style={{ display: 'flex', alignItems: 'center',justifyContent: 'flex-start', width : '33.3%' }}>{token.name} :</Text>
-                            <Flex style={{display: 'flex', alignItems : 'center', justifyContent: 'center', width : '33.3%'}}>
-                                <Skeleton height={24} width={80} />
-                            </Flex>
-                            <Flex style={{display: 'flex', alignItems : 'center',justifyContent: 'flex-end', width : '33.3%'}}>
-                                <Skeleton height={24} width={80} />
+                        <Flex alignItems='center' justifyContent='space-between'>
+                            <Text  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>{token.name} :</Text>
+                            <Flex>
+                                <Skeleton height={16} width={80} />
                             </Flex>
                         </Flex>
                     ))}
             </CardBody>
             <CardBody>
                 <Flex alignItems='center' justifyContent='space-between'>
-                        <Text bold style={{ display: 'flex', alignItems: 'center'}}>Total Supply : </Text>
-                        <Skeleton height={24} width={80} />
+                        <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>Total Supply : </Text>
+                        <Skeleton height={16} width={80} />
                 </Flex>
                 <Flex alignItems='center' justifyContent='space-between'>
-                        <Text bold style={{ display: 'flex', alignItems: 'center'}}>USD Price : </Text>
-                        <Skeleton height={24} width={80} />
+                        <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>USD Price : </Text>
+                        <Skeleton height={16} width={80} />
                 </Flex>
             </CardBody>
             <Actions>
-                {!account ? (<>
+                {account ? (<>
                 <Flex alignItems='center' justifyContent='space-between'>
-                    <Button>Buy</Button>
                     <Button variant='success'>Mint</Button>
-                    <Button>Burn</Button>
+                    <Button variant='danger'>Burn</Button>
                 </Flex>
                 <Flex style={{marginTop : '20px'}} alignItems='center' justifyContent='space-between'>
-                    <Text style={{ display: 'flex', alignItems: 'center'}}>Your Balance : </Text>
-                    <Skeleton height={24} width={80} />
+                    <Text  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>Your Balance : </Text>
+                    <Skeleton height={16} width={80} />
                 </Flex>
                 </>
                 ) : ( <UnlockButton fullWidth /> )}

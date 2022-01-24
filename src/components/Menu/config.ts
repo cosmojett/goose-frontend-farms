@@ -7,11 +7,11 @@ const config: MenuEntry[] = [
     items: [
       {
         label: 'Exchange',
-        href: 'https://dex.aerospace.finance/',
+        href: 'https://dex.cosmosium.finance/',
       },
       {
         label: 'Liquidity',
-        href: 'https://dex.aerospace.finance/#/pool',
+        href: 'https://dex.cosmosium.finance/#/pool',
       },
     ],
   },
@@ -74,15 +74,15 @@ const config: MenuEntry[] = [
     items: [
       {
         label: 'Github',
-        href: 'https://github.com/aerospacefinance/',
+        href: 'https://github.com/cosmosiumfinance/',
       },
       {
         label: 'Docs',
-        href: 'https://docs.aerospace.finance/',
+        href: 'https://docs.cosmosium.finance/',
       },
       {
         label: 'Blog',
-        href: 'https://medium.com/@aerosfinance/',
+        href: 'https://medium.com/@cosmosiumfinance/',
       },
     ],
   },

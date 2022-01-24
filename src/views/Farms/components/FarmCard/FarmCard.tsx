@@ -29,6 +29,14 @@ const RainbowLight = keyframes`
   }
 `
 
+const Background = styled.div`
+  position : absolute;
+  height : 100%;
+  width : 100%;
+  opacity : 0.5;
+  border-radius: 8px;
+  border : 1px solid white;
+`;
 const StyledCardAccent = styled.div`
   background: linear-gradient(45deg,
   rgba(255, 0, 0, 1) 0%,
@@ -62,9 +70,18 @@ const FCard = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  padding: 24px;
+  
   position: relative;
   text-align: center;
+  &:before {
+    opacity : 0.4;
+  }
+`
+
+const CardContainer = styled.div`
+  padding: 24px;
+  z-index : 2;
+  border-radius: 8px;
 `
 
 const Divider = styled.div`
@@ -123,11 +140,12 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, bnbPrice,
     maximumFractionDigits: 2,
   })
 
-  const { quoteTokenAdresses, quoteTokenSymbol, tokenAddresses, risk } = farm
+  const { quoteTokenAdresses, quoteTokenSymbol, tokenAddresses, risk, image, earnToken } = farm
 
   return (
     <FCard>
-      {farm.tokenSymbol === 'EGG' && <StyledCardAccent />}
+      {/* {farm.tokenSymbol === 'EGG' && <StyledCardAccent />} */}
+      <CardContainer>
       <CardHeading
         lpLabel={lpLabel}
         multiplier={farm.multiplier}
@@ -135,11 +153,13 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, bnbPrice,
         depositFee={farm.depositFeeBP}
         farmImage={farmImage}
         tokenSymbol={farm.tokenSymbol}
+        image={image}
+        earnToken={earnToken}
       />
       {!removed && (
         <Flex justifyContent='space-between' alignItems='center'>
-          <Text>{TranslateString(352, 'APR')}:</Text>
-          <Text bold style={{ display: 'flex', alignItems: 'center' }}>
+          <Text  fontSize="16px" >{TranslateString(352, 'APR')}:</Text>
+          <Text  fontSize="16px"  bold style={{ display: 'flex', alignItems: 'center' }}>
             {farm.apy ? (
               <>
                 <ApyButton
@@ -159,36 +179,33 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, bnbPrice,
         </Flex>
       )}
       <Flex justifyContent='space-between'>
-        <Text >{TranslateString(318, 'Earn')}:</Text>
-        <Text color="primary" bold>{earnLabel}</Text>
+        <Text  fontSize="16px" >Deposit:</Text>
+        <Text  fontSize="16px" color="primary" bold>Deposit TOKEN</Text>
       </Flex>
       <Flex justifyContent='space-between'>
-        <Text style={{ fontSize: '24px' }}>{TranslateString(10001, 'Deposit Fee')}:</Text>
-        <Text bold style={{ fontSize: '24px' }}>{(farm.depositFeeBP / 100)}%</Text>
+        <Text  fontSize="16px" >{TranslateString(318, 'Earn')}:</Text>
+        <Text   fontSize="16px" color="primary" bold>{earnLabel}</Text>
+      </Flex>
+
+      <Flex justifyContent='space-between'>
+        <Text  fontSize="16px" >{TranslateString(10001, 'Deposit Fee')}:</Text>
+        <Text  fontSize="16px"  >{(farm.depositFeeBP / 100)}%</Text>
+      </Flex>
+      <Flex  justifyContent='space-between'>
+        <Text  fontSize="16px" >Harvest Interval:</Text>
+        <Text  fontSize="14px" >HARVEST </Text>
+      </Flex>
+      <Flex justifyContent='space-between'>
+        <Text  fontSize="16px" >Vesting Period:</Text>
+        <Text  fontSize="14px" >0 xx 0 days</Text>
+      </Flex>
+      <Flex justifyContent='space-between'>
+        <Text  fontSize="16px" >Total Liquidity:</Text>
+        <Text  fontSize="16px" >{totalValueFormated}</Text>
       </Flex>
       <CardActionsContainer farm={farm} ethereum={ethereum} account={account} />
-      <Divider />
-      <ExpandableSectionButton
-        onClick={() => setShowExpandableSection(!showExpandableSection)}
-        expanded={showExpandableSection}
-      />
-      <ExpandingWrapper expanded={showExpandableSection}>
-        <DetailsSection
-          removed={removed}
-          isTokenOnly={farm.isTokenOnly}
-          bscScanAddress={
-            farm.isTokenOnly ?
-              `https://bscscan.com/token/${farm.tokenAddresses[process.env.REACT_APP_CHAIN_ID]}`
-              :
-              `https://bscscan.com/token/${farm.lpAddresses[process.env.REACT_APP_CHAIN_ID]}`
-          }
-          totalValueFormated={totalValueFormated}
-          lpLabel={lpLabel}
-          quoteTokenAdresses={quoteTokenAdresses}
-          quoteTokenSymbol={quoteTokenSymbol}
-          tokenAddresses={tokenAddresses}
-        />
-      </ExpandingWrapper>
+      </CardContainer>
+
     </FCard>
   )
 }

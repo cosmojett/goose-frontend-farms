@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Tag, Flex, Heading, Image } from '@pancakeswap-libs/uikit'
-import { CommunityTag, CoreTag, NoFeeTag, RiskTag } from 'components/Tags'
+import { Tag, Flex, Heading } from '@pancakeswap-libs/uikit'
 
 export interface ExpandableSectionProps {
   lpLabel?: string
@@ -10,17 +9,32 @@ export interface ExpandableSectionProps {
   depositFee?: number
   farmImage?: string
   tokenSymbol?: string
+  image?: string
+  earnToken?: string
 }
 
+
 const Wrapper = styled(Flex)`
-  svg {
-    margin-right: 0.25rem;
-  }
+    justify-content : center;
+    align-items : center;
+`
+
+const Background = styled(Flex)`
+    background-size: auto;
+    border-radius : 6px;
+    height : 100px;
+    width : 100%;
+    display: flex;
+    flex-direction : column;
+    align-items : center;
+    justify-content : center;
+    text-align : center;
 `
 
 const MultiplierTag = styled(Tag)`
   margin-left: 4px;
 `
+// mobilde header text küçült
 
 const CardHeading: React.FC<ExpandableSectionProps> = ({
   lpLabel,
@@ -29,19 +43,19 @@ const CardHeading: React.FC<ExpandableSectionProps> = ({
   farmImage,
   tokenSymbol,
   depositFee,
+  image,
+  earnToken
 }) => {
   return (
     <Wrapper justifyContent="space-between" alignItems="center" mb="12px">
-      <Image src={`/images/farms/${farmImage}.png`} alt={tokenSymbol} width={64} height={64} />
-      <Flex flexDirection="column" alignItems="flex-end">
-        <Heading mb="4px">{lpLabel}</Heading>
-        <Flex justifyContent="center">
-          {depositFee === 0 ? <NoFeeTag /> : null}
-          {/* {isCommunityFarm ? <CommunityTag /> : <CoreTag />} */}
-          {/* <RiskTag risk={risk} /> */}
-          <MultiplierTag variant="primary">{multiplier}</MultiplierTag>
-        </Flex>
-      </Flex>
+      <Background style={{backgroundImage : `url(${image})`}}>
+                <Heading as="h1" size="xl"  color="contrast" style={{ textAlign: 'center' }}>
+                    {lpLabel}
+                </Heading>
+                <Heading as="h2" size="md"  color="contrast" style={{ textAlign: 'center' }}>
+                  Earn {earnToken}
+                </Heading>
+      </Background>
     </Wrapper>
   )
 }
