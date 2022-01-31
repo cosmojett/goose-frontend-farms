@@ -15,7 +15,7 @@ const Home = lazy(() => import('./views/Home'))
 const Farms = lazy(() => import('./views/Farms'))
 // const Lottery = lazy(() => import('./views/Lottery'))
 // const Pools = lazy(() => import('./views/Pools'))
-// const Ifos = lazy(() => import('./views/Ifos'))
+const Ifos = lazy(() => import('./views/Ifos'))
 const NotFound = lazy(() => import('./views/NotFound'))
 const Indexes = lazy(() => import('./views/Indexes'))
 // const Nft = lazy(() => import('./views/Nft'))
@@ -49,7 +49,7 @@ const App: React.FC = () => {
             <Route path="/farms">
               <Farms />
             </Route>
-            <Route path="/nests">
+            <Route path="/clusters">
               <Farms tokenMode/>
             </Route>
             <Route path="/indexes">
@@ -61,9 +61,9 @@ const App: React.FC = () => {
             {/* <Route path="/lottery"> */}
             {/*  <Lottery /> */}
             {/* </Route> */}
-            {/* <Route path="/ifo"> */}
-            {/*  <Ifos /> */}
-            {/* </Route> */}
+            <Route path="/ifo">
+              <Ifos />
+            </Route>
             {/* <Route path="/nft"> */}
             {/*  <Nft /> */}
             {/* </Route> */}

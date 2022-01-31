@@ -11,8 +11,7 @@ const Ifos = () => {
 
   return (
     <>
-      <Hero />
-      <Container>
+      <Container style={{marginTop : '50px'}}>
         <IfoTabButtons />
         <Route exact path={`${path}`}>
           <CurrentIfo />

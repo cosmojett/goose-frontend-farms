@@ -75,7 +75,7 @@
     {
       "data": {
         "stringId": 304,
-        "text": "Total GALAXY burned since launch"
+        "text": "Total BUZZ burned since launch"
       }
     },
     {
@@ -123,13 +123,13 @@
     {
       "data": {
         "stringId": 320,
-        "text": "Stake LP tokens to earn GALAXY"
+        "text": "Stake LP tokens to earn BUZZ"
       }
     },
     {
       "data": {
         "stringId": 322,
-        "text": "Stake GALAXY, get SYRUP."
+        "text": "Stake BUZZ, get SYRUP."
       }
     },
     {
@@ -153,7 +153,7 @@
     {
       "data": {
         "stringId": 334,
-        "text": "Every time you stake and unstake GALAXY tokens, the contract will automatically harvest GALAXY rewards for you!"
+        "text": "Every time you stake and unstake BUZZ tokens, the contract will automatically harvest BUZZ rewards for you!"
       }
     },
     {
@@ -219,7 +219,7 @@
     {
       "data": {
         "stringId": 358,
-        "text": "GALAXY price"
+        "text": "BUZZ price"
       }
     },
     {
@@ -243,7 +243,7 @@
     {
       "data": {
         "stringId": 380,
-        "text": "1 GALAXY = 1 SYRUP"
+        "text": "1 BUZZ = 1 SYRUP"
       }
     },
     {
@@ -291,7 +291,7 @@
     {
       "data": {
         "stringId": 400,
-        "text": "SYRUP holders proportionally split 25% of GALAXY block emissions each day (10 GALAXY per block), Rewards are distributed each block."
+        "text": "SYRUP holders proportionally split 25% of BUZZ block emissions each day (10 BUZZ per block), Rewards are distributed each block."
       }
     },
     {
@@ -351,13 +351,13 @@
     {
       "data": {
         "stringId": 424,
-        "text": "%num% GALAXY"
+        "text": "%num% BUZZ"
       }
     },
     {
       "data": {
         "stringId": 426,
-        "text": "Spend GALAXY to buy tickets, contributing to the lottery pot. Ticket purchases end approx. 30 minutes before lottery. Win prizes if 2, 3, or 4 of your ticket numbers match the winning numbers and their positions! Good luck!"
+        "text": "Spend BUZZ to buy tickets, contributing to the lottery pot. Ticket purchases end approx. 30 minutes before lottery. Win prizes if 2, 3, or 4 of your ticket numbers match the winning numbers and their positions! Good luck!"
       }
     },
     {
@@ -435,19 +435,19 @@
     {
       "data": {
         "stringId": 454,
-        "text": "%num% GALAXY Available"
+        "text": "%num% BUZZ Available"
       }
     },
     {
       "data": {
         "stringId": 456,
-        "text": "Your amount must be a multiple of 10 GALAXY"
+        "text": "Your amount must be a multiple of 10 BUZZ"
       }
     },
     {
       "data": {
         "stringId": 458,
-        "text": "1 Ticket = 10 GALAXY"
+        "text": "1 Ticket = 10 BUZZ"
       }
     },
     {
@@ -495,7 +495,7 @@
     {
       "data": {
         "stringId": 478,
-        "text": "Ticket purchases are final. Your GALAXY cannot be returned to you after buying tickets."
+        "text": "Ticket purchases are final. Your BUZZ cannot be returned to you after buying tickets."
       }
     },
     {
@@ -507,7 +507,7 @@
     {
       "data": {
         "stringId": 482,
-        "text": "GALAXY prizes to be claimed"
+        "text": "BUZZ prizes to be claimed"
       }
     },
     {
@@ -543,13 +543,13 @@
     {
       "data": {
         "stringId": 494,
-        "text": "Approve GALAXY"
+        "text": "Approve BUZZ"
       }
     },
     {
       "data": {
         "stringId": 496,
-        "text": "SYRUP holders proportionally split 40% of GALAXY block emissions each day (10 GALAXY per block), Rewards are distributed each block."
+        "text": "SYRUP holders proportionally split 40% of BUZZ block emissions each day (10 BUZZ per block), Rewards are distributed each block."
       }
     },
     {
@@ -567,19 +567,19 @@
     {
       "data": {
         "stringId": 504,
-        "text": "You\u2019ll pay for the new tokens using GALAXY-BNB LP tokens, which means you need to stake equal amounts of GALAXY and BNB in a liquidity pool to take part."
+        "text": "You\u2019ll pay for the new tokens using BUZZ-BNB LP tokens, which means you need to stake equal amounts of BUZZ and BNB in a liquidity pool to take part."
       }
     },
     {
       "data": {
         "stringId": 506,
-        "text": "Get GALAXY-BNB LP >"
+        "text": "Get BUZZ-BNB LP >"
       }
     },
     {
       "data": {
         "stringId": 508,
-        "text": "The project gets the BNB, Goose Finance burns the GALAXY."
+        "text": "The project gets the BNB, Goose Finance burns the BUZZ."
       }
     },
     {
@@ -645,7 +645,7 @@
     {
       "data": {
         "stringId": 534,
-        "text": "GALAXY Stats"
+        "text": "BUZZ Stats"
       }
     },
     {
@@ -663,7 +663,7 @@
     {
       "data": {
         "stringId": 540,
-        "text": "New GALAXY\/block"
+        "text": "New BUZZ\/block"
       }
     },
     {
@@ -675,19 +675,19 @@
     {
       "data": {
         "stringId": 544,
-        "text": "GALAXY to Harvest"
+        "text": "BUZZ to Harvest"
       }
     },
     {
       "data": {
         "stringId": 546,
-        "text": "GALAXY in Wallet"
+        "text": "BUZZ in Wallet"
       }
     },
     {
       "data": {
         "stringId": 548,
-        "text": "Collecting GALAXY"
+        "text": "Collecting BUZZ"
       }
     },
     {
@@ -699,7 +699,7 @@
     {
       "data": {
         "stringId": 552,
-        "text": "GALAXY to Collect"
+        "text": "BUZZ to Collect"
       }
     },
     {
@@ -765,7 +765,7 @@
     {
       "data": {
         "stringId": 580,
-        "text": "Stake GALAXY to earn new tokens."
+        "text": "Stake BUZZ to earn new tokens."
       }
     },
     {
@@ -783,7 +783,7 @@
     {
       "data": {
         "stringId": 586,
-        "text": "GALAXY to burn (USD)"
+        "text": "BUZZ to burn (USD)"
       }
     },
     {
@@ -795,7 +795,7 @@
     {
       "data": {
         "stringId": 590,
-        "text": "\u2b50\ufe0f Every time you stake and unstake LP tokens, the contract will automatically harvest GALAXY rewards for you!"
+        "text": "\u2b50\ufe0f Every time you stake and unstake LP tokens, the contract will automatically harvest BUZZ rewards for you!"
       }
     },
     {
@@ -813,13 +813,13 @@
     {
       "data": {
         "stringId": 596,
-        "text": "Buy GALAXY and BNB tokens"
+        "text": "Buy BUZZ and BNB tokens"
       }
     },
     {
       "data": {
         "stringId": 598,
-        "text": "Get GALAXY-BNB LP tokens by adding GALAXY and BNB liquidity"
+        "text": "Get BUZZ-BNB LP tokens by adding BUZZ and BNB liquidity"
       }
     },
     {
@@ -831,7 +831,7 @@
     {
       "data": {
         "stringId": 602,
-        "text": "While the sale is live, commit your GALAXY-LP tokens to buy the IFO tokens"
+        "text": "While the sale is live, commit your BUZZ-LP tokens to buy the IFO tokens"
       }
     },
     {
@@ -867,7 +867,7 @@
     {
       "data": {
         "stringId": 614,
-        "text": "Trade in for GALAXY, or keep for your collection!"
+        "text": "Trade in for BUZZ, or keep for your collection!"
       }
     },
     {
@@ -909,7 +909,7 @@
     {
       "data": {
         "stringId": 628,
-        "text": "When you trade in this NFT to receive GALAXY, you will lose access to it forever!"
+        "text": "When you trade in this NFT to receive BUZZ, you will lose access to it forever!"
       }
     },
     {
@@ -939,7 +939,7 @@
     {
       "data": {
         "stringId": 638,
-        "text": "Winners can trade in their NFTs for a GALAXY value until the expiry date written below. If you don't trade in your NFT by then, don\u2019t worry: you\u2019ll still keep it in your wallet!"
+        "text": "Winners can trade in their NFTs for a BUZZ value until the expiry date written below. If you don't trade in your NFT by then, don\u2019t worry: you\u2019ll still keep it in your wallet!"
       }
     },
     {
@@ -981,7 +981,7 @@
     {
       "data": {
         "stringId": 654,
-        "text": "Trade in for GALAXY"
+        "text": "Trade in for BUZZ"
       }
     },
     {
@@ -1107,7 +1107,7 @@
     {
       "data": {
         "stringId": 696,
-        "text": "Stake LP tokens to earn GALAXY"
+        "text": "Stake LP tokens to earn BUZZ"
       }
     },
     {
@@ -1149,13 +1149,13 @@
     {
       "data": {
         "stringId": 708,
-        "text": "The GALAXY Lottery"
+        "text": "The BUZZ Lottery"
       }
     },
     {
       "data": {
         "stringId": 710,
-        "text": "Buy tickets with GALAXY"
+        "text": "Buy tickets with BUZZ"
       }
     },
     {
@@ -1209,7 +1209,7 @@
     {
       "data": {
         "stringId": 10000,
-        "text": "Deposit Fee will be used to buyback GALAXY"
+        "text": "Deposit Fee will be used to buyback BUZZ"
       }
     },
     {
@@ -1221,7 +1221,7 @@
     {
       "data": {
         "stringId": 10002,
-        "text": "Stake tokens to earn GALAXY"
+        "text": "Stake tokens to earn BUZZ"
       }
     },
     {

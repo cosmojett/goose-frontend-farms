@@ -20,8 +20,8 @@ const config: MenuEntry[] = [
     icon: 'FarmIcon',
     items : [
       {
-        label: 'Stake',
-        href: '/pools',
+        label: 'Clusters',
+        href: '/clusters',
       },
       {
         label: 'Farms',
@@ -34,24 +34,24 @@ const config: MenuEntry[] = [
     icon: 'PoolIcon',
     href: '/indexes',
   },
+  // {
+  //  label: 'Options',
+  //  icon: 'FarmIcon',
+  //  items : [
+  //    {
+  //      label: 'Call',
+  //      href: '/options/call',
+  //    },
+  //    {
+  //      label: 'Put',
+  //      href: '/options/put',
+  //    },
+  //  ]
+  // }, 
   {
-    label: 'Options',
-    icon: 'FarmIcon',
-    items : [
-      {
-        label: 'Call',
-        href: '/options/call',
-      },
-      {
-        label: 'Put',
-        href: '/options/put',
-      },
-    ]
-  },
-  {
-    label: 'Zap',
+    label: 'IFO',
     icon: 'PoolIcon',
-    href: '/zap',
+    href: '/ifo',
   },
   // {
   //   label: 'Pools',

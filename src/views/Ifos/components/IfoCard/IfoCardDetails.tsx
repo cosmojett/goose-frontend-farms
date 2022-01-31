@@ -64,10 +64,10 @@ const IfoCardDetails: React.FC<IfoCardDetailsProps> = ({
           <Text>{saleAmount}</Text>
         </Item>
         <Item>
-          <Display>{TranslateString(999, 'To raise (USD)')}</Display>
+          <Display>To raise</Display>
           <Text>{raiseAmount}</Text>
         </Item>
-        <Item>
+        <Item style={cakeToBurn === '0' ? {display : 'none'} : {display : 'flex'}}>
           <Display>{TranslateString(586, 'CAKE to burn (USD)')}</Display>
           <Text>{cakeToBurn}</Text>
         </Item>
