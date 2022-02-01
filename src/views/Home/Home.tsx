@@ -62,9 +62,9 @@ const Home: React.FC = () => {
     <Page>
       <Hero>
         <Heading as="h1" size="xl" mb="24px" color="primary">
-          {TranslateString(576, 'Aerospace Finance')}
+          Cosmosium Finance
         </Heading>
-        <Text>{TranslateString(578, 'Unique Indexed strategy based yield farm on Avalance.')}</Text>
+        <Text>Simplified earning system with optimized yield aggregation and strategy based yield farms.</Text>
       </Hero>
       <div>
         <Cards>
