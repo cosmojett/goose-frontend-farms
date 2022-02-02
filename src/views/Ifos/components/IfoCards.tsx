@@ -3,9 +3,10 @@ import styled from 'styled-components'
 interface IfoCardWrapperProps {
   isSingle?: boolean
 }
-
+// add border when tabs added
+// border-top: 2px solid ${({ theme }) => theme.colors.textSubtle};
 const IfoCardWrapper = styled.div<IfoCardWrapperProps>`
-  border-top: 2px solid ${({ theme }) => theme.colors.textSubtle};
+
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 32px;

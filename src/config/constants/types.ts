@@ -17,6 +17,8 @@ export interface Ifo {
   currencyAddress: string
   tokenDecimals: number
   releaseBlockNumber: number
+  endDate: string
+  endTime: string
 }
 
 export enum QuoteToken {

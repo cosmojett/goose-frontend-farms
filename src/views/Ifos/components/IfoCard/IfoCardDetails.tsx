@@ -13,6 +13,9 @@ export interface IfoCardDetailsProps {
   projectSiteUrl: string
   raisingAmount: BigNumber
   totalAmount: BigNumber
+  endDate: string
+  endTime: string
+  releaseBlockNumber: number
 }
 
 const StyledIfoCardDetails = styled.div`
@@ -38,6 +41,9 @@ const IfoCardDetails: React.FC<IfoCardDetailsProps> = ({
   projectSiteUrl,
   raisingAmount,
   totalAmount,
+  endDate,
+  endTime,
+  releaseBlockNumber
 }) => {
   const TranslateString = useI18n()
 
@@ -45,18 +51,23 @@ const IfoCardDetails: React.FC<IfoCardDetailsProps> = ({
     <>
       <StyledIfoCardDetails>
         <Item>
-          <Display>{TranslateString(582, 'Launch Time')}</Display>
+          <Display>Launch Time</Display>
           <Text>
             {launchDate},
-            <Link
-              href="https://www.timeanddate.com/worldclock/singapore/singapore"
-              target="blank"
-              rel="noopener noreferrer"
-              ml="4px"
-              style={{ display: 'inline' }}
-            >
               {launchTime}
-            </Link>
+          </Text>
+        </Item>
+        <Item>
+          <Display>End Time</Display>
+          <Text>
+            {endDate},
+            {endTime}
+          </Text>
+        </Item>
+        <Item>
+          <Display>Claim Block</Display>
+          <Text>
+              {releaseBlockNumber}
           </Text>
         </Item>
         <Item>

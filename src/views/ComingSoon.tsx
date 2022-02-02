@@ -21,8 +21,9 @@ const ComingSoon = () => {
 
         <Heading size="xxl">Coming Soon</Heading>
         <Text mb="16px">Cosmosium Finance is currently not published farms yet. Read our documents for details : <a style={{color : 'green'}} href="https://docs.cosmosium.finance">Docs</a></Text>
-        <Button as="a" href="/" size="sm">
-          {TranslateString(999, 'Back Home')}
+        <Text mb="16px">If you want to participate in our presale, visit <a style={{color : 'green'}} href="/ifo">IFO</a> page.</Text>
+        <Button as="a" href="/ifo" size="sm">
+          IFO
         </Button>
       </StyledNotFound>
     </Page>

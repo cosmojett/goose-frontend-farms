@@ -76,6 +76,9 @@ const IfoCard: React.FC<IfoCardProps> = ({ ifo }) => {
     currencyAddress,
     tokenDecimals,
     releaseBlockNumber,
+    endDate,
+    endTime,
+
   } = ifo
   const [state, setState] = useState({
     isLoading: true,
@@ -173,6 +176,9 @@ const IfoCard: React.FC<IfoCardProps> = ({ ifo }) => {
           projectSiteUrl={projectSiteUrl}
           raisingAmount={state.raisingAmount}
           totalAmount={state.totalAmount}
+          endDate={endDate}
+          endTime={endTime}
+          releaseBlockNumber={releaseBlockNumber}
         />
       </CardBody>
     </StyledIfoCard>
