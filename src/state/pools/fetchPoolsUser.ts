@@ -80,7 +80,7 @@ export const fetchUserStakeBalances = async (account) => {
 export const fetchUserPendingRewards = async (account) => {
   const calls = nonMasterPools.map((p) => ({
     address: p.contractAddress[CHAIN_ID],
-    name: 'pendingReward',
+    name: 'pendingBuzz',
     params: [account],
   }))
   const res = await multicall(sousChefABI, calls)

@@ -3,7 +3,7 @@ import { Card, CardBody, Heading, Text } from '@pancakeswap-libs/uikit'
 import BigNumber from 'bignumber.js/bignumber'
 import styled from 'styled-components'
 import { getBalanceNumber } from 'utils/formatBalance'
-import { useTotalSupply, useBurnedBalance } from 'hooks/useTokenBalance'
+import { useTotalSupply, useBurnedBalance, useChefBalance } from 'hooks/useTokenBalance'
 import useI18n from 'hooks/useI18n'
 import { getCakeAddress } from 'utils/addressHelpers'
 import CardValue from './CardValue'
@@ -26,15 +26,16 @@ const CakeStats = (props) => {
   const TranslateString = useI18n()
   const totalSupply = useTotalSupply()
   const burnedBalance = useBurnedBalance(getCakeAddress())
+  const chefBalance = useChefBalance(getCakeAddress())
   const farms = useFarms();
   const eggPrice = usePriceCakeBusd();
-  const circSupply = totalSupply ? totalSupply.minus(burnedBalance) : new BigNumber(0);
+  const circSupply = totalSupply ? totalSupply.minus(burnedBalance).minus(chefBalance) : new BigNumber(0);
   const cakeSupply = getBalanceNumber(circSupply);
   const marketCap = eggPrice.times(circSupply);
 
-  let eggPerBlock = 0;
-  if(farms && farms[0] && farms[0].eggPerBlock){
-    eggPerBlock = new BigNumber(farms[0].eggPerBlock).div(new BigNumber(10).pow(18)).toNumber();
+  let buzzPerBlock = 0;
+  if(farms && farms[0] && farms[0].buzzPerBlock){
+    buzzPerBlock = new BigNumber(farms[0].buzzPerBlock).div(new BigNumber(10).pow(18)).toNumber();
   }
 
   return (
@@ -48,12 +49,12 @@ const CakeStats = (props) => {
           <CardValue fontSize="14px" value={getBalanceNumber(marketCap)} decimals={0} prefix="$" />
         </Row>
         <Row>
-          <Text fontSize="14px">{TranslateString(536, 'Total Minted')}</Text>
-          {totalSupply && <CardValue fontSize="14px" value={getBalanceNumber(totalSupply)} decimals={0} />}
-        </Row>
-        <Row>
           <Text fontSize="14px">{TranslateString(538, 'Total Burned')}</Text>
           <CardValue fontSize="14px" value={getBalanceNumber(burnedBalance)} decimals={0} />
+        </Row>
+        <Row>
+          <Text fontSize="14px">Uncirculated Buzz</Text>
+          <CardValue fontSize="14px" value={getBalanceNumber(chefBalance)} decimals={0} />
         </Row>
         <Row>
           <Text fontSize="14px">{TranslateString(10004, 'Circulating Supply')}</Text>
@@ -61,7 +62,7 @@ const CakeStats = (props) => {
         </Row>
         <Row>
           <Text fontSize="14px">{TranslateString(540, 'New EGG/block')}</Text>
-          <Text bold fontSize="14px">{eggPerBlock}</Text>
+          <Text bold fontSize="14px">{buzzPerBlock}</Text>
         </Row>
       </CardBody>
     </StyledCakeStats>

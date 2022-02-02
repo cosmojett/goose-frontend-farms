@@ -92,7 +92,7 @@ export const updateUserStakedBalance = (sousId: string, account: string) => asyn
 
 export const updateUserPendingReward = (sousId: string, account: string) => async (dispatch) => {
   const pendingRewards = await fetchUserPendingRewards(account)
-  dispatch(updatePoolsUserData({ sousId, field: 'pendingReward', value: pendingRewards[sousId] }))
+  dispatch(updatePoolsUserData({ sousId, field: 'pendingBuzz', value: pendingRewards[sousId] }))
 }
 
 export default PoolsSlice.reducer

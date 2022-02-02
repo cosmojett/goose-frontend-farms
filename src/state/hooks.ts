@@ -80,7 +80,7 @@ export const usePriceCakeBusd = (): BigNumber => {
   // const pid = 0; // EGG-BUSD LP
   // const farm = useFarmFromPid(pid);
   // return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO;
-  return new BigNumber(2);
+  return new BigNumber(0.0285);
 }
 
 export const useTotalValue = (): BigNumber => {

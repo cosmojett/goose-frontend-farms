@@ -5,7 +5,7 @@ import { provider } from 'web3-core'
 import cakeABI from 'config/abi/cake.json'
 import { getContract } from 'utils/web3'
 import { getTokenBalance } from 'utils/erc20'
-import { getCakeAddress } from 'utils/addressHelpers'
+import { getCakeAddress, getMasterChefAddress } from 'utils/addressHelpers'
 import useRefresh from './useRefresh'
 
 const useTokenBalance = (tokenAddress: string) => {
@@ -51,7 +51,26 @@ export const useBurnedBalance = (tokenAddress: string) => {
   useEffect(() => {
     const fetchBalance = async () => {
       const cakeContract = getContract(cakeABI, getCakeAddress())
+
       const bal = await cakeContract.methods.balanceOf('0x000000000000000000000000000000000000dEaD').call()
+      setBalance(new BigNumber(bal))
+    }
+
+    fetchBalance()
+  }, [tokenAddress, slowRefresh])
+
+  return balance
+}
+
+export const useChefBalance = (tokenAddress: string) => {
+  const [balance, setBalance] = useState(new BigNumber(0))
+  const { slowRefresh } = useRefresh()
+
+  useEffect(() => {
+    const fetchBalance = async () => {
+      const cakeContract = getContract(cakeABI, getCakeAddress())
+        const chefAddress = getMasterChefAddress();
+      const bal = await cakeContract.methods.balanceOf(chefAddress).call()
       setBalance(new BigNumber(bal))
     }
 

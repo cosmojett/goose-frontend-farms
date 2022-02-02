@@ -18,6 +18,7 @@ const Farms = lazy(() => import('./views/Farms'))
 const Ifos = lazy(() => import('./views/Ifos'))
 const NotFound = lazy(() => import('./views/NotFound'))
 const Indexes = lazy(() => import('./views/Indexes'))
+const ComingSoon = lazy(() => import('./views/ComingSoon'));
 // const Nft = lazy(() => import('./views/Nft'))
 
 // This config is required for number formating
@@ -47,14 +48,18 @@ const App: React.FC = () => {
               <Home />
             </Route>
             <Route path="/farms">
-              <Farms />
+             {/*  <Farms /> */}
+                            <ComingSoon />
             </Route>
             <Route path="/clusters">
-              <Farms tokenMode/>
+             {/*  <Farms tokenMode/> */}
+                            <ComingSoon />
             </Route>
             <Route path="/indexes">
-              <Indexes />
+              {/* <Indexes /> */}
+              <ComingSoon />
             </Route>
+            
             {/* <Route path="/pools"> */}
             {/*  <Pools /> */}
             {/* </Route> */}

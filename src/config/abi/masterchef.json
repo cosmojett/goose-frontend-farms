@@ -2,28 +2,18 @@
   {
     "inputs": [
       {
-        "internalType": "contract EggToken",
-        "name": "_egg",
+        "internalType": "contract IBuzz",
+        "name": "_buzz",
         "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_devaddr",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "_feeAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_eggPerBlock",
-        "type": "uint256"
       },
       {
         "internalType": "uint256",
         "name": "_startBlock",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_buzzPerBlock",
         "type": "uint256"
       }
     ],
@@ -86,6 +76,31 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "caller",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "previousAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newAmount",
+        "type": "uint256"
+      }
+    ],
+    "name": "EmissionRateUpdated",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "previousOwner",
         "type": "address"
       },
@@ -97,6 +112,31 @@
       }
     ],
     "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "pid",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amountLockedUp",
+        "type": "uint256"
+      }
+    ],
+    "name": "RewardLockedUp",
     "type": "event"
   },
   {
@@ -140,40 +180,54 @@
   },
   {
     "inputs": [],
-    "name": "devaddr",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "egg",
-    "outputs": [
-      {
-        "internalType": "contract EggToken",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function",
-    "constant": true
-  },
-  {
-    "inputs": [],
-    "name": "eggPerBlock",
+    "name": "MAXIMUM_HARVEST_INTERVAL",
     "outputs": [
       {
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [],
+    "name": "buzz",
+    "outputs": [
+      {
+        "internalType": "contract IBuzz",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [],
+    "name": "buzzPerBlock",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [],
+    "name": "devAddress",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
@@ -235,13 +289,23 @@
       },
       {
         "internalType": "uint256",
-        "name": "accEggPerShare",
+        "name": "accBuzzPerShare",
         "type": "uint256"
       },
       {
         "internalType": "uint16",
         "name": "depositFeeBP",
         "type": "uint16"
+      },
+      {
+        "internalType": "uint256",
+        "name": "harvestInterval",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "totalLp",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -272,6 +336,20 @@
   {
     "inputs": [],
     "name": "totalAllocPoint",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [],
+    "name": "totalLockedUpRewards",
     "outputs": [
       {
         "internalType": "uint256",
@@ -320,6 +398,16 @@
         "internalType": "uint256",
         "name": "rewardDebt",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "rewardLockedUp",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "nextHarvestUntil",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -358,6 +446,11 @@
         "type": "uint16"
       },
       {
+        "internalType": "uint256",
+        "name": "_harvestInterval",
+        "type": "uint256"
+      },
+      {
         "internalType": "bool",
         "name": "_withUpdate",
         "type": "bool"
@@ -384,6 +477,11 @@
         "internalType": "uint16",
         "name": "_depositFeeBP",
         "type": "uint16"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_harvestInterval",
+        "type": "uint256"
       },
       {
         "internalType": "bool",
@@ -417,6 +515,31 @@
         "type": "uint256"
       }
     ],
+    "stateMutability": "pure",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_pid",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "_user",
+        "type": "address"
+      }
+    ],
+    "name": "pendingBuzz",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function",
     "constant": true
@@ -434,12 +557,12 @@
         "type": "address"
       }
     ],
-    "name": "pendingEgg",
+    "name": "canHarvest",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "bool",
         "name": "",
-        "type": "uint256"
+        "type": "bool"
       }
     ],
     "stateMutability": "view",
@@ -518,12 +641,57 @@
   {
     "inputs": [
       {
+        "internalType": "uint256",
+        "name": "_pid",
+        "type": "uint256"
+      }
+    ],
+    "name": "getPoolInfo",
+    "outputs": [
+      {
         "internalType": "address",
-        "name": "_devaddr",
+        "name": "lpToken",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "allocPoint",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "lastRewardBlock",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "accBuzzPerShare",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint16",
+        "name": "depositFeeBP",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint256",
+        "name": "harvestInterval",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function",
+    "constant": true
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_devAddress",
         "type": "address"
       }
     ],
-    "name": "dev",
+    "name": "setDevAddress",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -545,7 +713,7 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "_eggPerBlock",
+        "name": "_buzzPerBlock",
         "type": "uint256"
       }
     ],
