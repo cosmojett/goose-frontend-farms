@@ -99,7 +99,7 @@ const IfoCardContribute: React.FC<Props> = ({
   return (
     <>
       <LabelButton
-        disabled={pendingTx || userInfo.isClaimed || claimBlock > currentBlock}
+        disabled={pendingTx || userInfo.isClaimed}
         buttonLabel={isFinished ? 'Claim' : 'Contribute'}
         label={isFinished ? 'Your tokens to claim' : `Your contribution (${currency})`}
         value={
