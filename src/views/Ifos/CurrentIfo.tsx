@@ -34,15 +34,19 @@ const List = styled.ul`
 /**
  * Note: currently there should be only 1 active IFO at a time
  */
-const activeIfo = ifosConfig.find((ifo) => ifo.isActive)
-
+const activeIfo = ifosConfig.filter((ifo) => ifo.isActive)
+console.log(activeIfo)
 const Ifo = () => {
   const TranslateString = useI18n()
 
   return (
     <div>
-      <IfoCards isSingle>
-        <IfoCard ifo={activeIfo} />
+      <IfoCards>
+      {activeIfo.map((x) => (
+        <IfoCard ifo={x} />
+      ))}
+       
+        
       </IfoCards>
       <LaunchIfoCallout>
         <div>
