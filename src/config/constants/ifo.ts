@@ -4,7 +4,7 @@ const ifos: Ifo[] = [
   
   {
     id: 'buzzbusd',
-    address: '0x17Bf9C0bB69C6429E30284919672336FDd785CF6',
+    address: '0x659c7aB0ad312cB20ab92BFDBa5d66036fB5Bc02',
     isActive: true,
     name: 'Buzz',
     subTitle: 'Utilization token for Cosmosium Finance',
@@ -25,7 +25,7 @@ const ifos: Ifo[] = [
   }, 
   {
     id: 'buzzwbnb',
-    address: '0x5D078855990A2882c27dbF65De71D096dCf5FEF2',
+    address: '0x9FBB208Dd1B870B10a2FD40DeD0541C6BcC2edcd',
     isActive: true,
     name: 'Buzz',
     subTitle: 'Utilization token for Cosmosium Finance',
