@@ -9,9 +9,12 @@ import CakeStats from './components/CakeStats'
 import TotalValueLockedCard from './components/TotalValueLockedCard'
 import TwitterCard from './components/TwitterCard'
 
+// background-image: url('/images/cosmosium/home_hero_left.png');
+
+// background-image:url('/images/cosmosium/home_hero_left.png'), url('/images/cosmosium/home_hero_right.png');
 const Hero = styled.div`
   align-items: center;
-  background-image: url('/images/cosmosium/home_hero_left.png');
+  
   background-repeat: no-repeat;
   background-position: top center;
   display: flex;
@@ -23,7 +26,7 @@ const Hero = styled.div`
   text-align: center;
 
   ${({ theme }) => theme.mediaQueries.lg} {
-    background-image:url('/images/cosmosium/home_hero_left.png'), url('/images/cosmosium/home_hero_right.png');
+    
     background-position: left center, right center;
     height: 165px;
     padding-top: 0;

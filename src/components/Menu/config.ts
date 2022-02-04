@@ -7,11 +7,11 @@ const config: MenuEntry[] = [
     items: [
       {
         label: 'Exchange',
-        href: 'https://dex.cosmosium.finance/',
+        href: '#',
       },
       {
         label: 'Liquidity',
-        href: 'https://dex.cosmosium.finance/#/pool',
+        href: '#',
       },
     ],
   },

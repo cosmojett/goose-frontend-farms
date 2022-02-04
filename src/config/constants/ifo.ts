@@ -1,6 +1,7 @@
 import { Ifo } from './types'
 
 const ifos: Ifo[] = [
+  
   {
     id: 'buzz',
     address: '0xca1fcb00ffcd02f50ebdb23d8d32f8748719d9a9',
@@ -21,7 +22,7 @@ const ifos: Ifo[] = [
     releaseBlockNumber: 14913680 ,
     endDate : '08 February 2022',
     endTime : '18:00 UTC'
-  },
+  }, 
 ]
 
 export default ifos

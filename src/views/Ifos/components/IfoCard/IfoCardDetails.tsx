@@ -51,13 +51,6 @@ const IfoCardDetails: React.FC<IfoCardDetailsProps> = ({
     <>
       <StyledIfoCardDetails>
         <Item>
-          <Display>Launch Time</Display>
-          <Text>
-            {launchDate},
-              {launchTime}
-          </Text>
-        </Item>
-        <Item>
           <Display>End Time</Display>
           <Text>
             {endDate},

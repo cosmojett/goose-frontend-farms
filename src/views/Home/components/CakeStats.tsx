@@ -3,7 +3,7 @@ import { Card, CardBody, Heading, Text } from '@pancakeswap-libs/uikit'
 import BigNumber from 'bignumber.js/bignumber'
 import styled from 'styled-components'
 import { getBalanceNumber } from 'utils/formatBalance'
-import { useTotalSupply, useBurnedBalance, useChefBalance } from 'hooks/useTokenBalance'
+import { useTotalSupply, useBurnedBalance, useChefBalance, useTreasuryBalance } from 'hooks/useTokenBalance'
 import useI18n from 'hooks/useI18n'
 import { getCakeAddress } from 'utils/addressHelpers'
 import CardValue from './CardValue'
@@ -27,9 +27,10 @@ const CakeStats = (props) => {
   const totalSupply = useTotalSupply()
   const burnedBalance = useBurnedBalance(getCakeAddress())
   const chefBalance = useChefBalance(getCakeAddress())
+  const treasuryBalance = useTreasuryBalance(getCakeAddress(),'0xAd8F748b2e87bDDCbf98f11a63F9f3CbcDD34B38')
   const farms = useFarms();
   const eggPrice = usePriceCakeBusd();
-  const circSupply = totalSupply ? totalSupply.minus(burnedBalance).minus(chefBalance) : new BigNumber(0);
+  const circSupply = totalSupply ? totalSupply.minus(burnedBalance).minus(chefBalance).minus(treasuryBalance) : new BigNumber(0);
   const cakeSupply = getBalanceNumber(circSupply);
   const marketCap = eggPrice.times(circSupply);
 
