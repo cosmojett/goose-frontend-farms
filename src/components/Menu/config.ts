@@ -50,7 +50,7 @@ const config: MenuEntry[] = [
   // }, 
   {
     label: 'IFO',
-    icon: 'PoolIcon',
+    icon: 'TicketIcon',
     href: '/ifo',
   },
   // {
