@@ -5,7 +5,7 @@ import { LanguageContext } from 'contexts/Localisation/languageContext'
 import useTheme from 'hooks/useTheme'
 import { usePriceCakeBusd } from 'state/hooks'
 import { Menu as UikitMenu } from '@pancakeswap-libs/uikit'
-import config from './config'
+import {links, socials } from './config'
 
 const Menu = (props) => {
   const { account, connect, reset } = useWallet()
@@ -24,7 +24,8 @@ const Menu = (props) => {
       langs={allLanguages}
       setLang={setSelectedLanguage}
       cakePriceUsd={cakePriceUsd.toNumber()}
-      links={config}
+      links={links}
+      socials={socials}
       priceLink="https://poocoin.app/tokens/0xa73c15620bfa79646e9a11d0d638d66588456462"
       {...props}
     />
