@@ -1,5 +1,6 @@
 import { MenuEntry } from '@pancakeswap-libs/uikit'
 
+const BASE_DEX = 'https://dex.cosmosium.finance';
 export const links = [
   {
     label: 'Trade',
@@ -7,11 +8,11 @@ export const links = [
     items: [
       {
         label: 'Exchange',
-        href: '#',
+        href: `${BASE_DEX}/#/swap`,
       },
       {
         label: 'Liquidity',
-        href: '#',
+        href: `${BASE_DEX}/#/pool`,
       },
     ],
   },
