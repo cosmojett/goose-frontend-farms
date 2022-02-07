@@ -84,6 +84,10 @@ const config: MenuEntry[] = [
         label: 'Blog',
         href: 'https://medium.com/@cosmosiumfinance/',
       },
+      {
+        label: 'Telegram',
+        href: 'https://t.me/cosmosiumfinance',
+      },
     ],
   },
 ]
