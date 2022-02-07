@@ -2,67 +2,91 @@ import { MenuEntry } from '@pancakeswap-libs/uikit'
 
 export const links = [
   {
-    label: "Trade",
-    icon: "TradeIcon",
+    label: 'Trade',
+    icon: 'TradeIcon',
     items: [
       {
-        label: "Exchange",
-        href: "https://exchange.pancakeswap.finance",
+        label: 'Exchange',
+        href: '#',
       },
       {
-        label: "Liquidity",
-        href: "https://exchange.pancakeswap.finance/#/pool",
+        label: 'Liquidity',
+        href: '#',
       },
     ],
   },
   {
-    label: "Farms",
-    icon: "FarmIcon",
-    href: "/farms",
+    label: 'Earn',
+    icon: 'FarmIcon',
+    items : [
+      {
+        label: 'Clusters',
+        href: '/clusters',
+      },
+      {
+        label: 'Farms',
+        href: '/farms',
+      },
+    ]
   },
   {
-    label: "Lottery",
-    icon: "TicketIcon",
-    href: "/lottery",
+    label: 'Indexes',
+    icon: 'PoolIcon',
+    href: '/indexes',
   },
+  // {
+  //  label: 'Options',
+  //  icon: 'FarmIcon',
+  //  items : [
+  //    {
+  //      label: 'Call',
+  //      href: '/options/call',
+  //    },
+  //    {
+  //      label: 'Put',
+  //      href: '/options/put',
+  //    },
+  //  ]
+  // }, 
   {
-    label: "NFT",
-    icon: "NftIcon",
-    href: "/nft",
+    label: 'IFO',
+    icon: 'TicketIcon',
+    href: '/ifo',
   },
+  // {
+  //   label: 'Pools',
+  //   icon: 'PoolIcon',
+  //   href: '/pools',
+  // },
+  // {
+  //   label: 'Lottery',
+  //   icon: 'TicketIcon',
+  //   href: '/lottery',
+  // },
+  // {
+  //   label: 'NFT',
+  //   icon: 'NftIcon',
+  //   href: '/nft',
+  // },
   {
-    label: "IFO",
-    icon: "IfoIcon",
+    label: 'Links',
+    icon: 'MoreIcon',
     items: [
       {
-        label: "Next",
-        href: "/ifo",
+        label: 'Github',
+        href: 'https://github.com/cosmosiumfinance/',
       },
       {
-        label: "History",
-        href: "/ifo/history",
-      },
-    ],
-  },
-  {
-    label: "More",
-    icon: "MoreIcon",
-    items: [
-      // {
-      //   label: "Voting",
-      //   href: "https://voting.pancakeswap.finance",
-      // },
-      {
-        label: "Github",
-        href: "https://github.com/cosmosiumfinance/",
+        label: 'Docs',
+        href: 'https://docs.cosmosium.finance/',
       },
       {
-        label: "Docs",
-        href: "https://docs.cosmosium.finance/",
+        label: 'Blog',
+        href: 'https://medium.com/@cosmosiumfinance/',
       },
       {
-        label: "Blog",
-        href: "https://medium.com/@cosmosiumfinance",
+        label: 'Telegram',
+        href: 'https://t.me/cosmosiumfinance',
       },
     ],
   },

@@ -1883,7 +1883,7 @@
 
 "@pancakeswap-libs/uikit@cosmosiumfinance/ui-kit":
   version "0.10.2"
-  resolved "https://codeload.github.com/cosmosiumfinance/ui-kit/tar.gz/9a7ba67ce118b7c58676b34958aee5d580900b94"
+  resolved "https://codeload.github.com/cosmosiumfinance/ui-kit/tar.gz/4b4e2f2b0bcfdeba31d40be371525fbe23ac8dcc"
   dependencies:
     "@types/lodash" "^4.14.162"
     "@types/styled-system" "^5.1.10"
