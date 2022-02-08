@@ -47,6 +47,9 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
     (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
   )
 
+  const autoFarms = farmsLP.filter((farm) => farm.isAuto);
+
+
   // /!\ This function will be removed soon
   // This function compute the APY for each farm and will be replaced when we have a reliable API
   // to retrieve assets prices against USD
@@ -63,7 +66,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
         let apy = cakePrice.times(cakeRewardPerYear);
 
         let totalValue = new BigNumber(farm.lpTotalInQuoteToken || 0);
-
+        console.log(farm)
         if (farm.quoteTokenSymbol === QuoteToken.BNB) {
           totalValue = totalValue.times(bnbPrice);
         }
@@ -74,7 +77,9 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
 
         return { ...farm, apy }
       })
+
       return farmsToDisplayWithAPY.map((farm) => (
+
         <FarmCard
           key={farm.pid}
           farm={farm}

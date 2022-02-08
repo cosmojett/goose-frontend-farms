@@ -134,13 +134,12 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, bnbPrice,
     : '-'
 
   const lpLabel = farm.lpSymbol
-  const earnLabel = 'EGG'
   const farmAPY = farm.apy && farm.apy.times(new BigNumber(100)).toNumber().toLocaleString(undefined, {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   })
 
-  const { quoteTokenAdresses, quoteTokenSymbol, tokenAddresses, risk, image, earnToken } = farm
+  const { quoteTokenAdresses, quoteTokenSymbol, tokenAddresses, risk, image, earnToken, depositToken, isAuto, harvestInterval } = farm
 
   return (
     <FCard>
@@ -180,11 +179,11 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, bnbPrice,
       )}
       <Flex justifyContent='space-between'>
         <Text  fontSize="16px" >Deposit:</Text>
-        <Text  fontSize="16px" color="primary" bold>Deposit TOKEN</Text>
+        <Text  fontSize="16px" color="primary" bold>{depositToken}</Text>
       </Flex>
       <Flex justifyContent='space-between'>
         <Text  fontSize="16px" >{TranslateString(318, 'Earn')}:</Text>
-        <Text   fontSize="16px" color="primary" bold>{earnLabel}</Text>
+        <Text   fontSize="16px" color="primary" bold>{earnToken}</Text>
       </Flex>
 
       <Flex justifyContent='space-between'>
@@ -193,11 +192,11 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, bnbPrice,
       </Flex>
       <Flex  justifyContent='space-between'>
         <Text  fontSize="16px" >Harvest Interval:</Text>
-        <Text  fontSize="14px" >HARVEST </Text>
+        <Text  fontSize="16px" >{new BigNumber(harvestInterval).toString()} </Text>
       </Flex>
       <Flex justifyContent='space-between'>
-        <Text  fontSize="16px" >Vesting Period:</Text>
-        <Text  fontSize="14px" >0 xx 0 days</Text>
+        <Text  fontSize="16px" >Auto Compound:</Text>
+        <Text  fontSize="14px" >{isAuto ? 'True' : 'False'}</Text>
       </Flex>
       <Flex justifyContent='space-between'>
         <Text  fontSize="16px" >Total Liquidity:</Text>

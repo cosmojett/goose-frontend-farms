@@ -2,6 +2,26 @@ import contracts from './contracts'
 import { FarmConfig, QuoteToken } from './types'
 
 const farms: FarmConfig[] = [
+  {
+    pid : 0,
+    risk : 5,
+    lpSymbol : 'Cosmic Farm #1',
+    lpAddresses : {
+      97 : '0x9F861a8aCa106A3b3A12385eAE76784885D51239',
+      56 : ''
+    },
+    tokenSymbol : 'BUZZ',
+    tokenAddresses: {
+      97: '0x9F861a8aCa106A3b3A12385eAE76784885D51239',
+      56: '',
+    },
+    quoteTokenSymbol: QuoteToken.BUSD,
+    quoteTokenAdresses: contracts.busd,
+    image : './images/farm_bg/1.png',
+    earnToken : 'BUZZ',
+    depositToken : 'BUZZ',
+    isAuto : true,
+    }
   /*  {
     pid: 0,
     risk: 5,

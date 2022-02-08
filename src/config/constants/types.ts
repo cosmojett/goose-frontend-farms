@@ -62,6 +62,8 @@ export interface FarmConfig {
   }
   image?: string
   earnToken?: string
+  isAuto? : boolean
+  depositToken? : string
 }
 
 export interface PoolConfig {

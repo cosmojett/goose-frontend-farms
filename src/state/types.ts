@@ -8,6 +8,7 @@ export interface Farm extends FarmConfig {
   tokenPriceVsQuote?: BigNumber
   poolWeight?: number
   depositFeeBP?: number
+  harvestInterval?: string
   buzzPerBlock?: number
     userData?: {
     allowance: BigNumber
