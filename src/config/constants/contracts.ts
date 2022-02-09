@@ -25,7 +25,7 @@ export default {
   },
   busd: {
     56: '0xe9e7cea3dedca5984780bafc599bd69add087d56',
-    97: '0x78867bbeef44f2326bf8ddd1941a4439382ef2a7',
+    97: '0xed24fc36d5ee211ea25a80239fb8c4cfd80f12ee',
   },
   // 43114 -> mainnet
   wavax : {

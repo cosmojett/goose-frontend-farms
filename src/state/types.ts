@@ -15,7 +15,10 @@ export interface Farm extends FarmConfig {
     tokenBalance: BigNumber
     stakedBalance: BigNumber
     earnings: BigNumber
+    nextHarvest?: BigNumber
+    currentTime? : BigNumber
   }
+
 }
 
 export interface Pool extends PoolConfig {

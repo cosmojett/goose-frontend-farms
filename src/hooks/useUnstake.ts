@@ -7,8 +7,8 @@ import {
   updateUserBalance,
   updateUserPendingReward,
 } from 'state/actions'
-import { unstake, sousUnstake, sousEmegencyUnstake } from 'utils/callHelpers'
-import { useMasterchef, useSousChef } from './useContract'
+import { unstake, sousUnstake, sousEmegencyUnstake, autoFarmWithdrawAll } from 'utils/callHelpers'
+import { useMasterchef, useSousChef, useAutoFarm } from './useContract'
 
 const useUnstake = (pid: number) => {
   const dispatch = useDispatch()
@@ -25,6 +25,19 @@ const useUnstake = (pid: number) => {
   )
 
   return { onUnstake: handleUnstake }
+}
+
+export const useAutoFarmWithdraw = (farmAddress: string) => {
+  const { account } = useWallet()
+   const contract = useAutoFarm(farmAddress)
+
+   const handleUnstake = useCallback(
+     async () => {
+       const txHash = await autoFarmWithdrawAll(contract, account)
+       console.info(txHash)
+     }, [contract, account]
+   )
+   return { onUnstake : handleUnstake }
 }
 
 const SYRUPIDS = [5, 6, 3, 1, 22, 23]

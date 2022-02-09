@@ -14,6 +14,7 @@ import { fetchFarmUserDataAsync } from 'state/actions'
 import { QuoteToken } from 'config/constants/types'
 import useI18n from 'hooks/useI18n'
 import FarmCard, { FarmWithStakedValue } from './components/FarmCard/FarmCard'
+import AutoFarmCard, { AutoFarmWithStakedValue } from './components/AutoFarm/AutoFarmCard';
 import FarmTabButtons from './components/FarmTabButtons'
 import Divider from './components/Divider'
 
@@ -40,8 +41,8 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
 
   const [stakedOnly, setStakedOnly] = useState(false)
 
-  const activeFarms = farmsLP.filter((farm) => !!farm.isTokenOnly === !!tokenMode && farm.multiplier !== '0X')
-  const inactiveFarms = farmsLP.filter((farm) => !!farm.isTokenOnly === !!tokenMode && farm.multiplier === '0X')
+  const activeFarms = farmsLP.filter((farm) => !!farm.isTokenOnly === !!tokenMode && farm.multiplier !== '0X' && !farm.isAuto)
+  const inactiveFarms = farmsLP.filter((farm) => !!farm.isTokenOnly === !!tokenMode && farm.multiplier === '0X' && !farm.isAuto)
 
   const stakedOnlyFarms = activeFarms.filter(
     (farm) => farm.userData && new BigNumber(farm.userData.stakedBalance).isGreaterThan(0),
@@ -53,6 +54,45 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   // /!\ This function will be removed soon
   // This function compute the APY for each farm and will be replaced when we have a reliable API
   // to retrieve assets prices against USD
+
+  console.log(autoFarms)
+
+  const autoFarmsList = useCallback(
+    (farmsToDisplay, removed: boolean) => {
+      const autoFarmsWithAPY : AutoFarmWithStakedValue[] = farmsToDisplay.map((farm) => {
+        const cakeRewardPerBlock = new BigNumber(farm.buzzPerBlock || 1).times(new BigNumber(farm.poolWeight)) .div(new BigNumber(10).pow(18))
+        const cakeRewardPerYear = cakeRewardPerBlock.times(BLOCKS_PER_YEAR)
+
+        let apy = cakePrice.times(cakeRewardPerYear);
+
+        let totalValue = new BigNumber(farm.lpTotalInQuoteToken || 0);
+        console.log(farm)
+        if (farm.quoteTokenSymbol === QuoteToken.BNB) {
+          totalValue = totalValue.times(bnbPrice);
+        }
+
+        if(totalValue.comparedTo(0) > 0){
+          apy = apy.div(totalValue);
+        }
+
+        return { ...farm, apy }
+      })
+
+      return autoFarmsWithAPY.map((farm) => (
+
+        <AutoFarmCard
+          key={farm.pid}
+          farm={farm}
+          removed={removed}
+          bnbPrice={bnbPrice}
+          cakePrice={cakePrice}
+          ethereum={ethereum}
+          account={account}
+        />
+      ))
+    }, [bnbPrice, account, cakePrice, ethereum]
+    
+  )
   const farmsList = useCallback(
     (farmsToDisplay, removed: boolean) => {
       // const cakePriceVsBNB = new BigNumber(farmsLP.find((farm) => farm.pid === CAKE_POOL_PID)?.tokenPriceVsQuote || 0)
@@ -96,7 +136,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
 
   return (
     <Page>
-      <Heading as="h1" size="lg" color="primary" mb="50px" style={{ textAlign: 'center' }}>
+      <Heading as="h2" size="lg" color="primary" mb="50px" style={{ textAlign: 'center' }}>
         {
           tokenMode ?
             TranslateString(10002, 'Stake tokens to earn EGG')
@@ -104,18 +144,18 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
           TranslateString(320, 'Stake LP tokens to earn EGG')
         }
       </Heading>
-      <Heading as="h2" color="contrast" mb="50px" style={{ textAlign: 'center' }}>
+      <Heading as="h3" color="contrast" mb="50px" style={{ textAlign: 'center' }}>
         {TranslateString(10000, 'Deposit Fee will be used to buyback EGG')}
       </Heading>
-      <FarmTabButtons stakedOnly={stakedOnly} setStakedOnly={setStakedOnly}/>
       <div>
-        <Divider />
+                <Divider />
+        <FlexLayout>
+        {autoFarmsList(autoFarms,false)}
+        </FlexLayout>
+
         <FlexLayout>
           <Route exact path={`${path}`}>
             {stakedOnly ? farmsList(stakedOnlyFarms, false) : farmsList(activeFarms, false)}
-          </Route>
-          <Route exact path={`${path}/history`}>
-            {farmsList(inactiveFarms, true)}
           </Route>
         </FlexLayout>
       </div>

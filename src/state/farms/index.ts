@@ -1,12 +1,14 @@
 /* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit'
 import farmsConfig from 'config/constants/farms'
+import { getWeb3 } from 'utils/web3'
 import fetchFarms from './fetchFarms'
 import {
   fetchFarmUserEarnings,
   fetchFarmUserAllowances,
   fetchFarmUserTokenBalances,
   fetchFarmUserStakedBalances,
+  fetchFarmUserNextHarvest
 } from './fetchFarmUser'
 import { FarmsState, Farm } from '../types'
 
@@ -46,6 +48,10 @@ export const fetchFarmUserDataAsync = (account) => async (dispatch) => {
   const userFarmTokenBalances = await fetchFarmUserTokenBalances(account)
   const userStakedBalances = await fetchFarmUserStakedBalances(account)
   const userFarmEarnings = await fetchFarmUserEarnings(account)
+  const userNextHarvest = await fetchFarmUserNextHarvest(account)
+  const web3 = getWeb3()
+  const blockNumber = await web3.eth.getBlockNumber()
+  const block = await web3.eth.getBlock(blockNumber)
 
   const arrayOfUserDataObjects = userFarmAllowances.map((farmAllowance, index) => {
     return {
@@ -54,6 +60,8 @@ export const fetchFarmUserDataAsync = (account) => async (dispatch) => {
       tokenBalance: userFarmTokenBalances[index],
       stakedBalance: userStakedBalances[index],
       earnings: userFarmEarnings[index],
+      nextHarvest : userNextHarvest[index],
+      currentTime : block.timestamp,
     }
   })
 

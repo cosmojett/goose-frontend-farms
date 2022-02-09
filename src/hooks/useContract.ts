@@ -14,6 +14,7 @@ import lotteryTicket from 'config/abi/lotteryNft.json'
 import masterChef from 'config/abi/masterchef.json'
 import sousChef from 'config/abi/sousChef.json'
 import sousChefBnb from 'config/abi/sousChefBnb.json'
+import autoFarm from 'config/abi/autofarm.json'
 
 const useContract = (abi: AbiItem, address: string, contractOptions?: ContractOptions) => {
   const web3 = useWeb3()
@@ -67,6 +68,11 @@ export const useLotteryTicket = () => {
 export const useMasterchef = () => {
   const abi = (masterChef as unknown) as AbiItem
   return useContract(abi, getMasterChefAddress())
+}
+
+export const useAutoFarm = (address: string) => {
+  const autoFarmAbi = (autoFarm as unknown) as AbiItem
+  return useContract(autoFarmAbi, address)
 }
 
 export const useSousChef = (id) => {

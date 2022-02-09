@@ -1,48 +1,45 @@
-import React, { useMemo, useState, useCallback } from 'react'
+import React, { useMemo, useState, useCallback, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import styled from 'styled-components'
 import { provider } from 'web3-core'
-import { getWeb3 } from 'utils/web3'
 import { getContract } from 'utils/erc20'
-import getTimePeriods from 'utils/getTimePeriods'
-import formatTimePeriod from 'utils/formatTimePeriod'
 import { Button, Flex, Text } from '@pancakeswap-libs/uikit'
 import { Farm } from 'state/types'
 import { useFarmFromPid, useFarmFromSymbol, useFarmUser } from 'state/hooks'
 import useI18n from 'hooks/useI18n'
 import UnlockButton from 'components/UnlockButton'
-import { useApprove } from 'hooks/useApprove'
+import { useApprove, useApproveAddress } from 'hooks/useApprove'
+import { userAllowance } from 'utils/callHelpers'
 import StakeAction from './StakeAction'
 import HarvestAction from './HarvestAction'
+
 
 const Action = styled.div`
   padding-top: 16px;
 `
 export interface FarmWithStakedValue extends Farm {
   apy?: BigNumber
-  nextHarvest? : BigNumber
-  currentTime? : BigNumber
 }
 
 interface FarmCardActionsProps {
   farm: FarmWithStakedValue
   ethereum?: provider
   account?: string
+  autoFarmContract: any
 }
 
-const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account }) => {
+const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account, autoFarmContract }) => {
   const TranslateString = useI18n()
   const [requestedApproval, setRequestedApproval] = useState(false)
+  const [allowance, setAllowance] = useState(new BigNumber(0));
   const { pid, lpAddresses, tokenAddresses, isTokenOnly, depositFeeBP } = useFarmFromPid(farm.pid)
-  const { allowance, tokenBalance, stakedBalance, earnings, nextHarvest, currentTime } = useFarmUser(pid)
+  const { tokenBalance, stakedBalance, earnings } = useFarmUser(pid)
   const lpAddress = lpAddresses[process.env.REACT_APP_CHAIN_ID]
+
   const tokenAddress = tokenAddresses[process.env.REACT_APP_CHAIN_ID];
+  const farmContract = autoFarmContract[process.env.REACT_APP_CHAIN_ID];
   const lpName = farm.lpSymbol.toUpperCase()
   const isApproved = account && allowance && allowance.isGreaterThan(0)
-  const netTime = (nextHarvest.toNumber() - currentTime.toNumber()) > 0 ? nextHarvest.toNumber() - currentTime.toNumber() : 0
-  const timeText = formatTimePeriod(getTimePeriods(netTime))
-  // console.log(timeText)
-
 
   const lpContract = useMemo(() => {
     if(isTokenOnly){
@@ -51,7 +48,19 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account }
     return getContract(ethereum as provider, lpAddress);
   }, [ethereum, lpAddress, tokenAddress, isTokenOnly])
 
-  const { onApprove } = useApprove(lpContract)
+
+  const { onApprove } = useApproveAddress(lpContract, farmContract);
+  const getAllowance = useEffect(() => {
+    async function fetchAllowance() {
+      try {
+        const allowancex = await  userAllowance(lpContract, farmContract, account);
+        setAllowance(new BigNumber(allowancex))
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    fetchAllowance()
+  }, [lpContract, farmContract, account])
 
   const handleApprove = useCallback(async () => {
     try {
@@ -65,7 +74,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account }
 
   const renderApprovalOrStakeButton = () => {
     return isApproved ? (
-      <StakeAction stakedBalance={stakedBalance} tokenBalance={tokenBalance} tokenName={lpName} pid={pid} depositFeeBP={depositFeeBP} />
+      <StakeAction account={account} farmAddress={farmContract} stakedBalance={stakedBalance} tokenBalance={tokenBalance} tokenName={lpName} pid={pid} depositFeeBP={depositFeeBP} />
     ) : (
 
         <Button  disabled={requestedApproval} onClick={handleApprove}>
@@ -80,22 +89,9 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account }
     <Action>
       {!account ? (<UnlockButton mt="8px" fullWidth />) : (
         <>
-          <Flex>
-          <Text bold textTransform="uppercase" color="primary" fontSize="12px" pr="3px">
-            {/* TODO: Is there a way to get a dynamic value here from useFarmFromSymbol? */}
-            {farm.earnToken}
-          </Text>
-          <Text bold textTransform="uppercase" color="contrast" fontSize="12px">
-            {TranslateString(999, 'Earned')}
-          </Text>
-        </Flex>
-        <HarvestAction earnings={earnings} pid={pid} netTime={netTime} timeText={timeText} />
         <Flex>
           <Text bold textTransform="uppercase" color="primary" fontSize="12px" pr="3px">
-            {lpName}
-          </Text>
-          <Text bold textTransform="uppercase" color="contrast" fontSize="12px">
-            {TranslateString(999, 'Staked')}
+            Total Staked Amount
           </Text>
         </Flex>
         {renderApprovalOrStakeButton()}

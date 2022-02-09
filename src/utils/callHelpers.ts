@@ -7,6 +7,51 @@ export const approve = async (lpContract, masterChefContract, account) => {
     .send({ from: account })
 }
 
+export const approveToAddress = async(tokenContract, spender, account) => {
+  return tokenContract.methods
+    .approve(spender, ethers.constants.MaxUint256)
+    .send({ from: account })
+}
+
+export const userAllowance = async(tokenContract, spender, account) => {
+  return tokenContract.methods
+    .allowance(account, spender)
+    .call()
+}
+
+export const autoFarmSharePrice = async(autofarm) => {
+  return autofarm.methods
+  .getPricePerFullShare()
+  .call()
+}
+
+export const autoFarmTotal = async(autofarm) => {
+  return autofarm.methods
+  .balanceOf()
+  .call()
+}
+
+export const autoFarmDepositFee = async(autofarm) => {
+  return autofarm.methods
+  .depositFeeBP()
+  .call()
+}
+
+export const userAutoFarmStakes = async(autofarm, account) => {
+  return autofarm.methods
+  .userInfo(account)
+  .call()
+}
+
+export const autoFarmStake = async (contract, amount, account) => {
+  return contract.methods
+    .deposit(new BigNumber(amount).times(new BigNumber(10).pow(18)).toString())
+    .send({ from : account})
+    .on('transactionHash', (tx) => {
+      return tx.transactionHash
+    })
+}
+
 export const stake = async (masterChefContract, pid, amount, account) => {
   return masterChefContract.methods
     .deposit(pid, new BigNumber(amount).times(new BigNumber(10).pow(18)).toString())
@@ -38,6 +83,15 @@ export const unstake = async (masterChefContract, pid, amount, account) => {
   return masterChefContract.methods
     .withdraw(pid, new BigNumber(amount).times(new BigNumber(10).pow(18)).toString())
     .send({ from: account })
+    .on('transactionHash', (tx) => {
+      return tx.transactionHash
+    })
+}
+
+export const autoFarmWithdrawAll = async (contract, account) => {
+  return contract.methods
+    .withdrawAll()
+    .send({ from : account})
     .on('transactionHash', (tx) => {
       return tx.transactionHash
     })

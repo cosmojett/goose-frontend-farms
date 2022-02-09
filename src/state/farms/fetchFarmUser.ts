@@ -15,7 +15,6 @@ export const fetchFarmUserAllowances = async (account: string) => {
     return { address: lpContractAddress, name: 'allowance', params: [account, masterChefAdress] }
   })
 
-console.log(calls)
   const rawLpAllowances = await multicall(erc20ABI, calls)
   const parsedLpAllowances = rawLpAllowances.map((lpBalance) => {
     return new BigNumber(lpBalance).toJSON()
@@ -54,6 +53,24 @@ export const fetchFarmUserStakedBalances = async (account: string) => {
   const rawStakedBalances = await multicall(masterchefABI, calls)
   const parsedStakedBalances = rawStakedBalances.map((stakedBalance) => {
     return new BigNumber(stakedBalance[0]._hex).toJSON()
+  })
+  return parsedStakedBalances
+}
+
+export const fetchFarmUserNextHarvest = async (account: string) => {
+  const masterChefAdress = getMasterChefAddress()
+
+  const calls = farmsConfig.map((farm) => {
+    return {
+      address: masterChefAdress,
+      name: 'userInfo',
+      params: [farm.pid, account],
+    }
+  })
+
+  const rawStakedBalances = await multicall(masterchefABI, calls)
+  const parsedStakedBalances = rawStakedBalances.map((stakedBalance) => {
+    return new BigNumber(stakedBalance[3]._hex).toJSON()
   })
   return parsedStakedBalances
 }

@@ -64,6 +64,7 @@ export interface FarmConfig {
   earnToken?: string
   isAuto? : boolean
   depositToken? : string
+  autoFarmContract? : Address
 }
 
 export interface PoolConfig {

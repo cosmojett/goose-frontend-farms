@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo, useState, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import styled, { keyframes } from 'styled-components'
 import { Flex, Text, Skeleton } from '@pancakeswap-libs/uikit'
@@ -6,8 +6,9 @@ import { communityFarms } from 'config/constants'
 import { Farm } from 'state/types'
 import { provider } from 'web3-core'
 import useI18n from 'hooks/useI18n'
-import getTimePeriods from 'utils/getTimePeriods'
-import formatTimePeriod from 'utils/formatTimePeriod'
+import { useAutoFarm } from 'hooks/useContract'
+import { autoFarmTotal, autoFarmDepositFee } from 'utils/callHelpers'
+import { getBalanceNumber } from 'utils/formatBalance'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { QuoteToken } from 'config/constants/types'
 import DetailsSection from './DetailsSection'
@@ -15,7 +16,7 @@ import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
 import ApyButton from './ApyButton'
 
-export interface FarmWithStakedValue extends Farm {
+export interface AutoFarmWithStakedValue extends Farm {
   apy?: BigNumber
 }
 
@@ -98,8 +99,8 @@ const ExpandingWrapper = styled.div<{ expanded: boolean }>`
   overflow: hidden;
 `
 
-interface FarmCardProps {
-  farm: FarmWithStakedValue
+interface AutoFarmCard {
+  farm: AutoFarmWithStakedValue
   removed: boolean
   cakePrice?: BigNumber
   bnbPrice?: BigNumber
@@ -107,32 +108,45 @@ interface FarmCardProps {
   account?: string
 }
 
-const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, bnbPrice, ethereum, account }) => {
+const AutoFarmCard: React.FC<AutoFarmCard> = ({ farm, removed, cakePrice, bnbPrice, ethereum, account }) => {
   const TranslateString = useI18n()
-
+  const [staked, setStaked] = useState(0);
+  const [depositFee, setDepositFee] = useState(0);
   const [showExpandableSection, setShowExpandableSection] = useState(false)
-
+  const farmAddress = farm.autoFarmContract[process.env.REACT_APP_CHAIN_ID];
+  const farmContract = useAutoFarm(farmAddress);
   // const isCommunityFarm = communityFarms.includes(farm.tokenSymbol)
   // We assume the token name is coin pair + lp e.g. CAKE-BNB LP, LINK-BNB LP,
   // NAR-CAKE LP. The images should be cake-bnb.svg, link-bnb.svg, nar-cake.svg
   // const farmImage = farm.lpSymbol.split(' ')[0].toLocaleLowerCase()
+  //
+  // apy hesabı ekle
+  //
   const farmImage = farm.isTokenOnly ? farm.tokenSymbol.toLowerCase() : `${farm.tokenSymbol.toLowerCase()}-${farm.quoteTokenSymbol.toLowerCase()}`
+  const getTotalStaked = useEffect(() => {
+    async function getStakedValue() {
+      const value = await autoFarmTotal(farmContract)
+      console.log(value.toString())
+      setStaked(getBalanceNumber(value))
+    }
+    getStakedValue()
+  }, [farmContract])
+
+  const getDepositFee = useEffect(() => {
+    async function depfee() {
+      const value = await autoFarmDepositFee(farmContract)
+      setDepositFee(value)
+    }
+    depfee()
+  }, [farmContract])
 
   const totalValue: BigNumber = useMemo(() => {
-    if (!farm.lpTotalInQuoteToken) {
-      return null
-    }
-    if (farm.quoteTokenSymbol === QuoteToken.BNB) {
-      return bnbPrice.times(farm.lpTotalInQuoteToken)
-    }
-    if (farm.quoteTokenSymbol === QuoteToken.CAKE) {
-      return cakePrice.times(farm.lpTotalInQuoteToken)
-    }
-    return farm.lpTotalInQuoteToken
-  }, [bnbPrice, cakePrice, farm.lpTotalInQuoteToken, farm.quoteTokenSymbol])
+      return cakePrice.times(staked)
 
-  const totalValueFormated = totalValue
-    ? `$${Number(totalValue).toLocaleString(undefined, { maximumFractionDigits: 2 })}`
+  }, [ cakePrice, staked])
+
+  const totalValueFormated = staked
+    ? `$${Number(totalValue).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
     : '-'
 
   const lpLabel = farm.lpSymbol
@@ -141,9 +155,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, bnbPrice,
     maximumFractionDigits: 2,
   })
 
-  const { quoteTokenAdresses, quoteTokenSymbol, tokenAddresses, risk, image, earnToken, depositToken, isAuto, harvestInterval } = farm
-  console.log(typeof harvestInterval)
-  const timePeriods = formatTimePeriod(getTimePeriods(Number(harvestInterval)))
+  const { quoteTokenAdresses, quoteTokenSymbol, tokenAddresses, risk, image, earnToken, depositToken, isAuto, harvestInterval, autoFarmContract } = farm
 
   return (
     <FCard>
@@ -192,11 +204,7 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, bnbPrice,
 
       <Flex justifyContent='space-between'>
         <Text  fontSize="16px" >{TranslateString(10001, 'Deposit Fee')}:</Text>
-        <Text  fontSize="16px"  >{(farm.depositFeeBP / 100)}%</Text>
-      </Flex>
-      <Flex  justifyContent='space-between'>
-        <Text  fontSize="16px" >Harvest Interval:</Text>
-        <Text  fontSize="16px" > {timePeriods}</Text>
+        <Text  fontSize="16px"  >{(depositFee / 100)}%</Text>
       </Flex>
       <Flex justifyContent='space-between'>
         <Text  fontSize="16px" >Auto Compound:</Text>
@@ -206,11 +214,11 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, bnbPrice,
         <Text  fontSize="16px" >Total Liquidity:</Text>
         <Text  fontSize="16px" >{totalValueFormated}</Text>
       </Flex>
-      <CardActionsContainer farm={farm} ethereum={ethereum} account={account} />
+      <CardActionsContainer farm={farm} ethereum={ethereum} account={account} autoFarmContract={autoFarmContract} />
       </CardContainer>
 
     </FCard>
   )
 }
 
-export default FarmCard
+export default AutoFarmCard

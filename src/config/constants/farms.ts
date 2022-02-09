@@ -21,7 +21,31 @@ const farms: FarmConfig[] = [
     earnToken : 'BUZZ',
     depositToken : 'BUZZ',
     isAuto : true,
+    autoFarmContract : {
+      97 : '0x53356bA80bc3986C777B5CaB15573830d8E832ed',
+      56 : ''
     }
+  },
+  {
+    pid: 1,
+    risk: 5,
+    lpSymbol: 'BUZZ-BUSD LP',
+    lpAddresses: {
+      97: '0x88C8E3bc6a3Ee7967dE12ed01046d4743ab00002',
+      56: '',
+    },
+    tokenSymbol: 'BUZZ',
+    tokenAddresses: {
+      97: '0x9F861a8aCa106A3b3A12385eAE76784885D51239',
+      56: '',
+    },
+    quoteTokenSymbol: QuoteToken.BUSD,
+    quoteTokenAdresses: contracts.busd,
+    image : './images/farm_bg/1.png',
+    earnToken : 'BUZZ',
+    depositToken : 'BUZZ-BUSD LP',
+    isAuto : false,
+  },
   /*  {
     pid: 0,
     risk: 5,

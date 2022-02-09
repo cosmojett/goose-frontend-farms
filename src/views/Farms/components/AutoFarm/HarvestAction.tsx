@@ -10,8 +10,6 @@ import useStake from '../../../../hooks/useStake'
 interface FarmCardActionsProps {
   earnings?: BigNumber
   pid?: number
-  netTime?: number
-  timeText?: string
 }
 
 const BalanceAndCompound = styled.div`
@@ -21,7 +19,7 @@ const BalanceAndCompound = styled.div`
   flex-direction: column;
 `
 
-const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid, netTime, timeText}) => {
+const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid }) => {
   const TranslateString = useI18n()
   const [pendingTx, setPendingTx] = useState(false)
   const { onReward } = useHarvest(pid)
@@ -50,14 +48,14 @@ const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid, netTime,
           </Button>
           : null}
         <Button
-          disabled={rawEarningsBalance === 0 || pendingTx || netTime > 0}
+          disabled={rawEarningsBalance === 0 || pendingTx}
           onClick={async () => {
             setPendingTx(true)
             await onReward()
             setPendingTx(false)
           }}
         >
-          {netTime > 0 ? timeText : 'Harvest'}
+          {TranslateString(999, 'Harvest')}
         </Button>
       </BalanceAndCompound>
     </Flex>
