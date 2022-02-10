@@ -15,6 +15,7 @@ import masterChef from 'config/abi/masterchef.json'
 import sousChef from 'config/abi/sousChef.json'
 import sousChefBnb from 'config/abi/sousChefBnb.json'
 import autoFarm from 'config/abi/autofarm.json'
+import cluster from 'config/abi/cluster.json'
 
 const useContract = (abi: AbiItem, address: string, contractOptions?: ContractOptions) => {
   const web3 = useWeb3()
@@ -73,6 +74,11 @@ export const useMasterchef = () => {
 export const useAutoFarm = (address: string) => {
   const autoFarmAbi = (autoFarm as unknown) as AbiItem
   return useContract(autoFarmAbi, address)
+}
+
+export const useCluster = (address: string) => {
+  const abi = (cluster as unknown) as AbiItem
+  return useContract(abi,address)
 }
 
 export const useSousChef = (id) => {

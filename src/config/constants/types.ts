@@ -65,6 +65,8 @@ export interface FarmConfig {
   isAuto? : boolean
   depositToken? : string
   autoFarmContract? : Address
+  isCluster?: boolean
+  clusterContract? : Address
 }
 
 export interface PoolConfig {

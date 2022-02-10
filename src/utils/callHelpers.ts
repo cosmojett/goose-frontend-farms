@@ -37,6 +37,18 @@ export const autoFarmDepositFee = async(autofarm) => {
   .call()
 }
 
+export const clusterLock = async (cluster) => {
+  return cluster.methods
+  .timeLock()
+  .call()
+}
+
+export const clusterUserInfo = async (cluster, account) => {
+  return cluster.methods
+  .userInfo(account)
+  .call()
+}
+
 export const userAutoFarmStakes = async(autofarm, account) => {
   return autofarm.methods
   .userInfo(account)
