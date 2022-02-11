@@ -4,64 +4,38 @@ import { Indexes } from './types'
 const indexes: Indexes[] = [
     {
         id: 0,
-        name: 'Sample Index',
+        name: 'Large Cap Index',
         image : './images/indexes/1.jpg',
         creator: 'Verified Astronauts',
         tokens: [
             {
-                contract : contract.wavax,
-                name : 'WAVAX'
+                contract : contract.btcb,
+                name : 'BTCB'
             },
             {
-                contract : contract.wavax,
-                name : 'DAI'
-            }
+                contract : contract.ethb,
+                name : 'ETHB'
+            },
         ],
-        contract: '0x...'
-    },
+        contract: '0xDe12f8faC90a56CD6D2426d2c675aCD8e34b1435'
+    },/*
     {
         id: 1,
-        name: 'Sample Index 2',
+        name: 'DeFi Index',
         image : './images/indexes/2.jpg',
         creator: 'Verified Astronauts',
         tokens: [
             {
-                contract : contract.wavax,
-                name : 'WAVAX'
+                contract : contract.realCake,
+                name : 'CAKE'
             },
             {
-                contract : contract.wavax,
-                name : 'BTC-B'
-            }
+                contract : contract.banana,
+                name : 'BANANA'
+            },
         ],
-        contract: '0x...'
-    },
-    {
-        id: 1,
-        name: 'Sample Index 3',
-        image : './images/indexes/3.jpg',
-        creator: 'Verified Astronauts',
-        tokens: [
-            {
-                contract : contract.wavax,
-                name : 'WAVAX'
-            }
-        ],
-        contract: '0x...'
-    },
-    {
-        id: 1,
-        name: 'Sample Index 4',
-        image : './images/indexes/4.jpg',
-        creator: 'Verified Astronauts',
-        tokens: [
-            {
-                contract : contract.wavax,
-                name : 'WAVAX'
-            }
-        ],
-        contract: '0x...'
-    }
+        contract: '0x641f0119EFa907481D8Db30B1c1CAc3f365d74E1'
+    }, */
 ]
 
 export default indexes;

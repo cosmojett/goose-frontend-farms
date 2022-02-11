@@ -65,22 +65,8 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account }
 
   const renderApprovalOrStakeButton = () => {
     return isApproved ? (
-      <StakeAction stakedBalance={stakedBalance} tokenBalance={tokenBalance} tokenName={lpName} pid={pid} depositFeeBP={depositFeeBP} />
-    ) : (
-
-        <Button  disabled={requestedApproval} onClick={handleApprove}>
-        {TranslateString(999, 'Approve Contract')}
-      </Button>
-
-
-    )
-  }
-
-  return (
-    <Action>
-      {!account ? (<UnlockButton mt="8px" fullWidth />) : (
-        <>
-          <Flex>
+      <>
+                <Flex>
           <Text bold textTransform="uppercase" color="primary" fontSize="12px" pr="3px">
             {/* TODO: Is there a way to get a dynamic value here from useFarmFromSymbol? */}
             {farm.earnToken}
@@ -98,6 +84,22 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account }
             {TranslateString(999, 'Staked')}
           </Text>
         </Flex>
+        
+      <StakeAction stakedBalance={stakedBalance} tokenBalance={tokenBalance} tokenName={lpName} pid={pid} depositFeeBP={depositFeeBP} /></>
+    ) : (
+
+        <Button  disabled={requestedApproval} onClick={handleApprove}>
+        {TranslateString(999, 'Approve Contract')}
+      </Button>
+
+
+    )
+  }
+
+  return (
+    <Action>
+      {!account ? (<UnlockButton mt="8px" fullWidth />) : (
+        <>
         {renderApprovalOrStakeButton()}
         </>
       )}

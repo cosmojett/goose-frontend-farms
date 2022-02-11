@@ -23,6 +23,19 @@ export const getAllowance = async (
   }
 }
 
+export const getAllowanceForAddress = async(
+  token: Contract,
+  spender: string,
+  account: string
+): Promise<string> => {
+  try {
+    const allowance: string = await token.methods.allowance(account,spender).call()
+    return allowance
+  } catch (e) {
+    return '0'
+  }
+}
+
 export const getTokenBalance = async (
   provider: ProviderType,
   tokenAddress: string,

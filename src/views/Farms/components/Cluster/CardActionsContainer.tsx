@@ -102,7 +102,16 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account, 
   }
   const renderApprovalOrStakeButton = () => {
     return isApproved ? (
+      <>        
       <StakeAction account={account} farmAddress={farmContract} stakedBalance={stakedBalance} tokenBalance={tokenBalance} tokenName={lpName} pid={pid} depositFeeBP={depositFeeBP} withdrawAvailable={stakeTime > Number(currentTime)}/>
+      <Flex>
+          <Text bold textTransform="uppercase" color="primary" fontSize="12px" pr="3px">
+            Time Left
+          </Text>
+        </Flex>
+        <Flex justifyContent="space-between" alignItems="center">
+          <Heading color='text'>{stakeTime > Number(currentTime) ? formatTimePeriod(getTimePeriods(stakeTime - Number(currentTime))) : '-'}</Heading>
+        </Flex></>
     ) : (
 
         <Button  disabled={requestedApproval} onClick={handleApprove}>
@@ -125,14 +134,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account, 
           </Text>
         </Flex>
         {renderApprovalOrStakeButton()}
-        <Flex>
-          <Text bold textTransform="uppercase" color="primary" fontSize="12px" pr="3px">
-            Time Left
-          </Text>
-        </Flex>
-        <Flex justifyContent="space-between" alignItems="center">
-          <Heading color='text'>{stakeTime > Number(currentTime) ? formatTimePeriod(getTimePeriods(stakeTime - Number(currentTime))) : 'Withdrawable'}</Heading>
-        </Flex>
+
         </>
       )}
     </Action>

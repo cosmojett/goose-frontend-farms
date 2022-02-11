@@ -49,6 +49,30 @@ export const clusterUserInfo = async (cluster, account) => {
   .call()
 }
 
+export const galaxyTotalSupply = async(galaxy) => {
+  return galaxy.methods
+  .totalSupply()
+  .call()
+}
+
+export const galaxyPrice = async(galaxy,amount) => {
+  return galaxy.methods
+  .mintWithStablePrice(new BigNumber(amount).times(new BigNumber(10).pow(18)).toString())
+  .call()
+}
+
+export const galaxyComponentPrices = async(galaxy,amount) => {
+  return galaxy.methods
+  .componentPrices(new BigNumber(amount).times(new BigNumber(10).pow(18)).toString())
+  .call()
+}
+
+export const galaxyBalance = async(galaxy,account) => {
+  return galaxy.methods
+  .balanceOf(account)
+  .call()
+}
+
 export const userAutoFarmStakes = async(autofarm, account) => {
   return autofarm.methods
   .userInfo(account)

@@ -54,8 +54,7 @@ const App: React.FC = () => {
                             <Farms />
             </Route>
             <Route path="/indexes">
-              {/* <Indexes /> */}
-              <ComingSoon />
+               <Indexes />
             </Route>
             
             {/* <Route path="/pools"> */}

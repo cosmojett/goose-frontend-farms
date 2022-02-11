@@ -16,6 +16,7 @@ import sousChef from 'config/abi/sousChef.json'
 import sousChefBnb from 'config/abi/sousChefBnb.json'
 import autoFarm from 'config/abi/autofarm.json'
 import cluster from 'config/abi/cluster.json'
+import index from 'config/abi/index.json'
 
 const useContract = (abi: AbiItem, address: string, contractOptions?: ContractOptions) => {
   const web3 = useWeb3()
@@ -86,6 +87,11 @@ export const useSousChef = (id) => {
   const rawAbi = config.poolCategory === PoolCategory.BINANCE ? sousChefBnb : sousChef
   const abi = (rawAbi as unknown) as AbiItem
   return useContract(abi, config.contractAddress[process.env.REACT_APP_CHAIN_ID])
+}
+
+export const useGalaxy = (address: string) => {
+  const abi = (index as unknown) as AbiItem
+  return useContract(abi,address)
 }
 
 export default useContract

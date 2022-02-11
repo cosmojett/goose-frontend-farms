@@ -8,12 +8,12 @@ const farms: FarmConfig[] = [
     lpSymbol : 'Cosmic Farm #1',
     lpAddresses : {
       97 : '0x9F861a8aCa106A3b3A12385eAE76784885D51239',
-      56 : ''
+      56 : '0xa73c15620bfa79646e9a11d0d638d66588456462'
     },
     tokenSymbol : 'BUZZ',
     tokenAddresses: {
       97: '0x9F861a8aCa106A3b3A12385eAE76784885D51239',
-      56: '',
+      56: '0xa73c15620bfa79646e9a11d0d638d66588456462',
     },
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
@@ -24,27 +24,27 @@ const farms: FarmConfig[] = [
     isCluster : false,
     autoFarmContract : {
       97 : '0x53356bA80bc3986C777B5CaB15573830d8E832ed',
-      56 : ''
+      56 : '0x79eFe3cC2E2291D9570762d0a6b8Cf00B9d593df'
     }
   },
   {
     pid: 1,
     risk: 5,
-    lpSymbol: 'BUZZ-BUSD LP',
+    lpSymbol: 'BUZZ-BNB LP',
     lpAddresses: {
       97: '0x88C8E3bc6a3Ee7967dE12ed01046d4743ab00002',
-      56: '',
+      56: '0xac67c5108816e5dab31376a0ee916d1fa7e6d50a',
     },
     tokenSymbol: 'BUZZ',
     tokenAddresses: {
       97: '0x9F861a8aCa106A3b3A12385eAE76784885D51239',
-      56: '',
+      56: '0xa73c15620bfa79646e9a11d0d638d66588456462',
     },
-    quoteTokenSymbol: QuoteToken.BUSD,
-    quoteTokenAdresses: contracts.busd,
-    image : './images/farm_bg/1.png',
+    quoteTokenSymbol: QuoteToken.BNB,
+    quoteTokenAdresses: contracts.wbnb,
+    image : './images/indexes/1.jpg',
     earnToken : 'BUZZ',
-    depositToken : 'BUZZ-BUSD LP',
+    depositToken : 'BUZZ-BNB LP',
     isAuto : false,
     isCluster : false,
   },  
@@ -54,23 +54,23 @@ const farms: FarmConfig[] = [
     lpSymbol: 'Cluster #1',
     lpAddresses: {
       97: '0x9F861a8aCa106A3b3A12385eAE76784885D51239',
-      56: '',
+      56: '0xa73c15620bfa79646e9a11d0d638d66588456462',
     },
     tokenSymbol: 'BUZZ',
     tokenAddresses: {
       97: '0x9F861a8aCa106A3b3A12385eAE76784885D51239',
-      56: '',
+      56: '0xa73c15620bfa79646e9a11d0d638d66588456462',
     },
     quoteTokenSymbol: QuoteToken.BUSD,
     quoteTokenAdresses: contracts.busd,
-    image : './images/farm_bg/1.png',
+    image : './images/indexes/2.jpg',
     earnToken : 'BUZZ',
     depositToken : 'BUZZ',
     isAuto : false,
     isCluster : true,
     clusterContract : {
       97 : '0x83aFb309b4C8891F1fA04A61c77bcCD882eE6134',
-      56 : ''
+      56 : '0x1770104aa9b1BDB1D1582802b3221a466A2A4f4d'
     }
   },
   /*  {
