@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import styled, { keyframes } from 'styled-components'
-import { Flex, Text, Skeleton } from '@pancakeswap-libs/uikit'
+import { Flex, Text, Skeleton, LinkExternal } from '@pancakeswap-libs/uikit'
 import { communityFarms } from 'config/constants'
 import { Farm } from 'state/types'
 import { provider } from 'web3-core'
@@ -10,6 +10,7 @@ import getTimePeriods from 'utils/getTimePeriods'
 import formatTimePeriod from 'utils/formatTimePeriod'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { QuoteToken } from 'config/constants/types'
+import getLiquidityUrlPathParts from 'utils/getLiquidityUrlPathParts'
 import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
@@ -142,9 +143,9 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, bnbPrice,
   })
 
   const { quoteTokenAdresses, quoteTokenSymbol, tokenAddresses, risk, image, earnToken, depositToken, isAuto, harvestInterval } = farm
-  console.log(typeof harvestInterval)
+  const liquidityUrlPathParts = getLiquidityUrlPathParts({ quoteTokenAdresses, quoteTokenSymbol, tokenAddresses })
   const timePeriods = formatTimePeriod(getTimePeriods(Number(harvestInterval)))
-
+  console.log(`Quote : ${JSON.stringify(quoteTokenAdresses)} , token : ${JSON.stringify(tokenAddresses)}`)
   return (
     <FCard>
       {/* {farm.tokenSymbol === 'EGG' && <StyledCardAccent />} */}
@@ -183,7 +184,9 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, bnbPrice,
       )}
       <Flex justifyContent='space-between'>
         <Text  fontSize="16px" >Deposit:</Text>
-        <Text  fontSize="16px" color="primary" bold>{depositToken}</Text>
+        <LinkExternal href={`https://dex.cosmosium.finance/#/add/${liquidityUrlPathParts}`}>
+          {depositToken}
+        </LinkExternal>
       </Flex>
       <Flex justifyContent='space-between'>
         <Text  fontSize="16px" >{TranslateString(318, 'Earn')}:</Text>

@@ -21,6 +21,10 @@ export const links = [
     icon: 'FarmIcon',
     items : [
       {
+        label : 'Cosmic',
+        href : '/cosmic'
+      },
+      {
         label: 'Clusters',
         href: '/clusters',
       },

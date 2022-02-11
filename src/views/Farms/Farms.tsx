@@ -183,21 +183,18 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
           TranslateString(320, 'Stake LP tokens to earn EGG')
         }
       </Heading>
-      <Heading as="h3" color="contrast" mb="50px" style={{ textAlign: 'center' }}>
-        {TranslateString(10000, 'Deposit Fee will be used to buyback EGG')}
-      </Heading>
       <div>
                 <Divider />
-        <FlexLayout>
-        {autoFarmsList(autoFarms,false)}
-        </FlexLayout>
 
         <FlexLayout>
-          <Route exact path={`${path}`}>
+          <Route exact path='/farms'>
             {stakedOnly ? farmsList(stakedOnlyFarms, false) : farmsList(activeFarms, false)}
           </Route>
           <Route exact path='/clusters'>
             {clusterList(clusters, false)}
+          </Route>
+          <Route exact path='/cosmic'>
+          {autoFarmsList(autoFarms,false)}
           </Route>
         </FlexLayout>
       </div>

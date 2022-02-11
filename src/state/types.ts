@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { FarmConfig, PoolConfig } from 'config/constants/types'
+import { FarmConfig, PoolConfig, Indexes } from 'config/constants/types'
 
 export interface Farm extends FarmConfig {
   tokenAmount?: BigNumber
@@ -33,6 +33,14 @@ export interface Pool extends PoolConfig {
   }
 }
 
+export interface IndexExtended extends Indexes {
+  userData?: {
+    allowance: BigNumber
+    indexBalance: BigNumber
+    indexTokenBalance: BigNumber
+  }
+}
+
 // Slices states
 
 export interface FarmsState {
@@ -43,9 +51,14 @@ export interface PoolsState {
   data: Pool[]
 }
 
+export interface IndexState {
+  data : IndexExtended[]
+}
+
 // Global state
 
 export interface State {
   farms: FarmsState
   pools: PoolsState
+  indexes: IndexState
 }

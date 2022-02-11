@@ -30,7 +30,7 @@ const farms: FarmConfig[] = [
   {
     pid: 1,
     risk: 5,
-    lpSymbol: 'BUZZ-BNB LP',
+    lpSymbol: 'BUZZ-BNB APE-LP',
     lpAddresses: {
       97: '0x88C8E3bc6a3Ee7967dE12ed01046d4743ab00002',
       56: '0xac67c5108816e5dab31376a0ee916d1fa7e6d50a',
@@ -44,7 +44,7 @@ const farms: FarmConfig[] = [
     quoteTokenAdresses: contracts.wbnb,
     image : './images/indexes/1.jpg',
     earnToken : 'BUZZ',
-    depositToken : 'BUZZ-BNB LP',
+    depositToken : 'BUZZ-BNB APE-LP',
     isAuto : false,
     isCluster : false,
   },  
@@ -73,6 +73,52 @@ const farms: FarmConfig[] = [
       56 : '0x1770104aa9b1BDB1D1582802b3221a466A2A4f4d'
     }
   },
+  {
+    pid: 3,
+    risk: 5,
+    lpSymbol: 'Cluster #2',
+    lpAddresses: {
+      97: '0x9F861a8aCa106A3b3A12385eAE76784885D51239',
+      56: '0xa73c15620bfa79646e9a11d0d638d66588456462',
+    },
+    tokenSymbol: 'BUZZ',
+    tokenAddresses: {
+      97: '0x9F861a8aCa106A3b3A12385eAE76784885D51239',
+      56: '0xa73c15620bfa79646e9a11d0d638d66588456462',
+    },
+    quoteTokenSymbol: QuoteToken.BUSD,
+    quoteTokenAdresses: contracts.busd,
+    image : './images/indexes/3.jpg',
+    earnToken : 'BUZZ',
+    depositToken : 'BUZZ',
+    isAuto : false,
+    isCluster : true,
+    clusterContract : {
+      97 : '',
+      56 : '0x027c055560F176A60206B592583927a4DE913FEF'
+    }
+  },
+  {
+    pid: 4,
+    risk: 5,
+    lpSymbol: 'BNB-BUSD APE-LP',
+    lpAddresses: {
+      97: '',
+      56: '0x51e6D27FA57373d8d4C256231241053a70Cb1d93',
+    },
+    tokenSymbol: 'BNB',
+    tokenAddresses: {
+      97: '',
+      56: '0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c',
+    },
+    quoteTokenSymbol: QuoteToken.BUSD,
+    quoteTokenAdresses: contracts.busd,
+    image : './images/indexes/1.jpg',
+    earnToken : 'BUZZ',
+    depositToken : 'BNB-BUSD APE-LP',
+    isAuto : false,
+    isCluster : false,
+  },  
   /*  {
     pid: 0,
     risk: 5,

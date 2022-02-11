@@ -3,7 +3,7 @@ import { useEffect, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import useRefresh from 'hooks/useRefresh'
 import { fetchFarmsPublicDataAsync, fetchPoolsPublicDataAsync, fetchPoolsUserDataAsync } from './actions'
-import { State, Farm, Pool } from './types'
+import { State, Farm, Pool, IndexExtended } from './types'
 import { QuoteToken } from '../config/constants/types'
 
 const ZERO = new BigNumber(0)
@@ -47,6 +47,18 @@ export const useFarmUser = (pid) => {
   }
 }
 
+export const useIndexFromId = (id): IndexExtended => {
+  const galaxy = useSelector((state: State) => state.indexes.data.find((f) => f.id === id))
+  return galaxy;
+}
+
+export const useIndexUser = (id) => {
+  const galaxy = useSelector((state: State) => {
+    console.log(state.indexes)
+    return 1
+  })
+
+}
 
 // Pools
 
@@ -71,10 +83,9 @@ export const usePoolFromPid = (sousId): Pool => {
 // Prices
 
 export const usePriceBnbBusd = (): BigNumber => {
-  // const pid = 2 // BUSD-BNB LP
-  // const farm = useFarmFromPid(pid)
-  // return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO
-  return new BigNumber(3);
+  const pid = 4 // BUSD-BNB LP
+  const farm = useFarmFromPid(pid)
+  return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO
 }
 
 export const usePriceCakeBusd = (): BigNumber => {

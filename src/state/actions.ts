@@ -7,3 +7,8 @@ export {
   updateUserPendingReward,
   updateUserStakedBalance,
 } from './pools'
+
+export {
+  fetchIndexUserData,
+  fetchIndexesPublicData
+} from './indexes'

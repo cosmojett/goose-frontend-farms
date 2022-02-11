@@ -51,7 +51,11 @@ const App: React.FC = () => {
             </Route>
             <Route path="/clusters">
              {/*  <Farms tokenMode/> */}
-                            <Farms />
+              <Farms />
+            </Route>
+            <Route path="/cosmic">
+             {/*  <Farms tokenMode/> */}
+              <Farms />
             </Route>
             <Route path="/indexes">
                <Indexes />
