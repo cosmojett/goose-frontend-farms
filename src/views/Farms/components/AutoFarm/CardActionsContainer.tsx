@@ -91,7 +91,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account, 
         <>
         <Flex>
           <Text bold textTransform="uppercase" color="primary" fontSize="12px" pr="3px">
-            Your Stake
+            Your Balance (Compounding)
           </Text>
         </Flex>
         {renderApprovalOrStakeButton()}

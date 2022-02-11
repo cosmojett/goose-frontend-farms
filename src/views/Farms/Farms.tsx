@@ -197,7 +197,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
             {stakedOnly ? farmsList(stakedOnlyFarms, false) : farmsList(activeFarms, false)}
           </Route>
           <Route exact path='/clusters'>
-            {stakedOnly ? clusterList(clusters, false) : clusterList(clusters, false)}
+            {clusterList(clusters, false)}
           </Route>
         </FlexLayout>
       </div>

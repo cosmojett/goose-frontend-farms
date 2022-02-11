@@ -9,7 +9,7 @@ const formatTimePeriod = (periods: ReturnType<typeof getTimePeriods>, excludePer
 
   Object.keys(periods).forEach((period) => {
     if (periods[period] > 0 && !excludePeriods.includes(period)) {
-      textArr.push(`${periods[period]} ${period.substr(0, 3)}`)
+      textArr.push(`${periods[period]} ${period.substr(0, 3) === 'hou' ? 'hrs' : period.substr(0,3)}`)
     }
   })
 

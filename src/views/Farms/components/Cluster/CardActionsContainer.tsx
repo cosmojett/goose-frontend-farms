@@ -22,6 +22,7 @@ const Action = styled.div`
 `
 export interface FarmWithStakedValue extends Farm {
   apy?: BigNumber
+  currentTime? : number
 }
 
 interface FarmCardActionsProps {
@@ -38,7 +39,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account, 
   const [stakeTime, setStakeTime] = useState(0);
   const [allowance, setAllowance] = useState(new BigNumber(0));
   const { pid, lpAddresses, tokenAddresses, isTokenOnly, depositFeeBP } = useFarmFromPid(farm.pid)
-  const { tokenBalance, stakedBalance, earnings } = useFarmUser(pid)
+  const { tokenBalance, stakedBalance, earnings, currentTime } = useFarmUser(pid)
   const lpAddress = lpAddresses[process.env.REACT_APP_CHAIN_ID]
 
   const tokenAddress = tokenAddresses[process.env.REACT_APP_CHAIN_ID];
@@ -75,13 +76,13 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account, 
       try {
           
           const userInfo = await clusterUserInfo(contract, account);
-          setStakeTime(Number(userInfo.lastUserActionTime))
+          setStakeTime(Number(userInfo.lastUserActionTime) + Number(timeLock))
       } catch (e) {
         console.error(e)
       }
     }
     fetchTime()
-  },[contract,account])
+  },[contract,account, timeLock])
 
   const handleApprove = useCallback(async () => {
     try {
@@ -98,12 +99,10 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account, 
       return formatTimePeriod(getTimePeriods(0))
     }
       return formatTimePeriod(getTimePeriods(current - (stakeTime + timeLock)))
-
-
   }
   const renderApprovalOrStakeButton = () => {
     return isApproved ? (
-      <StakeAction account={account} farmAddress={farmContract} stakedBalance={stakedBalance} tokenBalance={tokenBalance} tokenName={lpName} pid={pid} depositFeeBP={depositFeeBP} />
+      <StakeAction account={account} farmAddress={farmContract} stakedBalance={stakedBalance} tokenBalance={tokenBalance} tokenName={lpName} pid={pid} depositFeeBP={depositFeeBP} withdrawAvailable={stakeTime > Number(currentTime)}/>
     ) : (
 
         <Button  disabled={requestedApproval} onClick={handleApprove}>
@@ -113,14 +112,16 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account, 
 
     )
   }
-
+  console.log(`Current : ${currentTime} , Stake Time : ${stakeTime}, TimeLock :  ${timeLock}`)
+  console.log(typeof stakeTime)
+  console.log(typeof Number(currentTime))
   return (
     <Action>
       {!account ? (<UnlockButton mt="8px" fullWidth />) : (
         <>
         <Flex>
           <Text bold textTransform="uppercase" color="primary" fontSize="12px" pr="3px">
-            Your Stake
+            Your Balance (Compounding)
           </Text>
         </Flex>
         {renderApprovalOrStakeButton()}
@@ -130,7 +131,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account, 
           </Text>
         </Flex>
         <Flex justifyContent="space-between" alignItems="center">
-          <Heading color='text'> -- TODO --</Heading>
+          <Heading color='text'>{stakeTime > Number(currentTime) ? formatTimePeriod(getTimePeriods(stakeTime - Number(currentTime))) : 'Withdrawable'}</Heading>
         </Flex>
         </>
       )}

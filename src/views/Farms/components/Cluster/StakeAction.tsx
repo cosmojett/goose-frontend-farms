@@ -19,6 +19,7 @@ interface FarmCardActionsProps {
   depositFeeBP?: number
   farmAddress?: string
   account?: string
+  withdrawAvailable?: boolean
 }
 
 const IconButtonWrapper = styled.div`
@@ -28,7 +29,7 @@ const IconButtonWrapper = styled.div`
   }
 `
 
-const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  stakedBalance, tokenBalance, tokenName, pid, depositFeeBP}) => {
+const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  stakedBalance, tokenBalance, tokenName, pid, depositFeeBP, withdrawAvailable}) => {
   const TranslateString = useI18n()
   const { onStake } = useAutoFarmStake(farmAddress)
   const { onUnstake } = useAutoFarmWithdraw(farmAddress)
@@ -55,9 +56,9 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  sta
     fetchBalance()
   }, [farmContract, account])
 
-  const [onPresentDeposit] = useModal(<DepositModal max={tokenBalance} onConfirm={onStake} tokenName={tokenName} depositFeeBP={depositFeeBP} />)
+  const [onPresentDeposit] = useModal(<DepositModal max={tokenBalance} onConfirm={onStake} tokenName='BUZZ' depositFeeBP={depositFeeBP} isCluster/>)
   const [onPresentWithdraw] = useModal(
-    <WithdrawModal max={stakedBalance} onConfirm={onUnstake} tokenName={tokenName} />,
+    <WithdrawModal max={stakedBalance} onConfirm={onUnstake} tokenName='BUZZ' />,
   )
 
   const withdrawAll = async function() {
@@ -69,7 +70,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  sta
       <Button onClick={onPresentDeposit}>{TranslateString(999, 'Stake')}</Button>
     ) : (
       <IconButtonWrapper>
-        <IconButton variant="tertiary" onClick={() =>  withdrawAll()} mr="6px">
+        <IconButton disabled={withdrawAvailable} variant="tertiary" onClick={() =>  withdrawAll()} mr="6px">
           <MinusIcon color="primary" />
         </IconButton>
         <IconButton variant="tertiary" onClick={onPresentDeposit}>

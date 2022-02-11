@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import React, { useCallback, useMemo, useState } from 'react'
-import { Button, Modal } from '@pancakeswap-libs/uikit'
+import { Button, Modal, Heading } from '@pancakeswap-libs/uikit'
 import ModalActions from 'components/ModalActions'
 import TokenInput from 'components/TokenInput'
 import useI18n from 'hooks/useI18n'
@@ -12,9 +12,10 @@ interface DepositModalProps {
   onDismiss?: () => void
   tokenName?: string
   depositFeeBP?: number
+  isCluster?: boolean
 }
 
-const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, tokenName = '' , depositFeeBP = 0}) => {
+const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, tokenName = '' , depositFeeBP = 0, isCluster = false}) => {
   const [val, setVal] = useState('')
   const [pendingTx, setPendingTx] = useState(false)
   const TranslateString = useI18n()
@@ -34,7 +35,7 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
   }, [fullBalance, setVal])
 
   return (
-    <Modal title={`${TranslateString(316, 'Deposit')} ${tokenName} Tokens`} onDismiss={onDismiss}>
+    <Modal title={`${TranslateString(316, 'Deposit')} ${tokenName}`} onDismiss={onDismiss}>
       <TokenInput
         value={val}
         onSelectMax={handleSelectMax}
@@ -59,6 +60,12 @@ const DepositModal: React.FC<DepositModalProps> = ({ max, onConfirm, onDismiss, 
           {pendingTx ? TranslateString(488, 'Pending Confirmation') : TranslateString(464, 'Confirm')}
         </Button>
       </ModalActions>
+      {
+        isCluster ? (
+          <Heading color='text'>Depositing on locked stakings will resets your withdrawal time.</Heading>
+        ) : (<></>)
+      }
+       
     </Modal>
   )
 }
