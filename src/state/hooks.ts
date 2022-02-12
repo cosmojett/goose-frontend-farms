@@ -2,9 +2,12 @@ import BigNumber from 'bignumber.js'
 import { useEffect, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import useRefresh from 'hooks/useRefresh'
+import erc20 from 'config/abi/erc20.json'
+import multicall from 'utils/multicall'
 import { fetchFarmsPublicDataAsync, fetchPoolsPublicDataAsync, fetchPoolsUserDataAsync } from './actions'
 import { State, Farm, Pool, IndexExtended } from './types'
 import { QuoteToken } from '../config/constants/types'
+
 
 
 const ZERO = new BigNumber(0)
@@ -89,6 +92,7 @@ export const usePriceBnbBusd = (): BigNumber => {
   const farm = useFarmFromPid(pid)
   return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO
 }
+
 
 export const usePriceCakeBusd = (): BigNumber => {
   const bnbPrice = usePriceBnbBusd();

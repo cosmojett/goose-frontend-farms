@@ -18,12 +18,12 @@ const Indexes: React.FC = () => {
 
       const dispatch = useDispatch()
       const { fastRefresh } = useRefresh()
-
+/*
       useEffect(() => {
         if (account) {
           dispatch(fetchIndexUserData(account))
         }
-    }, [account, dispatch, fastRefresh])
+    }, [account, dispatch, fastRefresh]) */
     return (
         <Page>
             <Heading as="h1" size="lg" mb="24px" color="primary" style={{ textAlign: 'center' }}>
@@ -34,7 +34,7 @@ const Indexes: React.FC = () => {
             </Heading>
             <Divider />
             <FlexLayout>
-            {indexes.map(i => (
+            {/* indexes.map(i => (
                     <IndexCard 
                         id={i.id}
                         name= {i.name}
@@ -45,7 +45,7 @@ const Indexes: React.FC = () => {
                         ethereum={ethereum}
                         account={account}
                     />
-                ))}
+                )) */}
             </FlexLayout>
         </Page>
     )

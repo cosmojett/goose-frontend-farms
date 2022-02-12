@@ -53,11 +53,11 @@ export const links = [
   //    },
   //  ]
   // }, 
-  {
-    label: 'IFO',
-    icon: 'TicketIcon',
-    href: '/ifo',
-  },
+  // {
+  //  label: 'IFO',
+  //  icon: 'TicketIcon',
+  //  href: '/ifo',
+  // },
   // {
   //   label: 'Pools',
   //   icon: 'PoolIcon',
