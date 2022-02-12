@@ -125,9 +125,10 @@ const farms: FarmConfig[] = [
     pid: 5,
     risk: 5,
     lpSymbol: 'Bitcoin',
+    isTokenOnly : true,
     lpAddresses: {
       97: '',
-      56: '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c',
+      56: '0xf45cd219aef8618a92baa7ad848364a158a24f33',
     },
     tokenSymbol: 'BTC',
     tokenAddresses: {
@@ -148,9 +149,10 @@ const farms: FarmConfig[] = [
     pid: 6,
     risk: 5,
     lpSymbol: 'CAKE',
+    isTokenOnly : true,
     lpAddresses: {
       97: '',
-      56: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
+      56: '0x804678fa97d91b974ec2af3c843270886528a9e6',
     },
     tokenSymbol: 'CAKE',
     tokenAddresses: {
@@ -170,10 +172,11 @@ const farms: FarmConfig[] = [
   {
     pid: 7,
     risk: 5,
+    isTokenOnly : true,
     lpSymbol: 'ETH',
     lpAddresses: {
       97: '',
-      56: '0x2170ed0880ac9a755fd29b2688956bd959f933f8',
+      56: '0x7213a321f1855cf1779f42c0cd85d3d95291d34c',
     },
     tokenSymbol: 'ETH',
     tokenAddresses: {
@@ -194,17 +197,18 @@ const farms: FarmConfig[] = [
     pid: 8,
     risk: 5,
     lpSymbol: 'USDT',
+    isTokenOnly : true,
     lpAddresses: {
       97: '',
-      56: '0x55d398326f99059fF775485246999027B3197955',
+      56: '0x7efaef62fddcca950418312c6c91aef321375a00',
     },
     tokenSymbol: 'USDT',
     tokenAddresses: {
       97: '',
       56: '0x55d398326f99059fF775485246999027B3197955',
     },
-    quoteTokenSymbol: QuoteToken.BUSD,
-    quoteTokenAdresses: contracts.busd,
+    quoteTokenSymbol: QuoteToken.USDT,
+    quoteTokenAdresses: contracts.usdt,
     image : './images/indexes/10.jpg',
     earnToken : 'BUZZ',
     depositToken : 'USDT',
