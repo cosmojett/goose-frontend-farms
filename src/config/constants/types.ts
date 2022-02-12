@@ -67,6 +67,8 @@ export interface FarmConfig {
   autoFarmContract? : Address
   isCluster?: boolean
   clusterContract? : Address
+  isLpFarm? : boolean
+  tokenBuyLink? : string
 }
 
 export interface PoolConfig {

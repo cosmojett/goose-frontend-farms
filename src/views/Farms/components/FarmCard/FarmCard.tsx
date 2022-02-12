@@ -185,9 +185,16 @@ const FarmCard: React.FC<FarmCardProps> = ({ farm, removed, cakePrice, bnbPrice,
       )}
       <Flex justifyContent='space-between'>
         <Text  fontSize="16px" >Deposit:</Text>
-        <LinkExternal href={`https://dex.cosmosium.finance/#/add/${liquidityUrlPathParts}`}>
+        {farm.isLpFarm ? (
+                  <LinkExternal href={`https://dex.cosmosium.finance/#/add/${liquidityUrlPathParts}`}>
+                  {depositToken}
+                </LinkExternal>
+        ) : (
+          <LinkExternal href={farm.tokenBuyLink}>
           {depositToken}
         </LinkExternal>
+        )}
+
       </Flex>
       <Flex justifyContent='space-between'>
         <Text  fontSize="16px" >{TranslateString(318, 'Earn')}:</Text>
