@@ -144,6 +144,75 @@ const farms: FarmConfig[] = [
     isLpFarm : false,
     tokenBuyLink : 'https://dex.cosmosium.finance/#/swap?outputCurrency=0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c'
   },
+  {
+    pid: 6,
+    risk: 5,
+    lpSymbol: 'CAKE',
+    lpAddresses: {
+      97: '',
+      56: '0x804678fa97d91b974ec2af3c843270886528a9e6',
+    },
+    tokenSymbol: 'CAKE',
+    tokenAddresses: {
+      97: '',
+      56: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
+    },
+    quoteTokenSymbol: QuoteToken.BUSD,
+    quoteTokenAdresses: contracts.busd,
+    image : './images/indexes/8.jpg',
+    earnToken : 'BUZZ',
+    depositToken : 'CAKE',
+    isAuto : false,
+    isCluster : false,
+    isLpFarm : false,
+    tokenBuyLink : 'https://dex.cosmosium.finance/#/swap?outputCurrency=0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82'
+  },
+  {
+    pid: 7,
+    risk: 5,
+    lpSymbol: 'ETH',
+    lpAddresses: {
+      97: '',
+      56: '0x7213a321f1855cf1779f42c0cd85d3d95291d34c',
+    },
+    tokenSymbol: 'ETH',
+    tokenAddresses: {
+      97: '',
+      56: '0x2170ed0880ac9a755fd29b2688956bd959f933f8',
+    },
+    quoteTokenSymbol: QuoteToken.BUSD,
+    quoteTokenAdresses: contracts.busd,
+    image : './images/indexes/9.png',
+    earnToken : 'BUZZ',
+    depositToken : 'ETH',
+    isAuto : false,
+    isCluster : false,
+    isLpFarm : false,
+    tokenBuyLink : 'https://dex.cosmosium.finance/#/swap?outputCurrency=0x2170ed0880ac9a755fd29b2688956bd959f933f8'
+  },
+  {
+    pid: 8,
+    risk: 5,
+    lpSymbol: 'USDT',
+    lpAddresses: {
+      97: '',
+      56: '0x7efaef62fddcca950418312c6c91aef321375a00',
+    },
+    tokenSymbol: 'USDT',
+    tokenAddresses: {
+      97: '',
+      56: '0x55d398326f99059fF775485246999027B3197955',
+    },
+    quoteTokenSymbol: QuoteToken.BUSD,
+    quoteTokenAdresses: contracts.busd,
+    image : './images/indexes/10.jpg',
+    earnToken : 'BUZZ',
+    depositToken : 'USDT',
+    isAuto : false,
+    isCluster : false,
+    isLpFarm : false,
+    tokenBuyLink : 'https://dex.cosmosium.finance/#/swap?outputCurrency=0x55d398326f99059fF775485246999027B3197955'
+  },
   /*  {
     pid: 0,
     risk: 5,
