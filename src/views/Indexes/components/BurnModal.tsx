@@ -12,7 +12,7 @@ import { getAllowanceForAddress, getTokenBalance, getContract } from 'utils/erc2
 import { IndexToken } from 'config/constants/types'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 
-interface MintModalProps {
+interface BurnModalProps {
     tokens: IndexToken[]
     contract: string
     name: string
@@ -20,9 +20,10 @@ interface MintModalProps {
     onConfirm: (amount: string) => void
     account?: string
     ethereum?: provider
+    balance? : BigNumber
 }
 
-const MintModal: React.FC<MintModalProps> = ({ tokens, contract, name, onDismiss, onConfirm, ethereum, account}) => {
+const BurnModal: React.FC<BurnModalProps> = ({ tokens, contract, name, onDismiss, onConfirm, ethereum, account, balance}) => {
   const [val, setVal] = useState('')
   
   const [pendingTx, setPendingTx] = useState(false)
@@ -42,9 +43,9 @@ const MintModal: React.FC<MintModalProps> = ({ tokens, contract, name, onDismiss
             for(const token of tokens) {
                 const tokenContract = getContract(ethereum, tokens[i].contract[process.env.REACT_APP_CHAIN_ID])
                 const allowance = await getAllowanceForAddress(tokenContract,contract,account)
-                const balance = await getTokenBalance(ethereum,tokens[i].contract[process.env.REACT_APP_CHAIN_ID],account)
+                const balancex = await getTokenBalance(ethereum,tokens[i].contract[process.env.REACT_APP_CHAIN_ID],account)
                 console.log(allowance.toString())
-                _balances[i] = balance;
+                _balances[i] = balancex;
                 _allowances[i] = allowance;
                 i += 1;
             }
@@ -73,33 +74,17 @@ const MintModal: React.FC<MintModalProps> = ({ tokens, contract, name, onDismiss
 
 
   return (
-    <Modal title={`Mint ${name}`} onDismiss={onDismiss}>
-        <Flex alignItems='center' justifyContent='space-between' style={{ paddingBottom : 20}}>
-            <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>Balance</Text>
-            <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>Approval</Text>
-        </Flex>
-        {tokens.map((token,index) => (
-        <Flex alignItems='center' justifyContent='space-between' style={{paddingTop : 5, paddingBottom :10}}>
-            <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>{new BigNumber(balances[index]).dividedBy(new BigNumber(10).pow(18)).toFixed(5)} {tokens[index].name } </Text>
-            <Button variant="primary"  size='sm' disabled={new BigNumber(allowances[index]).isGreaterThan(0) && pendingTx}
-            onClick={() => {
-                    console.log('approve')
-            }}>
-                Approve
-            </Button>
-        </Flex>
-        ))}
+    <Modal title={`Burn ${name}`} onDismiss={onDismiss}>
+
       <TokenInput
         value={val}
         onChange={handleChange}
-        max=''
+        max={balance.toNumber()}
         symbol={name}
-        noHeader
-        noMax
       />
 
         <Flex alignItems='center' justifyContent='center' style={{ paddingBottom : 20, paddingTop : 10}}>
-            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center'}}>To mint {val} {name} you have to provide these amount of tokens</Text>
+            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>With burning {val} amount of {name} you will get these amount of tokens.</Text>
         </Flex>
 
         <Flex alignItems='center' justifyContent='center' style={{ paddingBottom : 20}}>
@@ -131,4 +116,4 @@ const MintModal: React.FC<MintModalProps> = ({ tokens, contract, name, onDismiss
   )
 }
 
-export default MintModal
+export default BurnModal

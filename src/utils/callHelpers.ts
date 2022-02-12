@@ -73,6 +73,30 @@ export const galaxyBalance = async(galaxy,account) => {
   .call()
 }
 
+export const galaxyComponentAmounts = async(galaxy, amount) => {
+  return galaxy.methods
+  .tokenMintAmounts(new BigNumber(amount).times(new BigNumber(10).pow(18)).toString())
+  .call()
+}
+
+export const galaxyMint = async(galaxy, amount, account) => {
+  return galaxy.methods
+  .mintGalaxy(new BigNumber(amount).times(new BigNumber(10).pow(18)).toString())
+  .send({from : account})
+  .on('transactionHash', (tx) => {
+    return tx.transactionHash
+  })
+}
+
+export const galaxyBurn = async(galaxy, amount, account) => {
+  return galaxy.methods
+  .burnGalaxy(new BigNumber(amount).times(new BigNumber(10).pow(18)).toString())
+  .send({from : account})
+  .on('transactionHash', (tx) => {
+    return tx.transactionHash
+  })
+}
+
 export const userAutoFarmStakes = async(autofarm, account) => {
   return autofarm.methods
   .userInfo(account)

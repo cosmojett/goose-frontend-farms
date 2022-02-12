@@ -1,21 +1,21 @@
 import React, { useMemo, useState, useEffect } from 'react'
 import BigNumber from 'bignumber.js'
 import { provider } from 'web3-core'
-import { useDispatch } from 'react-redux'
 import { Tag, Flex, Heading, Text, Skeleton, Button, useModal } from '@pancakeswap-libs/uikit'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import {IndexToken} from 'config/constants/types'
 import { useGalaxy } from 'hooks/useContract'
 import useRefresh from 'hooks/useRefresh'
 import { fetchIndexUserData } from 'state/actions'
+import { useGalaxyMint } from 'hooks/useStake'
+import { useGalaxyBurn } from 'hooks/useUnstake'
 import { useIndexUser } from 'state/hooks'
 import { galaxyTotalSupply, galaxyPrice, galaxyBalance, galaxyComponentPrices } from 'utils/callHelpers'
-import { getFullDisplayBalance } from 'utils/formatBalance'
 import UnlockButton from 'components/UnlockButton'
 import styled, { keyframes } from 'styled-components'
 import CardHeader from './CardHeader'
 import MintModal from '../MintModal'
-
+import BurnModal from '../BurnModal'
 
 
 interface IndexCardProps {
@@ -58,24 +58,17 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
     const indexContract = useGalaxy(contract);
     const xxx = useIndexUser(id)
     console.log('index from state')
-    console.log(xxx)
-    const dispatch = useDispatch()
-    const { fastRefresh } = useRefresh()
-
-    useEffect(() => {
-        if (account) {
-          dispatch(fetchIndexUserData(account))
-        }
-    }, [account, dispatch, fastRefresh])
 
     const [supply, setSupply] = useState(new BigNumber(0));
     const [price, setPrice] = useState(new BigNumber(0));
     const [balance, setBalance] = useState(new BigNumber(0));
     const [tokenPrices, setTokenPrices] = useState(Array(tokens.length).fill(new BigNumber(0)))
     const [totalPrice, setTotalPrices] = useState(new BigNumber(0))
+    const { onMint } = useGalaxyMint(contract)
+    const { onBurn } = useGalaxyBurn(contract)
 
-    const [onPresentMint] = useModal(<MintModal tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={(x : string) => {console.log('confirm')}}/>)
-
+    const [onPresentMint] = useModal(<MintModal tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={onMint}/>)
+    const [onPresentBurn] = useModal(<BurnModal balance={balance} tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={onBurn}/>)
     const getSupply =  useEffect(() => {
         async function fetchTotalSupply() {
             const _supply = await galaxyTotalSupply(indexContract);
@@ -168,7 +161,7 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
                 {account ? (<>
                 <Flex alignItems='center' justifyContent='space-between'>
                     <Button variant='success' onClick={onPresentMint}>Mint</Button>
-                    <Button variant='danger'>Burn</Button>
+                    <Button variant='danger'  onClick={onPresentBurn}>Burn</Button>
                 </Flex>
                 <Flex style={{marginTop : '20px'}} alignItems='center' justifyContent='space-between'>
                     <Text  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>Your Balance : </Text>

@@ -2,8 +2,8 @@ import { useCallback } from 'react'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { useDispatch } from 'react-redux'
 import { fetchFarmUserDataAsync, updateUserStakedBalance, updateUserBalance } from 'state/actions'
-import { stake, sousStake, sousStakeBnb, autoFarmStake } from 'utils/callHelpers'
-import { useMasterchef, useSousChef, useAutoFarm } from './useContract'
+import { stake, sousStake, sousStakeBnb, autoFarmStake, galaxyMint } from 'utils/callHelpers'
+import { useMasterchef, useSousChef, useAutoFarm, useGalaxy } from './useContract'
 
 const useStake = (pid: number) => {
   const dispatch = useDispatch()
@@ -20,6 +20,20 @@ const useStake = (pid: number) => {
   )
 
   return { onStake: handleStake }
+}
+
+export const useGalaxyMint = (galaxyAddress: string) => {
+  const { account } = useWallet()
+  const contract = useGalaxy(galaxyAddress)
+  
+  const handleMint = useCallback(
+    async (amount: string) => {
+      const txHash = await galaxyMint(contract, amount, account)
+      console.info(txHash)
+    }, [account, contract]
+  )
+
+  return { onMint: handleMint }
 }
 
 export const useAutoFarmStake = (farmAddress: string) => {

@@ -46,7 +46,6 @@ export const fetchIndexUserData = (account) => async(dispatch) => {
     const userIndexAllowances = await fetchIndexUserAllowances(account)
     const userIndexBalances = await fetchIndexUserBalances(account)
     const userIndexTokenBalances = await fetchIndexUserTokenBalances(account)
-    console.log(userIndexAllowances)
     const arrayOfUserDataObjects = userIndexAllowances.map((farmAllowance, index) => {
         return {
           index,

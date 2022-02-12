@@ -10,25 +10,34 @@ interface TokenInputProps extends InputProps {
   symbol: string
   onSelectMax?: () => void
   depositFeeBP?: number
+  noHeader? : boolean
+  noMax? : boolean
 }
 
-const TokenInput: React.FC<TokenInputProps> = ({ max, symbol, onChange, onSelectMax, value, depositFeeBP = 0 }) => {
+const TokenInput: React.FC<TokenInputProps> = ({ max, symbol, onChange, onSelectMax, value, depositFeeBP = 0, noHeader = false, noMax = false}) => {
   const TranslateString = useI18n()
   return (
     <StyledTokenInput>
+      {noHeader ? (<></>) : (
       <StyledMaxText>
-        {max.toLocaleString()} {symbol} {TranslateString(526, 'Available')}
+      {max.toLocaleString()} {symbol} {TranslateString(526, 'Available')}
       </StyledMaxText>
+      )}
+
       <Input
         endAdornment={
           <StyledTokenAdornmentWrapper>
             <StyledTokenSymbol>{symbol}</StyledTokenSymbol>
             <StyledSpacer />
-            <div>
+            {noMax ? (
+              <></>
+            ) : (
+              <div>
               <Button size="sm" onClick={onSelectMax}>
                 {TranslateString(452, 'Max')}
               </Button>
-            </div>
+              </div>
+            )}
           </StyledTokenAdornmentWrapper>
         }
         onChange={onChange}

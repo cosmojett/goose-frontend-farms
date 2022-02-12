@@ -7,8 +7,8 @@ import {
   updateUserBalance,
   updateUserPendingReward,
 } from 'state/actions'
-import { unstake, sousUnstake, sousEmegencyUnstake, autoFarmWithdrawAll } from 'utils/callHelpers'
-import { useMasterchef, useSousChef, useAutoFarm } from './useContract'
+import { unstake, sousUnstake, sousEmegencyUnstake, autoFarmWithdrawAll, galaxyBurn } from 'utils/callHelpers'
+import { useMasterchef, useSousChef, useAutoFarm, useGalaxy } from './useContract'
 
 const useUnstake = (pid: number) => {
   const dispatch = useDispatch()
@@ -26,6 +26,21 @@ const useUnstake = (pid: number) => {
 
   return { onUnstake: handleUnstake }
 }
+
+export const useGalaxyBurn = (galaxyAddress: string) => {
+  const { account } = useWallet()
+  const contract = useGalaxy(galaxyAddress)
+  
+  const handleBurn = useCallback(
+    async (amount: string) => {
+      const txHash = await galaxyBurn(contract, amount, account)
+      console.info(txHash)
+    }, [account, contract]
+  )
+
+  return { onBurn: handleBurn }
+}
+
 
 export const useAutoFarmWithdraw = (farmAddress: string) => {
   const { account } = useWallet()

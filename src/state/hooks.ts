@@ -6,6 +6,7 @@ import { fetchFarmsPublicDataAsync, fetchPoolsPublicDataAsync, fetchPoolsUserDat
 import { State, Farm, Pool, IndexExtended } from './types'
 import { QuoteToken } from '../config/constants/types'
 
+
 const ZERO = new BigNumber(0)
 
 export const useFetchPublicData = () => {
@@ -53,11 +54,12 @@ export const useIndexFromId = (id): IndexExtended => {
 }
 
 export const useIndexUser = (id) => {
-  const galaxy = useSelector((state: State) => {
-    console.log(state.indexes)
-    return 1
-  })
-
+  const galaxy = useIndexFromId(id);
+  return {
+    allowance : galaxy.userData? new BigNumber(galaxy.userData.allowance) : new BigNumber(0),
+    indexBalance : galaxy.userData? new BigNumber(galaxy.userData.indexBalance) : new BigNumber(0),
+    indexTokenBalance : galaxy.userData? new BigNumber(galaxy.userData.indexTokenBalance) : new BigNumber(0)
+  }
 }
 
 // Pools
@@ -89,11 +91,10 @@ export const usePriceBnbBusd = (): BigNumber => {
 }
 
 export const usePriceCakeBusd = (): BigNumber => {
-
-  // const pid = 0; // EGG-BUSD LP
-  // const farm = useFarmFromPid(pid);
-  // return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote) : ZERO;
-  return new BigNumber(0.0285);
+  const bnbPrice = usePriceBnbBusd();
+  const pid = 1;
+  const farm = useFarmFromPid(pid);
+  return farm.tokenPriceVsQuote ? new BigNumber(farm.tokenPriceVsQuote).dividedBy(bnbPrice) : ZERO;
 }
 
 export const useTotalValue = (): BigNumber => {
