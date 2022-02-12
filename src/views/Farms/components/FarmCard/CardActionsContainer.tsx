@@ -42,6 +42,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account }
   const netTime = (nextHarvest.toNumber() - currentTime.toNumber()) > 0 ? nextHarvest.toNumber() - currentTime.toNumber() : 0
   const timeText = formatTimePeriod(getTimePeriods(netTime))
   // console.log(timeText)
+  console.log(`Pid : ${pid} , token Balance : ${tokenBalance}, Allowance : ${allowance.toString()}`)
 
 
   const lpContract = useMemo(() => {
