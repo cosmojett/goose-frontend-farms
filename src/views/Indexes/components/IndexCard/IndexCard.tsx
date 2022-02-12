@@ -136,7 +136,7 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
                 </Heading>
                 <Flex alignItems='center' justifyContent='space-between'>
                             <Text bold  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>Token Name</Text>
-                            <Text bold  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>% Amount</Text>
+                            <Text bold  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>% USD</Text>
                 </Flex>
                     {tokens.map((token,index) => (
                         <Flex alignItems='center' justifyContent='space-between'>

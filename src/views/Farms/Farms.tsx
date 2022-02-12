@@ -100,6 +100,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
     (farmsToDisplay, removed: boolean) => {
       const autoFarmsWithAPY : AutoFarmWithStakedValue[] = farmsToDisplay.map((farm) => {
         const cakeRewardPerBlock = new BigNumber(farm.buzzPerBlock || 1).times(new BigNumber(farm.poolWeight)) .div(new BigNumber(10).pow(18))
+      
         const cakeRewardPerYear = cakeRewardPerBlock.times(BLOCKS_PER_YEAR)
 
         let apy = cakePrice.times(cakeRewardPerYear);
@@ -140,12 +141,13 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
         //   return farm
         // }
         const cakeRewardPerBlock = new BigNumber(farm.buzzPerBlock || 1).times(new BigNumber(farm.poolWeight)) .div(new BigNumber(10).pow(18))
+        
         const cakeRewardPerYear = cakeRewardPerBlock.times(BLOCKS_PER_YEAR)
 
         let apy = cakePrice.times(cakeRewardPerYear);
 
         let totalValue = new BigNumber(farm.lpTotalInQuoteToken || 0);
-        console.log(farm)
+
         if (farm.quoteTokenSymbol === QuoteToken.BNB) {
           totalValue = totalValue.times(bnbPrice);
         }
