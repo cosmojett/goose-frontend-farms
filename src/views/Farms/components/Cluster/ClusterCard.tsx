@@ -207,7 +207,7 @@ const AutoFarmCard: React.FC<AutoFarmCard> = ({ farm, removed, cakePrice, bnbPri
           </Text> 
             </Flex> */ }
                 <Flex justifyContent='space-between' alignItems='center'>
-                <Text  fontSize="16px" >Yearly Buzz Distribution:</Text>
+                <Text  fontSize="16px" >Yearly Buzz Dist.:</Text>
                 <Text  fontSize="16px"  bold style={{ display: 'flex', alignItems: 'center' }}>
                   {farm.yearlyDist ? (
                     `${farm.yearlyDist} BUZZ`
