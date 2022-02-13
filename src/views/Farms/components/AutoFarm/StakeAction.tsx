@@ -5,6 +5,7 @@ import { Button, Flex, Heading, IconButton, AddIcon, MinusIcon, useModal } from 
 import useI18n from 'hooks/useI18n'
 import { useAutoFarmStake } from 'hooks/useStake'
 import useUnstake, { useAutoFarmWithdraw } from 'hooks/useUnstake'
+import { usePriceCakeBusd } from 'state/hooks'
 import { useAutoFarm } from 'hooks/useContract'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { userAutoFarmStakes, autoFarmSharePrice } from 'utils/callHelpers'
@@ -19,6 +20,9 @@ interface FarmCardActionsProps {
   depositFeeBP?: number
   farmAddress?: string
   account?: string
+
+  pricePerFullShare?:any
+  userShares?:any
 }
 
 const IconButtonWrapper = styled.div`
@@ -28,14 +32,17 @@ const IconButtonWrapper = styled.div`
   }
 `
 
-const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  stakedBalance, tokenBalance, tokenName, pid, depositFeeBP}) => {
+const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  stakedBalance, tokenBalance, tokenName, pid, depositFeeBP, pricePerFullShare, userShares}) => {
   const TranslateString = useI18n()
   const { onStake } = useAutoFarmStake(farmAddress)
   const { onUnstake } = useAutoFarmWithdraw(farmAddress)
   const [balance, setBalance] = useState(new BigNumber(0))
-  const rawStakedBalance = getBalanceNumber(balance)
-  // user balanceı getir yazdır
+  const rawStakedBalance = new BigNumber(stakedBalance).dividedBy(new BigNumber(10).pow(18)).toNumber()
+  console.log(`Staked : ${stakedBalance.toString()}`)
+  const cakePriceUsd = usePriceCakeBusd()
   const displayBalance = rawStakedBalance.toLocaleString()
+  const stakedUSDValue = rawStakedBalance*cakePriceUsd.toNumber()
+  // user balanceı getir yazdır
 
   const farmContract = useAutoFarm(farmAddress);
 

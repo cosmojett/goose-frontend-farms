@@ -42,9 +42,34 @@ export interface IndexExtended extends Indexes {
 }
 
 // Slices states
+export interface VaultFees {
+  performanceFee: number
+  callFee: number
+  withdrawalFee: number
+  withdrawalFeePeriod: number
+}
+export interface VaultUser {
+  isLoading: boolean
+  userShares: string
+  buzzAtLastUserAction: string
+  lastDepositedTime: string
+  lastUserActionTime: string
+}
+export interface CakeVault {
+  totalShares?: string
+  pricePerFullShare?: string
+  totalBuzzInVault?: string
+  estimatedBuzzBountyReward?: string
+  totalPendingBuzzHarvest?: string
+  fees?: VaultFees
+  userData?: VaultUser
+  tokenTaxRate?:any
+}
 
 export interface FarmsState {
   data: Farm[]
+  cakeVault?:CakeVault
+  userDataLoaded?: boolean
 }
 
 export interface PoolsState {

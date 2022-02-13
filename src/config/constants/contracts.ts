@@ -55,5 +55,9 @@ export default {
   banana : {
     56 : '0x603c7f932ed1fc6575303d8fb018fdcbb0f39a95',
     97 : ''
+  },
+  cosmicFarm : {
+    56 : '0x79eFe3cC2E2291D9570762d0a6b8Cf00B9d593df',
+    97 : '0x79eFe3cC2E2291D9570762d0a6b8Cf00B9d593df'
   }
 }

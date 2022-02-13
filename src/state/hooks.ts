@@ -1,10 +1,12 @@
 import BigNumber from 'bignumber.js'
 import { useEffect, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { BLOCKS_PER_YEAR } from 'config'
 import useRefresh from 'hooks/useRefresh'
 import erc20 from 'config/abi/erc20.json'
 import multicall from 'utils/multicall'
-import { fetchFarmsPublicDataAsync, fetchPoolsPublicDataAsync, fetchPoolsUserDataAsync } from './actions'
+import { getAutoAprData } from 'views/Farms/components/AutoFarm/helpers'
+import { fetchFarmsPublicDataAsync, fetchPoolsPublicDataAsync, fetchPoolsUserDataAsync, fetchCakeVaultPublicData, fetchCakeVaultUserData, fetchCakeVaultFees } from './actions'
 import { State, Farm, Pool, IndexExtended } from './types'
 import { QuoteToken } from '../config/constants/types'
 
@@ -16,9 +18,28 @@ export const useFetchPublicData = () => {
   const dispatch = useDispatch()
   const { slowRefresh } = useRefresh()
   useEffect(() => {
+    dispatch(fetchCakeVaultPublicData())
     dispatch(fetchFarmsPublicDataAsync())
     // dispatch(fetchPoolsPublicDataAsync())
   }, [dispatch, slowRefresh])
+}
+
+export const useFetchCakeVault = (account) => {
+  // const { account } = useWallet()
+  const { fastRefresh } = useRefresh()
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchCakeVaultPublicData())
+  }, [dispatch, fastRefresh])
+
+   useEffect(() => {
+     dispatch(fetchCakeVaultUserData({ account }))
+   }, [dispatch, fastRefresh, account])
+
+  useEffect(() => {
+    dispatch(fetchCakeVaultFees())
+  }, [dispatch])
 }
 
 // Farms
@@ -122,4 +143,103 @@ export const useTotalValue = (): BigNumber => {
     }
   }
   return value;
+}
+
+export const useAutoFarmApy = (pid): number => {
+  const farm = (useFarmFromPid(pid))
+  const {
+    fees: { performanceFee }
+  } = useCakeVault()
+
+  const cakePrice = usePriceCakeBusd()
+  const bnbPrice = usePriceBnbBusd()
+  const cakeRewardPerBlock = new BigNumber(farm.buzzPerBlock || 1)
+          .times(new BigNumber(farm.poolWeight))
+          .div(new BigNumber(10).pow(18))
+        const cakeRewardPerYear = cakeRewardPerBlock.times(BLOCKS_PER_YEAR)
+        // alert(cakeRewardPerBlock)
+        let apy = cakePrice.times(cakeRewardPerYear)
+        let totalValue = new BigNumber(farm.lpTotalInQuoteToken || 0)
+
+        if (farm.quoteTokenSymbol === QuoteToken.BNB) {
+          totalValue = totalValue.times(bnbPrice)
+        }
+
+        if (totalValue.comparedTo(0) > 0) {
+          apy = apy.div(totalValue)
+        }
+       const AutoApy = getAutoAprData(apy.times(new BigNumber(100)).toNumber(),performanceFee)
+       const apyFinal = AutoApy.apr
+  return apyFinal
+}
+
+export const useCakeVault = () => {
+  const {
+    totalShares: totalSharesAsString,
+    pricePerFullShare: pricePerFullShareAsString,
+    totalBuzzInVault: totalBuzzInVaultAsString,
+    estimatedBuzzBountyReward: estimatedBuzzBountyRewardAsString,
+    totalPendingBuzzHarvest: totalPendingBuzzHarvestAsString,
+    fees: { performanceFee, callFee, withdrawalFee, withdrawalFeePeriod },
+    tokenTaxRate,
+
+    userData: {
+      isLoading,
+      userShares: userSharesAsString,
+      buzzAtLastUserAction: buzzAtLastUserActionAsString,
+      lastDepositedTime,
+      lastUserActionTime,
+    },
+  } = useSelector((state: State) => state.farms.cakeVault)
+  const cakeVault = useSelector((state: State) => state.farms.cakeVault);
+  console.log('vault data')
+  console.log(cakeVault)
+  const estimatedBuzzBountyReward = useMemo(() => {
+    return new BigNumber(estimatedBuzzBountyRewardAsString)
+  }, [estimatedBuzzBountyRewardAsString])
+
+  const totalPendingBuzzHarvest = useMemo(() => {
+    return new BigNumber(totalPendingBuzzHarvestAsString)
+  }, [totalPendingBuzzHarvestAsString])
+
+  const totalShares = useMemo(() => {
+    return new BigNumber(totalSharesAsString)
+  }, [totalSharesAsString])
+
+  const pricePerFullShare = useMemo(() => {
+    return new BigNumber(pricePerFullShareAsString)
+  }, [pricePerFullShareAsString])
+
+  const totalBuzzInVault = useMemo(() => {
+    return new BigNumber(totalBuzzInVaultAsString)
+  }, [totalBuzzInVaultAsString])
+
+  const userShares = useMemo(() => {
+    return new BigNumber(userSharesAsString)
+  }, [userSharesAsString])
+
+  const buzzAtLastUserAction = useMemo(() => {
+    return new BigNumber(buzzAtLastUserActionAsString)
+  }, [buzzAtLastUserActionAsString])
+
+  return {
+    totalShares,
+    pricePerFullShare,
+    totalBuzzInVault,
+    estimatedBuzzBountyReward,
+    totalPendingBuzzHarvest,
+    fees: {
+      performanceFee,
+      callFee,
+      withdrawalFee,
+      withdrawalFeePeriod,
+    },
+    userData: {
+      isLoading,
+      userShares,
+      buzzAtLastUserAction,
+      lastDepositedTime,
+      lastUserActionTime,
+    },
+  }
 }

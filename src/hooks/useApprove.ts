@@ -1,11 +1,36 @@
-import { useCallback } from 'react'
+import { useCallback, useState, useEffect, useRef } from 'react'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
+import BigNumber from 'bignumber.js'
 import { Contract } from 'web3-eth-contract'
 import { ethers } from 'ethers'
 import { useDispatch } from 'react-redux'
 import { updateUserAllowance, fetchFarmUserDataAsync } from 'state/actions'
 import { approve, approveToAddress } from 'utils/callHelpers'
+import { getCosmicFarmAddress } from 'utils/addressHelpers'
 import { useMasterchef, useCake, useSousChef, useLottery } from './useContract'
+
+
+export const usePreviousValue = (value: any) => {
+  const ref = useRef()
+
+  useEffect(() => {
+    ref.current = value
+  }, [value])
+
+  return ref.current
+}
+
+
+export const useLastUpdated = () => {
+  const [lastUpdated, setStateLastUpdated] = useState(Date.now())
+  const previousLastUpdated = usePreviousValue(lastUpdated)
+
+  const setLastUpdated = useCallback(() => {
+    setStateLastUpdated(Date.now())
+  }, [setStateLastUpdated])
+
+  return { lastUpdated, previousLastUpdated, setLastUpdated }
+}
 
 // Approve a Farm
 export const useApprove = (lpContract: Contract) => {
@@ -95,4 +120,45 @@ export const useIfoApprove = (tokenContract: Contract, spenderAddress: string) =
   }, [account, spenderAddress, tokenContract])
 
   return onApprove
+}
+
+export const useVaultApprove = () => {
+  const { account } = useWallet()
+  const cakeContract = useCake()
+  const cakeVaultAddress = getCosmicFarmAddress()
+  const handleVaultApprove = useCallback(async () => {
+    try {
+      const tx = await cakeContract.methods
+        .approve(cakeVaultAddress, ethers.constants.MaxUint256)
+        .send({ from: account })
+      return tx
+    } catch {
+      return false
+    }
+  }, [account, cakeVaultAddress, cakeContract])
+
+  return {handleVaultApprove}
+}
+
+export const useCheckVaultApprovalStatus = () => {
+  const [isVaultApproved, setIsVaultApproved] = useState(false)
+  const { account } = useWallet()
+  const cakeContract = useCake()
+  const cakeVaultAddress = getCosmicFarmAddress()
+  const { lastUpdated, setLastUpdated } = useLastUpdated()
+  useEffect(() => {
+    const checkApprovalStatus = async () => {
+      try {
+        const response = await cakeContract.methods.allowance(account, cakeVaultAddress).call()
+        const currentAllowance = new BigNumber(response.toString())
+        // console.log(currentAllowance)
+        setIsVaultApproved(currentAllowance.gt(0))
+      } catch (error) {
+        setIsVaultApproved(false)
+      }
+    }
+
+    checkApprovalStatus()
+  }, [account, cakeContract, cakeVaultAddress, lastUpdated])
+  return { isVaultApproved, setLastUpdated }
 }

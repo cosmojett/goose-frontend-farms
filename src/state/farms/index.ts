@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice,createAsyncThunk,PayloadAction} from '@reduxjs/toolkit'
 import farmsConfig from 'config/constants/farms'
 import { getWeb3 } from 'utils/web3'
 import fetchFarms from './fetchFarms'
@@ -10,9 +10,51 @@ import {
   fetchFarmUserStakedBalances,
   fetchFarmUserNextHarvest
 } from './fetchFarmUser'
-import { FarmsState, Farm } from '../types'
+import { fetchPublicVaultData, fetchVaultFees } from './fetchVaultPublic'
+import {fetchVaultUser} from './fetchVaultUser'
+import { FarmsState, Farm, CakeVault, VaultFees, VaultUser } from '../types'
 
-const initialState: FarmsState = { data: [...farmsConfig] }
+const initialState: FarmsState = { data: [...farmsConfig],
+  userDataLoaded: false,
+  cakeVault: {
+    totalShares: null,
+    pricePerFullShare: null,
+    totalBuzzInVault: null,
+    estimatedBuzzBountyReward: null,
+    totalPendingBuzzHarvest: null,
+    tokenTaxRate:null,
+    fees: {
+      performanceFee: null,
+      callFee: null,
+      withdrawalFee: null,
+      withdrawalFeePeriod: null,
+    },
+    userData: {
+      isLoading: true,
+      userShares: null,
+      buzzAtLastUserAction: null,
+      lastDepositedTime: null,
+      lastUserActionTime: null,
+    },
+  },
+}
+
+export const fetchCakeVaultPublicData = createAsyncThunk<CakeVault>('cakeVault/fetchPublicData', async () => {
+
+  const publicVaultInfo = await fetchPublicVaultData()
+  return publicVaultInfo
+})
+
+export const fetchCakeVaultFees = createAsyncThunk<VaultFees>('cakeVault/fetchFees', async () => {
+  const vaultFees = await fetchVaultFees()
+  return vaultFees
+})
+
+export const fetchCakeVaultUserData = createAsyncThunk<VaultUser, { account: string }>('cakeVault/fetchUser', async ({ account }) => {
+    const userData = await fetchVaultUser(account)
+    return userData
+  },
+)
 
 export const farmsSlice = createSlice({
   name: 'Farms',
@@ -32,8 +74,34 @@ export const farmsSlice = createSlice({
         state.data[index] = { ...state.data[index], userData: userDataEl }
       })
     },
+    updateFarmsUserData: (state, action) => {
+      const { field, value, pid } = action.payload
+      const index = state.data.findIndex((p) => p.pid === pid)
+
+      if (index >= 0) {
+        state.data[index] = { ...state.data[index], userData: { ...state.data[index].userData, [field]: value } }
+      }
+    },
+  },
+  extraReducers: (builder) => {
+    // Vault public data that updates frequently
+    builder.addCase(fetchCakeVaultPublicData.fulfilled, (state, action: PayloadAction<CakeVault>) => {
+      state.cakeVault = { ...state.cakeVault, ...action.payload }
+    })
+    // Vault fees
+    builder.addCase(fetchCakeVaultFees.fulfilled, (state, action: PayloadAction<VaultFees>) => {
+      const fees = action.payload
+      state.cakeVault = { ...state.cakeVault, fees }
+    })
+    // Vault user data
+    builder.addCase(fetchCakeVaultUserData.fulfilled, (state, action: PayloadAction<VaultUser>) => {
+      const userData = action.payload
+      userData.isLoading = false
+      state.cakeVault = { ...state.cakeVault, userData }
+    })
   },
 })
+
 
 // Actions
 export const { setFarmsPublicData, setFarmUserData } = farmsSlice.actions

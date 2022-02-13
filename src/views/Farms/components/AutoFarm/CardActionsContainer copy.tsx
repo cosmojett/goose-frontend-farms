@@ -5,13 +5,12 @@ import { provider } from 'web3-core'
 import { getContract } from 'utils/erc20'
 import { Button, Flex, Text } from '@pancakeswap-libs/uikit'
 import { Farm } from 'state/types'
-import { useFarmFromPid, useFarmFromSymbol, useFarmUser, usePriceCakeBusd } from 'state/hooks'
+import { useFarmFromPid, useFarmFromSymbol, useFarmUser } from 'state/hooks'
 import useI18n from 'hooks/useI18n'
 import UnlockButton from 'components/UnlockButton'
-import { useApprove, useApproveAddress, useCheckVaultApprovalStatus, useVaultApprove } from 'hooks/useApprove'
+import { useApprove, useApproveAddress } from 'hooks/useApprove'
 import { userAllowance } from 'utils/callHelpers'
 import StakeAction from './StakeAction'
-import { getCakeVaultEarnings } from './helpers'
 import HarvestAction from './HarvestAction'
 
 
@@ -27,34 +26,9 @@ interface FarmCardActionsProps {
   ethereum?: provider
   account?: string
   autoFarmContract: any
-  vaultData?:any
 }
 
-const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account, autoFarmContract, vaultData }) => {
-
-  const { isVaultApproved, setLastUpdated } = useCheckVaultApprovalStatus()
-  const cakePriceBusd = usePriceCakeBusd()
-
-  const { hasAutoEarnings, autoCakeToDisplay, autoUsdToDisplay, cakeAsBigNumber } = getCakeVaultEarnings(
-    account,
-    vaultData.buzzAtLastUserAction,
-    vaultData.userShares,
-    vaultData.pricePerFullShare,
-    cakePriceBusd.toNumber(),
-  )
-  console.log(cakeAsBigNumber.toString())
-  const { handleVaultApprove } = useVaultApprove()
-
-  const vaultApprove = useCallback(async () => {
-    try {
-      setRequestedApproval(true)
-      await handleVaultApprove()
-      setRequestedApproval(false)
-    } catch (e) {
-      console.error(e)
-    }
-  }, [handleVaultApprove])
-
+const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account, autoFarmContract }) => {
   const TranslateString = useI18n()
   const [requestedApproval, setRequestedApproval] = useState(false)
   const [allowance, setAllowance] = useState(new BigNumber(0));
@@ -104,16 +78,16 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account, 
   const renderApprovalOrStakeButton = () => {
     return isApproved ? (
       <>
-      <StakeAction account={account} farmAddress={farmContract} stakedBalance={cakeAsBigNumber} tokenBalance={tokenBalance} tokenName={lpName} pid={pid} depositFeeBP={depositFeeBP} userShares={vaultData.userShares} pricePerFullShare={vaultData.pricePerFullShare} />
+      <StakeAction account={account} farmAddress={farmContract} stakedBalance={stakedBalance} tokenBalance={tokenBalance} tokenName={lpName} pid={pid} depositFeeBP={depositFeeBP} />
               <Flex>
           <Text bold textTransform="uppercase" color="primary" fontSize="12px" pr="3px">
-            Your Amount (Compounding)
+            Your Stake
           </Text>
         </Flex>
         </>
     ) : (
 
-        <Button  disabled={requestedApproval} onClick={vaultApprove}>
+        <Button  disabled={requestedApproval} onClick={handleApprove}>
         {TranslateString(999, 'Approve Contract')}
       </Button>
 

@@ -8,7 +8,7 @@ import { Image, Heading } from '@pancakeswap-libs/uikit'
 import { BLOCKS_PER_YEAR, CAKE_PER_BLOCK, CAKE_POOL_PID } from 'config'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
-import { useFarms, usePriceBnbBusd, usePriceCakeBusd } from 'state/hooks'
+import { useFarms, usePriceBnbBusd, usePriceCakeBusd, useFetchCakeVault } from 'state/hooks'
 import useRefresh from 'hooks/useRefresh'
 import { fetchFarmUserDataAsync } from 'state/actions'
 import { QuoteToken } from 'config/constants/types'
@@ -40,6 +40,8 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
     }
   }, [account, dispatch, fastRefresh])
 
+  useFetchCakeVault(account)
+
   const [stakedOnly, setStakedOnly] = useState(false)
 
   const activeFarms = farmsLP.filter((farm) =>  farm.multiplier !== '0X' && !farm.isAuto && !farm.isCluster)
@@ -65,26 +67,27 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
         // if (!farm.tokenAmount || !farm.lpTotalInQuoteToken || !farm.lpTotalInQuoteToken) {
         //   return farm
         // }
-        
-        const cakeRewardPerBlock = new BigNumber(farm.buzzPerBlock || 1)
-          .times(new BigNumber(farm.poolWeight))
-          .div(new BigNumber(10).pow(18))
+        const cakeRewardPerBlock = new BigNumber(farm.buzzPerBlock || 1).times(new BigNumber(farm.poolWeight)) .div(new BigNumber(10).pow(18))
+        console.log(cakeRewardPerBlock.toString())
         const cakeRewardPerYear = cakeRewardPerBlock.times(BLOCKS_PER_YEAR)
-        // alert(cakeRewardPerBlock)
-        let apy = cakePrice.times(cakeRewardPerYear)
-        // alert(farm.poolWeight)
-        console.log(apy.toNumber())
-        console.log(farm)
-        let totalValue = new BigNumber(farm.lpTotalInQuoteToken || 0)
 
+        let apy = cakePrice.times(cakeRewardPerYear);
+        console.log(`Auto farm apy `)
+        let totalValue = new BigNumber(farm.lpTotalInQuoteToken || 0);
         if (farm.quoteTokenSymbol === QuoteToken.BNB) {
-          totalValue = totalValue.times(bnbPrice)
+          totalValue = totalValue.times(bnbPrice);
+        }
+        if (farm.quoteTokenSymbol === QuoteToken.CAKE) {
+          totalValue = totalValue.times(cakePrice);
         }
 
-        if (totalValue.comparedTo(0) > 0) {
-          apy = apy.div(totalValue)
+        if(totalValue.comparedTo(0) > 0){
+          console.log('dividing total val')
+          apy = apy.div(totalValue);
         }
-        console.log(apy.times(new BigNumber(100)).toNumber())
+
+        console.log(`Total value in farm : ${apy.toString()}`)
+
         return { ...farm, apy }
       })
 

@@ -7,13 +7,17 @@ import { Farm } from 'state/types'
 import { provider } from 'web3-core'
 import useI18n from 'hooks/useI18n'
 import { useAutoFarm } from 'hooks/useContract'
+import { useCakeVault } from 'state/hooks'
+import { BLOCKS_PER_YEAR } from 'config'
 import { autoFarmTotal, autoFarmDepositFee } from 'utils/callHelpers'
+import { fetchPublicVaultData } from 'state/farms/fetchVaultPublic'
 import { getBalanceNumber } from 'utils/formatBalance'
 import ExpandableSectionButton from 'components/ExpandableSectionButton'
 import { QuoteToken } from 'config/constants/types'
 import DetailsSection from './DetailsSection'
 import CardHeading from './CardHeading'
 import CardActionsContainer from './CardActionsContainer'
+import { getAutoAprData } from './helpers'
 import ApyButton from './ApyButton'
 
 export interface AutoFarmWithStakedValue extends Farm {
@@ -31,40 +35,6 @@ const RainbowLight = keyframes`
     background-position: 0% 50%;
   }
 `
-
-const Background = styled.div`
-  position : absolute;
-  height : 100%;
-  width : 100%;
-  opacity : 0.5;
-  border-radius: 8px;
-  border : 1px solid white;
-`;
-const StyledCardAccent = styled.div`
-  background: linear-gradient(45deg,
-  rgba(255, 0, 0, 1) 0%,
-  rgba(255, 154, 0, 1) 10%,
-  rgba(208, 222, 33, 1) 20%,
-  rgba(79, 220, 74, 1) 30%,
-  rgba(63, 218, 216, 1) 40%,
-  rgba(47, 201, 226, 1) 50%,
-  rgba(28, 127, 238, 1) 60%,
-  rgba(95, 21, 242, 1) 70%,
-  rgba(186, 12, 248, 1) 80%,
-  rgba(251, 7, 217, 1) 90%,
-  rgba(255, 0, 0, 1) 100%);
-  background-size: 300% 300%;
-  animation: ${RainbowLight} 2s linear infinite;
-  border-radius: 8px;
-  filter: blur(6px);
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  bottom: -2px;
-  left: -2px;
-  z-index: -1;
-`
-
 const FCard = styled.div`
   align-self: baseline;
   background: ${(props) => props.theme.card.background};
@@ -87,18 +57,7 @@ const CardContainer = styled.div`
   border-radius: 8px;
 `
 
-const Divider = styled.div`
-  background-color: ${({ theme }) => theme.colors.borderColor};
-  height: 1px;
-  margin: 28px auto;
-  width: 100%;
-`
-
-const ExpandingWrapper = styled.div<{ expanded: boolean }>`
-  height: ${(props) => (props.expanded ? '100%' : '0px')};
-  overflow: hidden;
-`
-
+// APY VS ORDAN DEVAM ET DATAYI ÇEKTİK
 interface AutoFarmCard {
   farm: AutoFarmWithStakedValue
   removed: boolean
@@ -109,6 +68,99 @@ interface AutoFarmCard {
 }
 
 const AutoFarmCard: React.FC<AutoFarmCard> = ({ farm, removed, cakePrice, bnbPrice, ethereum, account }) => {
+
+  fetchPublicVaultData()
+  const {
+    userData: { userShares, isLoading: isVaultUserDataLoading ,buzzAtLastUserAction, lastUserActionTime},
+    fees: { performanceFee },
+    totalBuzzInVault,
+    pricePerFullShare,
+    totalPendingBuzzHarvest,
+  } = useCakeVault()
+  const accountHasSharesStaked = userShares && userShares.gt(0)
+  // alert(accountHasSharesStaked)
+  const isLoading = !farm.userData || isVaultUserDataLoading
+  const performanceFeeAsDecimal = performanceFee && performanceFee / 100
+  // const isCommunityFarm = communityFarms.includes(farm.tokenSymbol)
+  // We assume the token name is coin pair + lp e.g. CAKE-BNB LP, LINK-BNB LP,
+  // NAR-CAKE LP. The images should be cake-bnb.svg, link-bnb.svg, nar-cake.svg
+  // const farmImage = farm.lpSymbol.split(' ')[0].toLocaleLowerCase()
+  // console.log(`totalPendingWisteriaHarvest:${totalPendingWisteriaHarvest}`)
+
+  const vaultData = {
+    userShares,
+    buzzAtLastUserAction,
+    lastUserActionTime,
+    pricePerFullShare,
+  }
+
+
+  const totalValue: BigNumber = useMemo(() => {
+    //   if(farm.isTokenOnly){
+
+    //    return cakePrice.times(farm.lpTotalInQuoteToken)
+    //  }
+    console.log(`Total value in buzz vault : ${totalBuzzInVault}`)
+    if (!farm.lpTotalInQuoteToken) {
+      return null
+    }
+    if(farm.isAuto){
+      return cakePrice.times(getBalanceNumber(totalBuzzInVault, 18))
+    }
+    if (farm.quoteTokenSymbol === QuoteToken.BNB) {
+      return bnbPrice.times(farm.lpTotalInQuoteToken)
+    }
+    if (farm.quoteTokenSymbol === QuoteToken.CAKE) {
+      return cakePrice.times(farm.lpTotalInQuoteToken)
+    }
+
+    // if(farm.isTokenOnly){
+
+    //   return bnbPrice.times(farm.lpTotalInQuoteToken)
+    // }
+    return farm.lpTotalInQuoteToken
+  }, [bnbPrice, cakePrice, farm.lpTotalInQuoteToken, farm.quoteTokenSymbol,farm.isAuto,totalBuzzInVault])
+  // console.log(performanceFeeAsDecimal)
+  const totalValueFormated = totalValue
+    ? `$${Number(totalValue).toLocaleString(undefined, { maximumFractionDigits: 2 })}`
+    : '-'
+
+    const lpLabel = farm.lpSymbol
+    const farmAPY = farm.apy && farm.apy.times(new BigNumber(100)).toNumber().toLocaleString(undefined, {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+    console.log(totalValue ? `Total value : ${totalValue.toString()}` : 'no total value')
+    console.log(farm)
+    console.log(`APR: ${farmAPY}`)
+    
+  const cakeRewardPerBlock = new BigNumber(farm.buzzPerBlock || 1)
+    .times(new BigNumber(farm.poolWeight).minus(new BigNumber(0.1)))
+    .div(new BigNumber(10).pow(18))
+  const cakeRewardPerYear = cakeRewardPerBlock.times(BLOCKS_PER_YEAR)
+  const { quoteTokenAdresses, quoteTokenSymbol, tokenAddresses, risk, image, earnToken, depositToken, isAuto, harvestInterval, autoFarmContract } = farm
+  const AutoApr = getAutoAprData(farm.apy.times(new BigNumber(100)).toNumber(),0)
+  console.log(`Auto Apr : ${AutoApr}`)
+  console.log(AutoApr)
+  const AutoAprAsPerchantage = AutoApr.apr.toLocaleString("ko-KR", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  })
+  const AutoAprAsPerchantage1 = AutoApr.autoApr1.toLocaleString("ko-KR", {
+    minimumFractionDigits: 3,
+    maximumFractionDigits: 3,
+  })
+  const AutoAprAsPerchantage2 = AutoApr.autoApr7.toLocaleString("ko-KR", {
+    minimumFractionDigits: 3,
+    maximumFractionDigits: 3,
+  })
+  const AutoAprAsPerchantage3 = AutoApr.autoApr30.toLocaleString("ko-KR", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  })
+
+
+
   const TranslateString = useI18n()
   const [staked, setStaked] = useState(0);
   const [depositFee, setDepositFee] = useState(0);
@@ -140,22 +192,10 @@ const AutoFarmCard: React.FC<AutoFarmCard> = ({ farm, removed, cakePrice, bnbPri
     depfee()
   }, [farmContract])
 
-  const totalValue: BigNumber = useMemo(() => {
-      return cakePrice.times(staked)
 
-  }, [ cakePrice, staked])
 
-  const totalValueFormated = staked
-    ? `$${Number(totalValue).toLocaleString(undefined, { maximumFractionDigits: 0 })}`
-    : '-'
 
-  const lpLabel = farm.lpSymbol
-  const farmAPY = farm.apy && farm.apy.times(new BigNumber(100)).toNumber().toLocaleString(undefined, {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })
 
-  const { quoteTokenAdresses, quoteTokenSymbol, tokenAddresses, risk, image, earnToken, depositToken, isAuto, harvestInterval, autoFarmContract } = farm
 
   return (
     <FCard>
@@ -214,7 +254,7 @@ const AutoFarmCard: React.FC<AutoFarmCard> = ({ farm, removed, cakePrice, bnbPri
         <Text  fontSize="16px" >Total Liquidity:</Text>
         <Text  fontSize="16px" >{totalValueFormated}</Text>
       </Flex>
-      <CardActionsContainer farm={farm} ethereum={ethereum} account={account} autoFarmContract={autoFarmContract} />
+      <CardActionsContainer farm={farm} vaultData={vaultData} ethereum={ethereum} account={account} autoFarmContract={autoFarmContract} />
       </CardContainer>
 
     </FCard>

@@ -20,3 +20,8 @@ export const getLotteryAddress = () => {
 export const getLotteryTicketAddress = () => {
   return addresses.lotteryNFT[chainId]
 }
+
+export const getCosmicFarmAddress = () => {
+  console.log(`Cosmic farm address : ${addresses.cosmicFarm[chainId]}`)
+  return addresses.cosmicFarm[chainId]
+}
