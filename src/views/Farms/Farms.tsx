@@ -8,7 +8,7 @@ import { Image, Heading } from '@pancakeswap-libs/uikit'
 import { BLOCKS_PER_YEAR, CAKE_PER_BLOCK, CAKE_POOL_PID } from 'config'
 import FlexLayout from 'components/layout/Flex'
 import Page from 'components/layout/Page'
-import { useFarms, usePriceBnbBusd, usePriceCakeBusd, useFetchCakeVault } from 'state/hooks'
+import { useFarms, usePriceBnbBusd, usePriceCakeBusd, useFetchCakeVault, useCakeVault } from 'state/hooks'
 import useRefresh from 'hooks/useRefresh'
 import { fetchFarmUserDataAsync } from 'state/actions'
 import { QuoteToken } from 'config/constants/types'
@@ -41,6 +41,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
   }, [account, dispatch, fastRefresh])
 
   useFetchCakeVault(account)
+  const vault = useCakeVault()
 
   const [stakedOnly, setStakedOnly] = useState(false)
 
@@ -68,12 +69,14 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
         //   return farm
         // }
         const cakeRewardPerBlock = new BigNumber(farm.buzzPerBlock || 1).times(new BigNumber(farm.poolWeight)) .div(new BigNumber(10).pow(18))
-        console.log(cakeRewardPerBlock.toString())
         const cakeRewardPerYear = cakeRewardPerBlock.times(BLOCKS_PER_YEAR)
 
         let apy = cakePrice.times(cakeRewardPerYear);
         console.log(`Auto farm apy `)
-        let totalValue = new BigNumber(farm.lpTotalInQuoteToken || 0);
+        console.log(vault.totalBuzzInVault.toString())
+        let totalValue = new BigNumber(vault.totalBuzzInVault.div(new BigNumber(10).pow(18)).div(20) || 0);
+        console.log(farm)
+        console.log(`Total Value Cosmic : ${totalValue.toString()}`)
         if (farm.quoteTokenSymbol === QuoteToken.BNB) {
           totalValue = totalValue.times(bnbPrice);
         }
@@ -82,11 +85,9 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
         }
 
         if(totalValue.comparedTo(0) > 0){
-          console.log('dividing total val')
           apy = apy.div(totalValue);
         }
 
-        console.log(`Total value in farm : ${apy.toString()}`)
 
         return { ...farm, apy }
       })
@@ -103,7 +104,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
           account={account}
         />
       ))
-    }, [bnbPrice, account, cakePrice, ethereum]
+    }, [bnbPrice, account, cakePrice, ethereum, vault]
     
   )
 

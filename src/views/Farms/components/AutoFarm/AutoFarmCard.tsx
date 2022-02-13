@@ -142,21 +142,9 @@ const AutoFarmCard: React.FC<AutoFarmCard> = ({ farm, removed, cakePrice, bnbPri
   const AutoApr = getAutoAprData(farm.apy.times(new BigNumber(100)).toNumber(),0)
   console.log(`Auto Apr : ${AutoApr}`)
   console.log(AutoApr)
-  const AutoAprAsPerchantage = AutoApr.apr.toLocaleString("ko-KR", {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  })
-  const AutoAprAsPerchantage1 = AutoApr.autoApr1.toLocaleString("ko-KR", {
-    minimumFractionDigits: 3,
-    maximumFractionDigits: 3,
-  })
-  const AutoAprAsPerchantage2 = AutoApr.autoApr7.toLocaleString("ko-KR", {
-    minimumFractionDigits: 3,
-    maximumFractionDigits: 3,
-  })
-  const AutoAprAsPerchantage3 = AutoApr.autoApr30.toLocaleString("ko-KR", {
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
+  const AutoAprAsPerchantage = AutoApr.apr.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   })
 
 
@@ -225,7 +213,7 @@ const AutoFarmCard: React.FC<AutoFarmCard> = ({ farm, removed, cakePrice, bnbPri
                   cakePrice={cakePrice}
                   apy={farm.apy}
                 />
-                {farmAPY}%
+                {AutoAprAsPerchantage}%
               </>
             ) : (
               <Skeleton height={24} width={80} />

@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js'
 import erc20 from 'config/abi/erc20.json'
 import masterchefABI from 'config/abi/masterchef.json'
+import autofarmABI from 'config/abi/autofarm.json'
 import multicall from 'utils/multicall'
 import { getMasterChefAddress } from 'utils/addressHelpers'
 import farmsConfig from 'config/constants/farms'
@@ -57,6 +58,9 @@ const fetchFarms = async () => {
         quoteTokenDecimals
       ] = await multicall(erc20, calls)
 
+
+      
+      console.log(`total Balance lp : ${lpTokenBalanceMC}`)
       let tokenAmount;
       let lpTotalInQuoteToken;
       let tokenPriceVsQuote;
@@ -64,7 +68,7 @@ const fetchFarms = async () => {
         tokenAmount = new BigNumber(lpTokenBalanceMC).div(new BigNumber(10).pow(tokenDecimals));
         if(farmConfig.tokenSymbol === QuoteToken.BUSD && farmConfig.quoteTokenSymbol === QuoteToken.BUSD){
           tokenPriceVsQuote = new BigNumber(1);
-        }else{
+        } else {
           tokenPriceVsQuote = new BigNumber(quoteTokenBlanceLP).div(new BigNumber(tokenBalanceLP));
         }
         lpTotalInQuoteToken = tokenAmount.times(tokenPriceVsQuote);

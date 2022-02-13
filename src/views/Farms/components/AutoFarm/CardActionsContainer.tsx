@@ -42,7 +42,6 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account, 
     vaultData.pricePerFullShare,
     cakePriceBusd.toNumber(),
   )
-  console.log(cakeAsBigNumber.toString())
   const { handleVaultApprove } = useVaultApprove()
 
   const vaultApprove = useCallback(async () => {
