@@ -47,13 +47,15 @@ const Cards = styled(BaseLayout)`
 
   ${({ theme }) => theme.mediaQueries.sm} {
     & > div {
-      grid-column: span 8;
+      grid-column: span 12;
+      width : 100%;
     }
   }
 
   ${({ theme }) => theme.mediaQueries.lg} {
     & > div {
       grid-column: span 6;
+      width : 45%;
     }
   }
 `
