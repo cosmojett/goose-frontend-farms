@@ -62,8 +62,11 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account, 
   const getAllowance = useEffect(() => {
     async function fetchAllowance() {
       try {
-        const allowancex = await  userAllowance(lpContract, farmContract, account);
-        setAllowance(new BigNumber(allowancex))
+        if(account) {
+          const allowancex = await  userAllowance(lpContract, farmContract, account);
+          setAllowance(new BigNumber(allowancex))
+        }
+
       } catch (e) {
         console.error(e)
       }
@@ -74,9 +77,11 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account, 
   const getUserStakeTime = useEffect(() => {
     async function fetchTime() {
       try {
-          
-          const userInfo = await clusterUserInfo(contract, account);
-          setStakeTime(Number(userInfo.lastUserActionTime) + Number(timeLock))
+          if(account) {
+            const userInfo = await clusterUserInfo(contract, account);
+            setStakeTime(Number(userInfo.lastUserActionTime) + Number(timeLock))
+          }
+
       } catch (e) {
         console.error(e)
       }

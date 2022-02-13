@@ -61,26 +61,34 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
 
   const autoFarmsList = useCallback(
     (farmsToDisplay, removed: boolean) => {
-      const autoFarmsWithAPY : AutoFarmWithStakedValue[] = farmsToDisplay.map((farm) => {
-        const cakeRewardPerBlock = new BigNumber(farm.buzzPerBlock || 1).times(new BigNumber(farm.poolWeight)) .div(new BigNumber(10).pow(18))
+      const farmsToDisplayWithAPY: FarmWithStakedValue[] = farmsToDisplay.map((farm) => {
+        // if (!farm.tokenAmount || !farm.lpTotalInQuoteToken || !farm.lpTotalInQuoteToken) {
+        //   return farm
+        // }
+        
+        const cakeRewardPerBlock = new BigNumber(farm.buzzPerBlock || 1)
+          .times(new BigNumber(farm.poolWeight))
+          .div(new BigNumber(10).pow(18))
         const cakeRewardPerYear = cakeRewardPerBlock.times(BLOCKS_PER_YEAR)
-
-        let apy = cakePrice.times(cakeRewardPerYear);
-
-        let totalValue = new BigNumber(farm.lpTotalInQuoteToken || 0);
+        // alert(cakeRewardPerBlock)
+        let apy = cakePrice.times(cakeRewardPerYear)
+        // alert(farm.poolWeight)
+        console.log(apy.toNumber())
         console.log(farm)
+        let totalValue = new BigNumber(farm.lpTotalInQuoteToken || 0)
+
         if (farm.quoteTokenSymbol === QuoteToken.BNB) {
-          totalValue = totalValue.times(bnbPrice);
+          totalValue = totalValue.times(bnbPrice)
         }
 
-        if(totalValue.comparedTo(0) > 0){
-          apy = apy.div(totalValue);
+        if (totalValue.comparedTo(0) > 0) {
+          apy = apy.div(totalValue)
         }
-
+        console.log(apy.times(new BigNumber(100)).toNumber())
         return { ...farm, apy }
       })
 
-      return autoFarmsWithAPY.map((farm) => (
+      return farmsToDisplayWithAPY.map((farm) => (
 
         <AutoFarmCard
           key={farm.pid}
@@ -100,10 +108,12 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
     (farmsToDisplay, removed: boolean) => {
       const autoFarmsWithAPY : AutoFarmWithStakedValue[] = farmsToDisplay.map((farm) => {
         const cakeRewardPerBlock = new BigNumber(farm.buzzPerBlock || 1).times(new BigNumber(farm.poolWeight)) .div(new BigNumber(10).pow(18))
-      
-        const cakeRewardPerYear = cakeRewardPerBlock.times(BLOCKS_PER_YEAR)
 
-        let apy = cakePrice.times(cakeRewardPerYear);
+        console.log(`Cluster buzz per block : ${cakeRewardPerBlock.toString()}`)
+
+        const cakeRewardPerYear = cakeRewardPerBlock.times(BLOCKS_PER_YEAR).toFixed(3)
+
+        const apy = cakePrice.times(cakeRewardPerYear);
 
         let totalValue = new BigNumber(farm.lpTotalInQuoteToken || 0);
         console.log(farm)
@@ -111,11 +121,8 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
           totalValue = totalValue.times(bnbPrice);
         }
 
-        if(totalValue.comparedTo(0) > 0){
-          apy = apy.div(totalValue);
-        }
 
-        return { ...farm, apy }
+        return { ...farm, apy, yearlyDist : cakeRewardPerYear }
       })
 
       return autoFarmsWithAPY.map((farm) => (

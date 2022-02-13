@@ -20,6 +20,7 @@ import ApyButton from './ApyButton'
 
 export interface AutoFarmWithStakedValue extends Farm {
   apy?: BigNumber
+  yearlyDist?: BigNumber
 }
 
 const RainbowLight = keyframes`
@@ -184,6 +185,7 @@ const AutoFarmCard: React.FC<AutoFarmCard> = ({ farm, removed, cakePrice, bnbPri
         earnToken={earnToken}
       />
       {!removed && (
+        <> {/*
         <Flex justifyContent='space-between' alignItems='center'>
           <Text  fontSize="16px" >{TranslateString(352, 'APR')}:</Text>
           <Text  fontSize="16px"  bold style={{ display: 'flex', alignItems: 'center' }}>
@@ -202,8 +204,19 @@ const AutoFarmCard: React.FC<AutoFarmCard> = ({ farm, removed, cakePrice, bnbPri
             ) : (
               <Skeleton height={24} width={80} />
             )}
-          </Text>
-        </Flex>
+          </Text> 
+            </Flex> */ }
+                <Flex justifyContent='space-between' alignItems='center'>
+                <Text  fontSize="16px" >Yearly Buzz Distribution:</Text>
+                <Text  fontSize="16px"  bold style={{ display: 'flex', alignItems: 'center' }}>
+                  {farm.yearlyDist ? (
+                    `${farm.yearlyDist} BUZZ`
+                  ) : (
+                    <Skeleton height={24} width={80} />
+                  )}
+                </Text>
+              </Flex>
+        </>
       )}
       <Flex justifyContent='space-between'>
         <Text  fontSize="16px" >Deposit:</Text>
