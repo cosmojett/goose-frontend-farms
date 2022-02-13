@@ -201,7 +201,7 @@ const AutoFarmCard: React.FC<AutoFarmCard> = ({ farm, removed, cakePrice, bnbPri
       />
       {!removed && (
         <Flex justifyContent='space-between' alignItems='center'>
-          <Text  fontSize="16px" >{TranslateString(352, 'APR')}:</Text>
+          <Text  fontSize="16px" >APY:</Text>
           <Text  fontSize="16px"  bold style={{ display: 'flex', alignItems: 'center' }}>
             {farm.apy ? (
               <>
