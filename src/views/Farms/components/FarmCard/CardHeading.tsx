@@ -49,10 +49,10 @@ const CardHeading: React.FC<ExpandableSectionProps> = ({
   return (
     <Wrapper justifyContent="space-between" alignItems="center" mb="12px">
       <Background style={{backgroundImage : `url(${image})`}}>
-                <Heading as="h1" size="xl"  color="contrast" style={{ textAlign: 'center' }}>
+                <Heading as="h1" size="lg"  color="contrast" style={{ textAlign: 'center'}}>
                     {lpLabel}
                 </Heading>
-                <Heading as="h2" size="md"  color="contrast" style={{ textAlign: 'center' }}>
+                <Heading as="h2" size="sm"  color="contrast" style={{ textAlign: 'center' }}>
                   Earn {earnToken}
                 </Heading>
       </Background>
