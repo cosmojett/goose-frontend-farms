@@ -72,11 +72,8 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
         const cakeRewardPerYear = cakeRewardPerBlock.times(BLOCKS_PER_YEAR)
 
         let apy = cakePrice.times(cakeRewardPerYear);
-        console.log(`Auto farm apy `)
-        console.log(vault.totalBuzzInVault.toString())
         let totalValue = new BigNumber(vault.totalBuzzInVault.div(new BigNumber(10).pow(18)).div(3.5) || 0);
-        console.log(farm)
-        console.log(`Total Value Cosmic : ${totalValue.toString()}`)
+
         if (farm.quoteTokenSymbol === QuoteToken.BNB) {
           totalValue = totalValue.times(bnbPrice);
         }
