@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js/bignumber'
 import styled from 'styled-components'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { useTotalSupply, useBurnedBalance, useChefBalance, useTreasuryBalance } from 'hooks/useTokenBalance'
+import { useCosmicBalance } from 'hooks/useFarmsWithBalance'
 import useI18n from 'hooks/useI18n'
 import { getCakeAddress } from 'utils/addressHelpers'
 import CardValue from './CardValue'
@@ -26,7 +27,8 @@ const CakeStats = (props) => {
   const TranslateString = useI18n()
   const totalSupply = useTotalSupply()
   const burnedBalance = useBurnedBalance(getCakeAddress())
-  const chefBalance = useChefBalance(getCakeAddress())
+  const autoFarmStakes = useCosmicBalance('0x79eFe3cC2E2291D9570762d0a6b8Cf00B9d593df')
+  const chefBalance = useChefBalance(getCakeAddress()).minus(autoFarmStakes)
   const treasuryBalance = useTreasuryBalance(getCakeAddress(),'0xAd8F748b2e87bDDCbf98f11a63F9f3CbcDD34B38')
   const farms = useFarms();
   const eggPrice = usePriceCakeBusd();

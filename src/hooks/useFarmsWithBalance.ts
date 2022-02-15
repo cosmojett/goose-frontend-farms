@@ -6,6 +6,8 @@ import { getMasterChefAddress } from 'utils/addressHelpers'
 import masterChefABI from 'config/abi/masterchef.json'
 import { farmsConfig } from 'config/constants'
 import { FarmConfig } from 'config/constants/types'
+import { autoFarmStaked } from 'utils/callHelpers'
+import { useMasterchef } from 'hooks/useContract'
 import useRefresh from './useRefresh'
 
 export interface FarmWithBalance extends FarmConfig {
@@ -37,6 +39,29 @@ const useFarmsWithBalance = () => {
   }, [account, fastRefresh])
 
   return farmsWithBalances
+}
+
+export const useCosmicBalance = (cosmicAddress : string) => {
+    const [cosmicBalance, setCosmicBalance] = useState(new BigNumber(0))
+  const { account } = useWallet()
+  const { fastRefresh } = useRefresh()
+const masterchef = useMasterchef()
+  useEffect(() => {
+    const fetchBalances = async () => {
+      
+      const balance = await autoFarmStaked(masterchef, cosmicAddress, 0);
+
+      console.log(balance)
+
+      setCosmicBalance(new BigNumber(balance.amount))
+    }
+
+    if (account) {
+      fetchBalances()
+    }
+  }, [account, fastRefresh, cosmicAddress, masterchef])
+
+  return cosmicBalance
 }
 
 export default useFarmsWithBalance
