@@ -50,7 +50,7 @@ const CakeStats = (props) => {
   return (
     <StyledCakeStats {...props}>
       <CardBody>
-        <Heading size="xl" mb="24px">
+        <Heading size="lg" mb="24px">
           {TranslateString(534, 'Egg Stats')}
         </Heading>
         <Row>

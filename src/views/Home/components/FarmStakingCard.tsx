@@ -68,7 +68,7 @@ const FarmedStakingCard = (props) => {
   return (
     <StyledFarmStakingCard {...props}>
       <CardBody>
-        <Heading size="xl" mb="24px">
+        <Heading size="lg" mb="24px">
           {TranslateString(542, 'Farms & Staking')}
         </Heading>
         <CardImage src="/images/cosmosium/token-150.png" alt="buzz logo" width={64} height={64} />

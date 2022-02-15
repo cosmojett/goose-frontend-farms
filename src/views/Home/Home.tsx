@@ -40,12 +40,8 @@ const Cards = styled(BaseLayout)`
   flex-wrap : wrap;
   margin-bottom: 48px;
 
-  & > div {
-    grid-column: span 6;
-    width : 45%;
-  }
 
-  ${({ theme }) => theme.mediaQueries.sm} {
+  ${({ theme }) => theme.mediaQueries.xs} {
     & > div {
       grid-column: span 12;
       width : 100%;

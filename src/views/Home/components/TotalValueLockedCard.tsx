@@ -27,7 +27,7 @@ const TotalValueLockedCard = (props) => {
   return (
     <StyledTotalValueLockedCard {...props}>
       <CardBody>
-        <Heading size="xl" mb="24px">
+        <Heading size="lg" mb="24px">
           BUZZ Price
         </Heading>
         <>
