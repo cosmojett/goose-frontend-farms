@@ -45,13 +45,11 @@ export const useCosmicBalance = (cosmicAddress : string) => {
     const [cosmicBalance, setCosmicBalance] = useState(new BigNumber(0))
   const { account } = useWallet()
   const { fastRefresh } = useRefresh()
-const masterchef = useMasterchef()
+    const masterchef = useMasterchef()
   useEffect(() => {
     const fetchBalances = async () => {
       
       const balance = await autoFarmStaked(masterchef, cosmicAddress, 0);
-
-      console.log(balance)
 
       setCosmicBalance(new BigNumber(balance.amount))
     }
@@ -63,5 +61,6 @@ const masterchef = useMasterchef()
 
   return cosmicBalance
 }
+
 
 export default useFarmsWithBalance
