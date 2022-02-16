@@ -72,7 +72,7 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
         const cakeRewardPerYear = cakeRewardPerBlock.times(BLOCKS_PER_YEAR)
 
         let apy = cakePrice.times(cakeRewardPerYear);
-        let totalValue = new BigNumber(vault.totalBuzzInVault.div(new BigNumber(10).pow(18)).div(3.5) || 0);
+        let totalValue = new BigNumber(vault.totalBuzzInVault.div(new BigNumber(10).pow(18)).div(12) || 0);
 
         if (farm.quoteTokenSymbol === QuoteToken.BNB) {
           totalValue = totalValue.times(bnbPrice);
