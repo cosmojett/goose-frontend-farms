@@ -30,9 +30,10 @@ const CakeStats = (props) => {
   const autoFarmStakes = useCosmicBalance('0x79eFe3cC2E2291D9570762d0a6b8Cf00B9d593df')
   const chefBalance = useChefBalance(getCakeAddress()).minus(autoFarmStakes)
   const treasuryBalance = useTreasuryBalance(getCakeAddress(),'0xAd8F748b2e87bDDCbf98f11a63F9f3CbcDD34B38')
+  const apeBalance = useTreasuryBalance(getCakeAddress(),'0x907cEc57456ADb5484921771d692a74c2Dd0d107')
   const farms = useFarms();
   const eggPrice = usePriceCakeBusd();
-  const circSupply = totalSupply ? totalSupply.minus(burnedBalance).minus(chefBalance).minus(treasuryBalance) : new BigNumber(0);
+  const circSupply = totalSupply ? totalSupply.minus(burnedBalance).minus(chefBalance).minus(treasuryBalance).minus(apeBalance) : new BigNumber(0);
   const cakeSupply = getBalanceNumber(circSupply);
   const marketCap = eggPrice.times(circSupply);
 
