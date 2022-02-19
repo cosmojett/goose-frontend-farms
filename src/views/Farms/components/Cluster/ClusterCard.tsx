@@ -119,6 +119,8 @@ const AutoFarmCard: React.FC<AutoFarmCard> = ({ farm, removed, cakePrice, bnbPri
   const [showExpandableSection, setShowExpandableSection] = useState(false)
   const farmAddress = farm.clusterContract[process.env.REACT_APP_CHAIN_ID];
   const farmContract = useCluster(farmAddress);
+  console.log('Cluster data')
+  console.log(farm)
   // const isCommunityFarm = communityFarms.includes(farm.tokenSymbol)
   // We assume the token name is coin pair + lp e.g. CAKE-BNB LP, LINK-BNB LP,
   // NAR-CAKE LP. The images should be cake-bnb.svg, link-bnb.svg, nar-cake.svg
@@ -185,9 +187,8 @@ const AutoFarmCard: React.FC<AutoFarmCard> = ({ farm, removed, cakePrice, bnbPri
         earnToken={earnToken}
       />
       {!removed && (
-        <> {/*
         <Flex justifyContent='space-between' alignItems='center'>
-          <Text  fontSize="16px" >{TranslateString(352, 'APR')}:</Text>
+          <Text  fontSize="16px" >Estimated APY:</Text>
           <Text  fontSize="16px"  bold style={{ display: 'flex', alignItems: 'center' }}>
             {farm.apy ? (
               <>
@@ -205,18 +206,7 @@ const AutoFarmCard: React.FC<AutoFarmCard> = ({ farm, removed, cakePrice, bnbPri
               <Skeleton height={24} width={80} />
             )}
           </Text> 
-            </Flex> */ }
-                <Flex justifyContent='space-between' alignItems='center'>
-                <Text  fontSize="16px" >Yearly Buzz Dist.:</Text>
-                <Text  fontSize="16px"  bold style={{ display: 'flex', alignItems: 'center' }}>
-                  {farm.yearlyDist ? (
-                    `${farm.yearlyDist} BUZZ`
-                  ) : (
-                    <Skeleton height={24} width={80} />
-                  )}
-                </Text>
-              </Flex>
-        </>
+            </Flex>
       )}
       <Flex justifyContent='space-between'>
         <Text  fontSize="16px" >Deposit:</Text>

@@ -70,6 +70,7 @@ const farms: FarmConfig[] = [
     depositToken : 'BUZZ',
     isAuto : false,
     isCluster : true,
+    isTokenOnly : true,
     clusterContract : {
       97 : '0x83aFb309b4C8891F1fA04A61c77bcCD882eE6134',
       56 : '0x1770104aa9b1BDB1D1582802b3221a466A2A4f4d'
@@ -93,6 +94,7 @@ const farms: FarmConfig[] = [
     image : './images/indexes/3.jpg',
     earnToken : 'BUZZ',
     depositToken : 'BUZZ',
+    isTokenOnly : true,
     isAuto : false,
     isCluster : true,
     clusterContract : {

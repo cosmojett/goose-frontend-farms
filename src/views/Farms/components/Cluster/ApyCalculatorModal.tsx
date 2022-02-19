@@ -45,11 +45,10 @@ const ApyCalculatorModal: React.FC<ApyCalculatorModalProps> = ({
   const TranslateString = useI18n()
   const liquidityUrlPathParts = getLiquidityUrlPathParts({ quoteTokenAdresses, quoteTokenSymbol, tokenAddresses })
   const farmApy = apy.times(new BigNumber(100)).toNumber()
-  const oneThousandDollarsWorthOfCake = 10000 / cakePrice.toNumber()
+  const oneThousandDollarsWorthOfCake = 1000 / cakePrice.toNumber()
 
-  const cakeEarnedPerThousand1D = calculateCakeEarnedPerThousandDollars({ numberOfDays: 1, farmApy, cakePrice })
   const cakeEarnedPerThousand7D = calculateCakeEarnedPerThousandDollars({ numberOfDays: 7, farmApy, cakePrice })
-  const cakeEarnedPerThousand30D = calculateCakeEarnedPerThousandDollars({ numberOfDays: 30, farmApy, cakePrice })
+  const cakeEarnedPerThousand14D = calculateCakeEarnedPerThousandDollars({ numberOfDays: 14, farmApy, cakePrice })
   const cakeEarnedPerThousand365D = calculateCakeEarnedPerThousandDollars({ numberOfDays: 365, farmApy, cakePrice })
 
   return (
@@ -67,20 +66,8 @@ const ApyCalculatorModal: React.FC<ApyCalculatorModalProps> = ({
         </GridItem>
         <GridItem>
           <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase" mb="20px">
-            BUZZ PER 10000$
+            BUZZ PER 1000$
           </Text>
-        </GridItem>
-        {/* 1 day row */}
-        <GridItem>
-          <Text>1d</Text>
-        </GridItem>
-        <GridItem>
-          <Text>
-            {apyModalRoi({ amountEarned: cakeEarnedPerThousand1D, amountInvested: oneThousandDollarsWorthOfCake })}%
-          </Text>
-        </GridItem>
-        <GridItem>
-          <Text>{cakeEarnedPerThousand1D}</Text>
         </GridItem>
         {/* 7 day row */}
         <GridItem>
@@ -96,15 +83,15 @@ const ApyCalculatorModal: React.FC<ApyCalculatorModalProps> = ({
         </GridItem>
         {/* 30 day row */}
         <GridItem>
-          <Text>30d</Text>
+          <Text>14d</Text>
         </GridItem>
         <GridItem>
           <Text>
-            {apyModalRoi({ amountEarned: cakeEarnedPerThousand30D, amountInvested: oneThousandDollarsWorthOfCake })}%
+            {apyModalRoi({ amountEarned: cakeEarnedPerThousand14D, amountInvested: oneThousandDollarsWorthOfCake })}%
           </Text>
         </GridItem>
         <GridItem>
-          <Text>{cakeEarnedPerThousand30D}</Text>
+          <Text>{cakeEarnedPerThousand14D}</Text>
         </GridItem>
         {/* 365 day / APY row */}
         <GridItem>
@@ -120,10 +107,7 @@ const ApyCalculatorModal: React.FC<ApyCalculatorModalProps> = ({
         </GridItem>
       </Grid>
       <Description fontSize="12px" color="textSubtle">
-        {TranslateString(
-          999,
-          'Calculated based on current rates. Compounding once daily. Rates are estimates provided for your convenience only, and by no means represent guaranteed returns.',
-        )}
+        Clusters system is different than other farming strategies. APY is just an estimated value and it dynamically changes. Your final balance can be higher or lower than estimated.
       </Description>
       <Flex justifyContent="center">
         <LinkExternal href='https://dex.cosmosium.finance/#/swap?outputCurrency=0xa73C15620bfA79646E9A11d0D638d66588456462'>

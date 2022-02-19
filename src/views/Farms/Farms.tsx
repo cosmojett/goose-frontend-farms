@@ -114,14 +114,18 @@ const Farms: React.FC<FarmsProps> = (farmsProps) => {
 
         const cakeRewardPerYear = cakeRewardPerBlock.times(BLOCKS_PER_YEAR).toFixed(3)
 
-        const apy = cakePrice.times(cakeRewardPerYear);
-
-        let totalValue = new BigNumber(farm.lpTotalInQuoteToken || 0);
-        console.log(farm)
+        let apy = cakePrice.times(cakeRewardPerYear);
+        const tokenPriceVsQuote = new BigNumber(farm.clusterBalance).times(cakePrice)
+        let totalValue = new BigNumber(farm.lpTotalInQuoteToken || 0).times(cakePrice);
+        console.log(`Cluster balance : ${totalValue.toString()}`)
+        console.log(`Apy balance : ${apy.toString()}`)
         if (farm.quoteTokenSymbol === QuoteToken.BNB) {
           totalValue = totalValue.times(bnbPrice);
         }
 
+        if(totalValue.comparedTo(0) > 0){
+          apy = apy.div(totalValue);
+        }
 
         return { ...farm, apy, yearlyDist : cakeRewardPerYear }
       })

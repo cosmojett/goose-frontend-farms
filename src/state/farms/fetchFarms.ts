@@ -3,6 +3,7 @@ import erc20 from 'config/abi/erc20.json'
 import masterchefABI from 'config/abi/masterchef.json'
 import autofarmABI from 'config/abi/autofarm.json'
 import multicall from 'utils/multicall'
+import { useAddressBalance } from 'hooks/useTokenBalance'
 import { getMasterChefAddress } from 'utils/addressHelpers'
 import farmsConfig from 'config/constants/farms'
 import { QuoteToken } from '../../config/constants/types'
@@ -57,20 +58,35 @@ const fetchFarms = async () => {
         tokenDecimals,
         quoteTokenDecimals
       ] = await multicall(erc20, calls)
-
-
+        let balanceOfCluster = new BigNumber(0)
+      if(farmConfig.isCluster) {
+        [ balanceOfCluster ] = await multicall(erc20, [{
+          address: farmConfig.tokenAddresses[CHAIN_ID],
+          name : 'balanceOf',
+          params: [farmConfig.clusterContract[CHAIN_ID]]
+        }]
+        )
+      }
       
-      console.log(`total Balance lp : ${lpTokenBalanceMC}`)
       let tokenAmount;
       let lpTotalInQuoteToken;
       let tokenPriceVsQuote;
       if(farmConfig.isTokenOnly){
         tokenAmount = new BigNumber(lpTokenBalanceMC).div(new BigNumber(10).pow(tokenDecimals));
+        if(farmConfig.isCluster) {
+          tokenAmount = new BigNumber(balanceOfCluster).div(new BigNumber(10).pow(tokenDecimals));
+          console.log(`Token Amount : ${tokenAmount.toString()}`)
+        }
         if(farmConfig.tokenSymbol === QuoteToken.BUSD && farmConfig.quoteTokenSymbol === QuoteToken.BUSD){
           tokenPriceVsQuote = new BigNumber(1);
         } else {
           tokenPriceVsQuote = new BigNumber(quoteTokenBlanceLP).div(new BigNumber(tokenBalanceLP));
         }
+
+        if(farmConfig.isCluster) {
+          tokenPriceVsQuote = new BigNumber(1);
+        }
+        
         lpTotalInQuoteToken = tokenAmount.times(tokenPriceVsQuote);
       }else{
         // Ratio in % a LP tokens that are in staking, vs the total number in circulation
@@ -119,12 +135,14 @@ const fetchFarms = async () => {
         tokenAmount: tokenAmount.toJSON(),
         // quoteTokenAmount: quoteTokenAmount,
         lpTotalInQuoteToken: lpTotalInQuoteToken.toJSON(),
+        lpTotalSupply : new BigNumber(lpTotalSupply || 0).toJSON(),
         tokenPriceVsQuote: tokenPriceVsQuote.toJSON(),
         poolWeight: poolWeight.toNumber(),
         multiplier: `${allocPoint.div(100).toString()}X`,
         depositFeeBP: info.depositFeeBP,
         harvestInterval : info.harvestInterval?.toString(),
         buzzPerBlock: new BigNumber(buzzPerBlock).toNumber(),
+        clusterBalance: new BigNumber(balanceOfCluster).toJSON()
       }
     }),
   )
