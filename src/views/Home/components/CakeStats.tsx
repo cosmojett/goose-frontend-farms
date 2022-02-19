@@ -41,7 +41,7 @@ const CakeStats = (props) => {
   const cluster1 = useAddressBalance('0xa73c15620bfa79646e9a11d0d638d66588456462','0x1770104aa9b1BDB1D1582802b3221a466A2A4f4d').dividedBy(new BigNumber(10).pow(18)).times(eggPrice)
   const cluster2 = useAddressBalance('0xa73c15620bfa79646e9a11d0d638d66588456462','0x027c055560F176A60206B592583927a4DE913FEF').dividedBy(new BigNumber(10).pow(18)).times(eggPrice)
   const cosmicBalance = useCosmicBalance('0x79eFe3cC2E2291D9570762d0a6b8Cf00B9d593df').dividedBy(new BigNumber(10).pow(18)).times(eggPrice)
-  const tvl = cosmicBalance.plus(cluster2).plus(cluster1).plus(totalValue).times(1.865)
+  const tvl = cosmicBalance.plus(cluster2).plus(cluster1).plus(totalValue)
 
   let buzzPerBlock = 0;
   if(farms && farms[0] && farms[0].buzzPerBlock){
