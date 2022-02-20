@@ -101,7 +101,7 @@ const CardActions: React.FC<FarmCardActionsProps> = ({ farm, ethereum, account, 
   }, [onApprove])
 
   const renderApprovalOrStakeButton = () => {
-    return isApproved ? (
+    return isVaultApproved ? (
       <>
       <StakeAction account={account} farmAddress={farmContract} stakedBalance={cakeAsBigNumber} tokenBalance={tokenBalance} tokenName={lpName} pid={pid} depositFeeBP={depositFeeBP} userShares={vaultData.userShares} pricePerFullShare={vaultData.pricePerFullShare} />
               <Flex>
