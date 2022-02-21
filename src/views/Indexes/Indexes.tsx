@@ -44,6 +44,7 @@ const Indexes: React.FC = () => {
                         contract= {i.contract}
                         ethereum={ethereum}
                         account={account}
+                        zap={i.zap}
                     />
                 ))}
             </FlexLayout>

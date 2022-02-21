@@ -3,9 +3,10 @@ import BigNumber from 'bignumber.js'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { provider } from 'web3-core'
 import cakeABI from 'config/abi/cake.json'
+import ERC20 from 'config/abi/erc20.json'
 import indexes from 'config/abi/index.json'
 import { getContract } from 'utils/web3'
-import { getTokenBalance } from 'utils/erc20'
+import { getTokenBalance, getAllowanceToken } from 'utils/erc20'
 import { getCakeAddress, getMasterChefAddress } from 'utils/addressHelpers'
 import useRefresh from './useRefresh'
 
@@ -124,4 +125,21 @@ export const useIndexComponentPrices = (indexAddress: string) => {
     }, [indexAddress, slowRefresh])
 
     return components;
+}
+
+export const useIndexZapAllowance = (indexAddress: string, account: string, stable: string) => {
+    const [allowance, setAllowance] = useState(new BigNumber(0))
+    const { slowRefresh } = useRefresh()
+    useEffect(() => {
+        const fetchAllowance = async () => {
+            const stableContract = getContract(ERC20, stable);
+            const allow = await getAllowanceToken(stableContract, indexAddress, account)
+            setAllowance(new BigNumber(allow))
+        }
+        if(account) {
+            fetchAllowance()
+        }
+    }, [indexAddress, account, stable, slowRefresh])
+
+    return allowance
 }

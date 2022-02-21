@@ -41,11 +41,11 @@ export default {
     97 : '0x9F861a8aCa106A3b3A12385eAE76784885D51239'
   },
   btcb : {
-    56 : '0x7130d2a12b9bcbfae4f2634d864a1ee1ce3ead9c',
+    56 : '0x7130d2A12B9BCbFAe4f2634d864A1Ee1Ce3Ead9c',
     97 : ''
   },
   ethb : {
-    56 : '0x2170ed0880ac9a755fd29b2688956bd959f933f8',
+    56 : '0x2170Ed0880ac9A755fd29B2688956BD959F933F8',
     97 : ''
   },
   realCake : {

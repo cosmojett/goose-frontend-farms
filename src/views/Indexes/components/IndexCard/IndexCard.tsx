@@ -6,10 +6,14 @@ import { useWallet } from '@binance-chain/bsc-use-wallet'
 import {IndexToken} from 'config/constants/types'
 import { useGalaxy } from 'hooks/useContract'
 import useRefresh from 'hooks/useRefresh'
+import ERC20 from 'config/abi/erc20.json'
 import { getBalanceNumber, getFullDisplayBalance, getFullDisplayBalanceFixed } from 'utils/formatBalance'
 import { fetchIndexUserData } from 'state/actions'
 import { useGalaxyMint } from 'hooks/useStake'
 import { useGalaxyBurn } from 'hooks/useUnstake'
+import { useApproveAddressNoFarm } from 'hooks/useApprove'
+import { getContract } from 'utils/web3'
+import useTokenBalance from 'hooks/useTokenBalance'
 import { useIndexUser } from 'state/hooks'
 import { galaxyTotalSupply, galaxyPrice, galaxyBalance, galaxyComponentPrices } from 'utils/callHelpers'
 import { useIndexBalance, useIndexSupply, useIndexPrice, useIndexComponentPrices } from 'hooks/useIndexes'
@@ -18,7 +22,7 @@ import styled, { keyframes } from 'styled-components'
 import CardHeader from './CardHeader'
 import MintModal from '../MintModal'
 import BurnModal from '../BurnModal'
-
+import ZapModal from '../ZapModal'
 
 interface IndexCardProps {
     id: number
@@ -29,6 +33,7 @@ interface IndexCardProps {
     contract: string
     account?: string
     ethereum?: provider
+    zap: IndexToken
     
 }
 
@@ -46,16 +51,23 @@ const ICard = styled.div`
 `
 
 const CardBody = styled.div`
-    margin-top : 20px;
+    margin-top : 10px;
 `;
 
 const Actions = styled.div`
     margin-top : 25px;
 `
 
+const Divider = styled.div`
+background-color: ${({ theme }) => theme.colors.textSubtle};
+height: 1px;
+margin: 8px auto 8px;
+width: 100%;
+`
+
 
 const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
-    const { tokens, contract, name, account, ethereum, id } = indexProps;
+    const { tokens, contract, name, account, ethereum, id, zap } = indexProps;
     const tokenNames = tokens.map(x => x.name);
     const indexContract = useGalaxy(contract);
     const xxx = useIndexUser(id)
@@ -64,15 +76,27 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
     const [tokenPrices, setTokenPrices] = useState(Array(tokens.length).fill(new BigNumber(0)))
     const userBalance = useIndexBalance(contract, account)
     const totalSupply = useIndexSupply(contract);
+    const userZapBalance = useTokenBalance(zap.contract[process.env.REACT_APP_CHAIN_ID])
     const price = useIndexPrice(contract);
     const components = useIndexComponentPrices(contract);
-    const [totalPrice, setTotalPrices] = useState(new BigNumber(0))
+    const stableContract = getContract(ERC20,zap.contract[process.env.REACT_APP_CHAIN_ID])
+    const totalPrice = components.length > 0 ? components.reduce((a, b) => ({price: a.price.plus(b.price), token :''})) : {price : new BigNumber(0), token : ''};
+    // const [totalPrice, setTotalPrices] = useState(new BigNumber(0))
     const { onMint } = useGalaxyMint(contract)
     const { onBurn } = useGalaxyBurn(contract)
+    const { onApprove } = useApproveAddressNoFarm(stableContract, contract)
 
     const [onPresentMint] = useModal(<MintModal tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={onMint}/>)
     const [onPresentBurn] = useModal(<BurnModal balance={userBalance} tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={onBurn}/>)
+    const [onPresentZap] = useModal(<ZapModal lotPrice={price} zap={zap} balance={userZapBalance} tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={onBurn} onApprove={onApprove}/>)
 
+    const getTokenNameFromContract = function(addr: string) {
+        const result = tokens.filter((x) => x.contract[process.env.REACT_APP_CHAIN_ID] === addr);
+        if(result.length > 0) {
+            return result[0].name;
+        }
+        return '';
+    }
 
     const getUserBalance = useEffect(() => {
         async function fetchBalance() {
@@ -88,26 +112,6 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
         fetchBalance()
     },[indexContract, account])
 
-    const getComponentPrices = useEffect(() => {
-        async function getPrices() {
-            try {
-                const _prices = await galaxyComponentPrices(indexContract, '0.000001');
-                const tokenPriceList = []
-                let totalTokenPrice = new BigNumber(0);
-                for(let i = 0; i < tokens.length; i++) {
-                    tokenPriceList[i] = new BigNumber(_prices[i].amount).times(1000000).dividedBy(new BigNumber(10).pow(18));
-                    totalTokenPrice = totalTokenPrice.plus(new BigNumber(_prices[i].amount).times(1000000).dividedBy(new BigNumber(10).pow(18))) 
-                }
-
-                console.log(totalTokenPrice.toString())
-                setTokenPrices(tokenPriceList);
-                setTotalPrices(totalTokenPrice);
-            } catch (ex) {
-                console.error(ex)
-            }
-        }
-        getPrices()
-    },[indexContract, tokens])
     return (
         <ICard>
             <CardHeader 
@@ -116,22 +120,22 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
                 tokens={tokenNames}
             />
             <CardBody>
-                <Heading size="xs" style={{ alignItems: 'flex-start' }}>
-                    Tokens
-                </Heading>
+
                 <Flex alignItems='center' justifyContent='space-between'>
                             <Text bold  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>Token Name</Text>
                             <Text bold  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>% USD</Text>
                 </Flex>
+                <Divider />
                     {components.map((token,index) => (
                         <Flex alignItems='center' justifyContent='space-between'>
-                            <Text  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>{token.token} :</Text>
+                            <Text  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>{getTokenNameFromContract(token.token)} :</Text>
                             <Flex>
-                               <Text  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>% {token.price.dividedBy(new BigNumber(totalPrice)).times(100).toFixed(2)}</Text>
+                               <Text  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>% {token.price.dividedBy(new BigNumber(totalPrice.price)).times(100).toFixed(2)}</Text>
                             </Flex>
                         </Flex>
                     ))}
             </CardBody>
+            <Divider />
             <CardBody>
                 <Flex alignItems='center' justifyContent='space-between'>
                         <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>Total Supply : </Text>
@@ -146,6 +150,7 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
                 {account ? (<>
                 <Flex alignItems='center' justifyContent='space-between'>
                     <Button variant='success' onClick={onPresentMint}>Mint</Button>
+                    <Button variant='success' onClick={onPresentZap}>Zap</Button>
                     <Button variant='danger'  onClick={onPresentBurn}>Burn</Button>
                 </Flex>
                 <Flex style={{marginTop : '20px'}} alignItems='center' justifyContent='space-between'>

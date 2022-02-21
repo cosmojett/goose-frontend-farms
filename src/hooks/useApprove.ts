@@ -68,6 +68,21 @@ export const useApproveAddress = (tokenContract : Contract, spender : string) =>
   return { onApprove: handleApprove }
 }
 
+export const useApproveAddressNoFarm = (tokenContract : Contract, spender : string) => {
+  const { account }: { account: string } = useWallet()
+
+  const handleApprove = useCallback(async () => {
+    try {
+      const tx = await approveToAddress(tokenContract, spender, account)
+      return tx
+    } catch (e) {
+      return false
+    }
+  }, [account, tokenContract, spender])
+
+  return { onApprove: handleApprove }
+}
+
 // Approve a Pool
 export const useSousApprove = (lpContract: Contract, sousId) => {
   const dispatch = useDispatch()

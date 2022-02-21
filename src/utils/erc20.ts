@@ -23,6 +23,19 @@ export const getAllowance = async (
   }
 }
 
+export const getAllowanceToken = async (
+  lpContract: Contract,
+  spender: string,
+  account: string,
+): Promise<string> => {
+  try {
+    const allowance: string = await lpContract.methods.allowance(account, spender).call()
+    return allowance
+  } catch (e) {
+    return '0'
+  }
+}
+
 export const getAllowanceForAddress = async(
   token: Contract,
   spender: string,

@@ -111,4 +111,5 @@ export type Indexes = {
   creator: string
   tokens: IndexToken[]
   contract: string
+  zap: IndexToken
 }
