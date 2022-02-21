@@ -6,11 +6,13 @@ import { useWallet } from '@binance-chain/bsc-use-wallet'
 import {IndexToken} from 'config/constants/types'
 import { useGalaxy } from 'hooks/useContract'
 import useRefresh from 'hooks/useRefresh'
+import { getBalanceNumber, getFullDisplayBalance, getFullDisplayBalanceFixed } from 'utils/formatBalance'
 import { fetchIndexUserData } from 'state/actions'
 import { useGalaxyMint } from 'hooks/useStake'
 import { useGalaxyBurn } from 'hooks/useUnstake'
 import { useIndexUser } from 'state/hooks'
 import { galaxyTotalSupply, galaxyPrice, galaxyBalance, galaxyComponentPrices } from 'utils/callHelpers'
+import { useIndexBalance, useIndexSupply, useIndexPrice, useIndexComponentPrices } from 'hooks/useIndexes'
 import UnlockButton from 'components/UnlockButton'
 import styled, { keyframes } from 'styled-components'
 import CardHeader from './CardHeader'
@@ -58,43 +60,26 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
     const indexContract = useGalaxy(contract);
     const xxx = useIndexUser(id)
     console.log('index from state')
-
-    const [supply, setSupply] = useState(new BigNumber(0));
-    const [price, setPrice] = useState(new BigNumber(0));
     const [balance, setBalance] = useState(new BigNumber(0));
     const [tokenPrices, setTokenPrices] = useState(Array(tokens.length).fill(new BigNumber(0)))
+    const userBalance = useIndexBalance(contract, account)
+    const totalSupply = useIndexSupply(contract);
+    const price = useIndexPrice(contract);
+    const components = useIndexComponentPrices(contract);
     const [totalPrice, setTotalPrices] = useState(new BigNumber(0))
     const { onMint } = useGalaxyMint(contract)
     const { onBurn } = useGalaxyBurn(contract)
 
     const [onPresentMint] = useModal(<MintModal tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={onMint}/>)
-    const [onPresentBurn] = useModal(<BurnModal balance={balance} tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={onBurn}/>)
-    const getSupply =  useEffect(() => {
-        async function fetchTotalSupply() {
-            const _supply = await galaxyTotalSupply(indexContract);
-            setSupply(new BigNumber(_supply).dividedBy(new BigNumber(10).pow(18)))
-        }
-        fetchTotalSupply()
-    }, [indexContract])
+    const [onPresentBurn] = useModal(<BurnModal balance={userBalance} tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={onBurn}/>)
 
-    const getIndexPrice = useEffect(() => {
-        async function fetchPrice() {
-            try {
-                const _price = await galaxyPrice(indexContract, '0.000001');
-                setPrice(new BigNumber(_price).times(1000000).dividedBy(new BigNumber(10).pow(18))); // fix for visual usd 
-            } catch (ex) {
-                console.error(ex)
-            }
-        }
-        fetchPrice()
-    }, [indexContract])
 
     const getUserBalance = useEffect(() => {
         async function fetchBalance() {
             try {
                 if(account) {
                     const _balance = await galaxyBalance(indexContract, account);
-                    setBalance(new BigNumber(_balance));
+                    setBalance(new BigNumber(_balance).dividedBy(new BigNumber(10).pow(18)));
                 }
             } catch (ex) {
                 console.error(ex)
@@ -138,11 +123,11 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
                             <Text bold  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>Token Name</Text>
                             <Text bold  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>% USD</Text>
                 </Flex>
-                    {tokens.map((token,index) => (
+                    {components.map((token,index) => (
                         <Flex alignItems='center' justifyContent='space-between'>
-                            <Text  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>{token.name} :</Text>
+                            <Text  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>{token.token} :</Text>
                             <Flex>
-                               <Text  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>% {tokenPrices[index].dividedBy(new BigNumber(totalPrice)).times(100).toFixed(2)}</Text>
+                               <Text  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>% {token.price.dividedBy(new BigNumber(totalPrice)).times(100).toFixed(2)}</Text>
                             </Flex>
                         </Flex>
                     ))}
@@ -150,11 +135,11 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
             <CardBody>
                 <Flex alignItems='center' justifyContent='space-between'>
                         <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>Total Supply : </Text>
-                        <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>{supply.toString()}</Text>
+                        <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>{getFullDisplayBalance(totalSupply)}</Text>
                 </Flex>
                 <Flex alignItems='center' justifyContent='space-between'>
                         <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>BUSD Price : </Text>
-                        <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>{price.toString()} $</Text>
+                        <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>{getFullDisplayBalanceFixed(price,18,3)} $</Text>
                 </Flex>
             </CardBody>
             <Actions>
@@ -165,7 +150,7 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
                 </Flex>
                 <Flex style={{marginTop : '20px'}} alignItems='center' justifyContent='space-between'>
                     <Text  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>Your Balance : </Text>
-                    <Text  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>{balance.toString()} </Text>
+                    <Text  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>{account ? getBalanceNumber(userBalance) : getBalanceNumber(new BigNumber(0))} </Text>
                 </Flex>
                 </>
                 ) : ( <UnlockButton fullWidth /> )}

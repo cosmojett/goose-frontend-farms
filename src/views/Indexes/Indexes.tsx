@@ -34,7 +34,7 @@ const Indexes: React.FC = () => {
             </Heading>
             <Divider />
             <FlexLayout>
-            {/* indexes.map(i => (
+            {indexes.map(i => (
                     <IndexCard 
                         id={i.id}
                         name= {i.name}
@@ -45,7 +45,7 @@ const Indexes: React.FC = () => {
                         ethereum={ethereum}
                         account={account}
                     />
-                )) */}
+                ))}
             </FlexLayout>
         </Page>
     )

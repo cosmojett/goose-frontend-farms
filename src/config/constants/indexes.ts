@@ -18,24 +18,28 @@ const indexes: Indexes[] = [/*
             },
         ],
         contract: '0xDe12f8faC90a56CD6D2426d2c675aCD8e34b1435'
-    },
+    }, */
     {
-        id: 1,
-        name: 'DeFi Index',
+        id: 0,
+        name: 'Large Cap Index',
         image : './images/indexes/2.jpg',
         creator: 'Verified Astronauts',
         tokens: [
             {
-                contract : contract.realCake,
-                name : 'CAKE'
+                contract : contract.btcb,
+                name : 'BTC'
             },
             {
-                contract : contract.banana,
-                name : 'BANANA'
+                contract : contract.ethb,
+                name : 'ETH'
+            },
+            {
+                contract : contract.wbnb,
+                name : 'WBNB'
             },
         ],
-        contract: '0x641f0119EFa907481D8Db30B1c1CAc3f365d74E1'
-    }, */
+        contract: '0x016ea71560f759CC175a945DA2613165c61A0431'
+    }, 
 ]
 
 export default indexes;
