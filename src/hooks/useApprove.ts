@@ -91,9 +91,6 @@ export const useApproveAddressNoContract = (spender : string) => {
 
   const handleApprove = useCallback(async (tokenAddress: string) => {
     try {
-      console.log(`Approve acc : ${account}`)
-      console.log(`Approve token : ${tokenAddress}`)
-      console.log(`Spender : ${spender}`)
       const contract = getContract(ERC20,tokenAddress)
       const tx = await approveToAddress(contract, spender, account)
       return tx

@@ -1,6 +1,8 @@
 import BigNumber from 'bignumber.js'
 import React, { useCallback, useMemo, useState, useEffect } from 'react'
 import { provider } from 'web3-core'
+import { ethers } from 'ethers'
+import { AbiItem } from 'web3-utils'
 import { Button, Modal, Heading, Text, Flex } from '@pancakeswap-libs/uikit'
 import ModalActions from 'components/ModalActions'
 import ZapInput from 'components/ZapInput'
@@ -12,6 +14,7 @@ import { useApproveAddress } from 'hooks/useApprove'
 import { useIndexMintFee, useIndexZapAllowance } from 'hooks/useIndexes'
 import { getAllowanceForAddress, getTokenBalance } from 'utils/erc20'
 import { getContract } from 'utils/web3'
+import useWeb3 from 'hooks/useWeb3'
 import { IndexToken } from 'config/constants/types'
 import { getFullDisplayBalance } from 'utils/formatBalance'
 
@@ -21,7 +24,7 @@ interface ZapModalProps {
     name: string
     onDismiss?: () => void
     onConfirm: (amount: string) => void
-    onApprove: () => void
+    onApprove: (spender: string) => void
     account?: string
     ethereum?: provider
     balance? : BigNumber
@@ -31,7 +34,7 @@ interface ZapModalProps {
 
 const ZapModal: React.FC<ZapModalProps> = ({ tokens, contract, name, onDismiss, onConfirm, onApprove, ethereum, account, balance, zap, lotPrice}) => {
   const [val, setVal] = useState('')
-  
+      const w3 = useWeb3()
   const [pendingTx, setPendingTx] = useState(false)
   const TranslateString = useI18n()
   const mintFee = useIndexMintFee(contract);
@@ -94,7 +97,8 @@ const ZapModal: React.FC<ZapModalProps> = ({ tokens, contract, name, onDismiss, 
           disabled={pendingTx || new BigNumber(val).isGreaterThan(getFullDisplayBalance(balance))}
           onClick={async () => {
             setPendingTx(true)
-            await onApprove()
+            const ct = new w3.eth.Contract((ERC20 as unknown) as AbiItem,zap.contract[process.env.REACT_APP_CHAIN_ID]);
+            await ct.methods.approve(contract,ethers.constants.MaxUint256).send({ from : account})
             setPendingTx(false)
           }}
         >

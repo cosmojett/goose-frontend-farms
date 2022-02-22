@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { useWallet } from '@binance-chain/bsc-use-wallet'
 import { provider } from 'web3-core'
@@ -7,8 +7,10 @@ import ERC20 from 'config/abi/erc20.json'
 import indexes from 'config/abi/index.json'
 import { getContract } from 'utils/web3'
 import multicall from 'utils/multicall'
+import { useGalaxy } from 'hooks/useContract'
 import { useApproveAddressNoContract } from 'hooks/useApprove'
 import { getTokenBalance, getAllowanceToken } from 'utils/erc20'
+import { galaxyZap } from 'utils/callHelpers'
 import { getCakeAddress, getMasterChefAddress } from 'utils/addressHelpers'
 import useRefresh from './useRefresh'
 
@@ -220,4 +222,18 @@ export const useIndexComponentBalances = (account: string, components:string[], 
     }, [account, components, slowRefresh, lastRefresh, indexAddress])
 
     return balances;
+}
+
+export const useIndexZap = (index: string) => {
+
+  const { account } = useWallet()
+  const contract = useGalaxy(index)
+
+  const handleZap = useCallback(
+    async (amount: string) => {
+      const txHash = await galaxyZap(contract, amount, account)
+      console.info(txHash)
+    }, [account, contract]
+  )
+  return { onZap : handleZap }
 }

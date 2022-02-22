@@ -110,6 +110,15 @@ export const galaxyBurn = async(galaxy, amount, account) => {
   })
 }
 
+export const galaxyZap = async(galaxy, amount, account) => {
+  return galaxy.methods
+  .zapStable(new BigNumber(amount).times(new BigNumber(10).pow(18)).toString())
+  .send({ from : account })
+  .on('transactionHash', (tx) => {
+    return tx.transactionHash
+  })
+}
+
 export const userAutoFarmStakes = async(autofarm, account) => {
   return autofarm.methods
   .userInfo(account)

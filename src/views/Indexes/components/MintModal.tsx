@@ -48,7 +48,6 @@ const MintModal: React.FC<MintModalProps> = ({ tokens, contract, name, onDismiss
     const tokenBalances = useIndexComponentBalances(account, tokens.map((token) => token.contract[process.env.REACT_APP_CHAIN_ID]), contract)
   console.log(tokenBalances)
 
-
   const handleChange = useCallback(
     async (e: React.FormEvent<HTMLInputElement>) => {
       setVal(e.currentTarget.value)
