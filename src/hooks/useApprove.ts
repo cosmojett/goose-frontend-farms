@@ -4,6 +4,9 @@ import BigNumber from 'bignumber.js'
 import { Contract } from 'web3-eth-contract'
 import { ethers } from 'ethers'
 import { useDispatch } from 'react-redux'
+import ERC20 from 'config/abi/erc20.json'
+import { getContract } from 'utils/web3'
+import { useERC20 } from 'hooks/useContract'
 import { updateUserAllowance, fetchFarmUserDataAsync } from 'state/actions'
 import { approve, approveToAddress } from 'utils/callHelpers'
 import { getCosmicFarmAddress } from 'utils/addressHelpers'
@@ -81,6 +84,26 @@ export const useApproveAddressNoFarm = (tokenContract : Contract, spender : stri
   }, [account, tokenContract, spender])
 
   return { onApprove: handleApprove }
+}
+
+export const useApproveAddressNoContract = (spender : string) => {
+  const { account }: { account: string } = useWallet()
+
+  const handleApprove = useCallback(async (tokenAddress: string) => {
+    try {
+      console.log(`Approve acc : ${account}`)
+      console.log(`Approve token : ${tokenAddress}`)
+      console.log(`Spender : ${spender}`)
+      const contract = getContract(ERC20,tokenAddress)
+      const tx = await approveToAddress(contract, spender, account)
+      return tx
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }, [account, spender])
+
+  return { onApproveAddress: handleApprove }
 }
 
 // Approve a Pool

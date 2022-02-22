@@ -1,5 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { ethers } from 'ethers'
+import ERC20 from 'config/abi/erc20.json'
+import { getContract } from 'utils/web3'
 
 export const approve = async (lpContract, masterChefContract, account) => {
   return lpContract.methods
@@ -11,7 +13,18 @@ export const approveToAddress = async(tokenContract, spender, account) => {
   return tokenContract.methods
     .approve(spender, ethers.constants.MaxUint256)
     .send({ from: account })
+    .on('transactionHash', (tx) => {
+      return tx.transactionHash
+    })
 }
+
+export const approveToAddressNoContract = async(tokenContract, spender, account) => {
+  const contract = getContract(ERC20,tokenContract)
+  return contract.methods
+    .approve(spender, ethers.constants.MaxUint256)
+    .send({ from: account })
+}
+
 
 export const userAllowance = async(tokenContract, spender, account) => {
   return tokenContract.methods

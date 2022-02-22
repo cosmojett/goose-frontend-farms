@@ -1,16 +1,22 @@
 import BigNumber from 'bignumber.js'
 import React, { useCallback, useMemo, useState, useEffect } from 'react'
 import { provider } from 'web3-core'
+import { ethers } from 'ethers'
+import { AbiItem } from 'web3-utils'
 import { Button, Modal, Heading, Text, Flex } from '@pancakeswap-libs/uikit'
 import ModalActions from 'components/ModalActions'
 import TokenInput from 'components/TokenInput'
 import useI18n from 'hooks/useI18n'
 import { useGalaxy } from 'hooks/useContract'
-import { galaxyComponentAmounts } from 'utils/callHelpers'
-import { useApproveAddress } from 'hooks/useApprove'
+import ERC20 from 'config/abi/erc20.json'
+import useWeb3 from 'hooks/useWeb3'
+import { galaxyComponentAmounts, approveToAddressNoContract } from 'utils/callHelpers'
+import { useIndexComponentBalances } from 'hooks/useIndexes'
+import { useApproveAddress, useApproveAddressNoContract } from 'hooks/useApprove'
+import useRefresh from 'hooks/useRefresh'
 import { getAllowanceForAddress, getTokenBalance, getContract } from 'utils/erc20'
 import { IndexToken } from 'config/constants/types'
-import { getFullDisplayBalance } from 'utils/formatBalance'
+import { getFullDisplayBalance, getFullDisplayBalanceFixed } from 'utils/formatBalance'
 
 interface MintModalProps {
     tokens: IndexToken[]
@@ -18,42 +24,29 @@ interface MintModalProps {
     name: string
     onDismiss?: () => void
     onConfirm: (amount: string) => void
+    onApprove: (token: string) => void
     account?: string
     ethereum?: provider
 }
 
-const MintModal: React.FC<MintModalProps> = ({ tokens, contract, name, onDismiss, onConfirm, ethereum, account}) => {
-  const [val, setVal] = useState('')
+const MintModal: React.FC<MintModalProps> = ({ tokens, contract, name, onDismiss, onConfirm, onApprove, ethereum, account}) => {
+    const [val, setVal] = useState('')
   
-  const [pendingTx, setPendingTx] = useState(false)
-  const TranslateString = useI18n()
-  const GalaxyContract = useGalaxy(contract);
+    const [pendingTx, setPendingTx] = useState(false)
+    const TranslateString = useI18n()
+    const GalaxyContract = useGalaxy(contract);
+    const [pendingTxs, setPendingTxs] = useState(Array(tokens.length).fill(false))
     const [balances, setBalances] = useState(Array(tokens.length).fill(new BigNumber(0)))
     const [allowances, setAllowances] = useState(Array(tokens.length).fill(new BigNumber(0)))
     const [tokenApproves, setTokenApproves] = useState();
     const [tokenMintAmounts, setTokenMintAmounts] = useState(Array(tokens.length));
-/* eslint-disable no-await-in-loop */
-    const getBalances = useEffect(() => {
-        async function fetchBalances() {
-            let i = 0;
-            const _balances = [];
-            const _allowances = [];
-            const _tokenApproves = [];
-            for(const token of tokens) {
-                const tokenContract = getContract(ethereum, tokens[i].contract[process.env.REACT_APP_CHAIN_ID])
-                const allowance = await getAllowanceForAddress(tokenContract,contract,account)
-                const balance = await getTokenBalance(ethereum,tokens[i].contract[process.env.REACT_APP_CHAIN_ID],account)
-                console.log(allowance.toString())
-                _balances[i] = balance;
-                _allowances[i] = allowance;
-                i += 1;
-            }
-            setBalances(_balances);
-            setAllowances(_allowances);
-        }
-        fetchBalances();
-    }, [tokens, ethereum, contract, account])
-/* eslint-disable no-await-in-loop */
+    const w3 = useWeb3()
+
+
+    // const { onApprove } = useApproveAddressNoContract(contract)
+
+    const tokenBalances = useIndexComponentBalances(account, tokens.map((token) => token.contract[process.env.REACT_APP_CHAIN_ID]), contract)
+  console.log(tokenBalances)
 
 
   const handleChange = useCallback(
@@ -78,12 +71,25 @@ const MintModal: React.FC<MintModalProps> = ({ tokens, contract, name, onDismiss
             <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>Balance</Text>
             <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>Approval</Text>
         </Flex>
-        {tokens.map((token,index) => (
+        {tokenBalances.map((token,index) => (
+
         <Flex alignItems='center' justifyContent='space-between' style={{paddingTop : 5, paddingBottom :10}}>
-            <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>{new BigNumber(balances[index]).dividedBy(new BigNumber(10).pow(18)).toFixed(5)} {tokens[index].name } </Text>
-            <Button variant="primary"  size='sm' disabled={new BigNumber(allowances[index]).isGreaterThan(0) && pendingTx}
-            onClick={() => {
-                    console.log('approve')
+                  {
+                  console.log(token.contract, contract, account)
+                  }
+            <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>{getFullDisplayBalanceFixed(token.balance,18,6)} {tokens[index].name } </Text>
+            <Button variant="primary"  size='sm' disabled={token.allowance.isGreaterThan(0) || pendingTxs[index]}
+            onClick={async () => {
+                    console.log('approve') // buton görünümünü düzenle
+                    let pendings = pendingTxs;
+                    pendings[index] = true;
+                    setPendingTxs(pendings);
+                    const ct = new w3.eth.Contract((ERC20 as unknown) as AbiItem,token.contract);
+                    await ct.methods.approve(contract,ethers.constants.MaxUint256).send({ from : account})
+                    // await onApprove(token.contract); // approve
+                    pendings = pendingTxs;
+                    pendings[index] = false;
+                    setPendingTxs(pendings);
             }}>
                 Approve
             </Button>

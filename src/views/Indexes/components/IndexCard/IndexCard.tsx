@@ -11,7 +11,7 @@ import { getBalanceNumber, getFullDisplayBalance, getFullDisplayBalanceFixed } 
 import { fetchIndexUserData } from 'state/actions'
 import { useGalaxyMint } from 'hooks/useStake'
 import { useGalaxyBurn } from 'hooks/useUnstake'
-import { useApproveAddressNoFarm } from 'hooks/useApprove'
+import { useApproveAddressNoFarm, useApproveAddressNoContract } from 'hooks/useApprove'
 import { getContract } from 'utils/web3'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { useIndexUser } from 'state/hooks'
@@ -85,8 +85,9 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
     const { onMint } = useGalaxyMint(contract)
     const { onBurn } = useGalaxyBurn(contract)
     const { onApprove } = useApproveAddressNoFarm(stableContract, contract)
+    const { onApproveAddress } = useApproveAddressNoContract(contract)
 
-    const [onPresentMint] = useModal(<MintModal tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={onMint}/>)
+    const [onPresentMint] = useModal(<MintModal tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={onMint} onApprove={onApproveAddress}/>)
     const [onPresentBurn] = useModal(<BurnModal balance={userBalance} tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={onBurn}/>)
     const [onPresentZap] = useModal(<ZapModal lotPrice={price} zap={zap} balance={userZapBalance} tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={onBurn} onApprove={onApprove}/>)
 
