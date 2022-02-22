@@ -11,7 +11,7 @@ import useI18n from 'hooks/useI18n'
 import { useGalaxy } from 'hooks/useContract'
 import { galaxyComponentAmounts, approveToAddress } from 'utils/callHelpers'
 import { useApproveAddress } from 'hooks/useApprove'
-import { useIndexMintFee, useIndexZapAllowance } from 'hooks/useIndexes'
+import { useIndexMintFee, useIndexZapAllowance, useIndexSlippage } from 'hooks/useIndexes'
 import { getAllowanceForAddress, getTokenBalance } from 'utils/erc20'
 import { getContract } from 'utils/web3'
 import useWeb3 from 'hooks/useWeb3'
@@ -39,6 +39,7 @@ const ZapModal: React.FC<ZapModalProps> = ({ tokens, contract, name, onDismiss, 
   const TranslateString = useI18n()
   const [bnValue, setBnValue] = useState(new BigNumber(0))
   const mintFee = useIndexMintFee(contract);
+  const slippage = useIndexSlippage(contract);
   const zapAllowance = useIndexZapAllowance(contract,account,zap.contract[process.env.REACT_APP_CHAIN_ID])
   const stableContract = getContract(ERC20,zap.contract[process.env.REACT_APP_CHAIN_ID])
   console.log(`Current account : ${account}`)
@@ -73,13 +74,13 @@ const ZapModal: React.FC<ZapModalProps> = ({ tokens, contract, name, onDismiss, 
         console.log(bnValue.toString())
       }
         <Flex alignItems='center' justifyContent='center' style={{ paddingBottom : 20, paddingTop : 10}}>
-            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>With zapping {!bnValue.isNaN() ? bnValue.times(lotPrice.dividedBy(new BigNumber(10).pow(18))).toFixed(6) : ''} {zap.name} to get {val} amount of {name}.</Text>
+            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>You will pay {!bnValue.isNaN() ? bnValue.times(lotPrice.dividedBy(new BigNumber(10).pow(18))).times(slippage.dividedBy(10000).plus(1)).toFixed(6) : ''} {zap.name} to get {val} amount of {name}.</Text>
         </Flex>
-        <Flex alignItems='center' justifyContent='center' style={{ paddingBottom : 20, paddingTop : 10}}>
-            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>There will be %1 slippage.</Text>
-        </Flex>
-        <Flex alignItems='center' justifyContent='center' style={{ paddingBottom : 20, paddingTop : 10}}>
-        <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>There will be %{mintFee / 100} minting fee applied. These fees will be used to buy-back BUZZ.</Text>
+        <Flex flexDirection='column' alignItems='center' justifyContent='center' style={{ paddingBottom : 20, paddingTop : 10}}>
+            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>There will be %{slippage.dividedBy(100).toString()} slippage. </Text>
+            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>The BUSD amount can be different than shown above because of component price difference. </Text>
+            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>There will be %{mintFee / 100} minting fee applied. These fees will be used to buy-back BUZZ.</Text>
+            
         </Flex>
 
       <ModalActions>

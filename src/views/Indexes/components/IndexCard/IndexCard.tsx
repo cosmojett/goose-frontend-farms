@@ -69,15 +69,11 @@ width: 100%;
 const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
     const { tokens, contract, name, account, ethereum, id, zap } = indexProps;
     const tokenNames = tokens.map(x => x.name);
-    const indexContract = useGalaxy(contract);
-    const [balance, setBalance] = useState(new BigNumber(0));
-    const [tokenPrices, setTokenPrices] = useState(Array(tokens.length).fill(new BigNumber(0)))
     const userBalance = useIndexBalance(contract, account)
     const totalSupply = useIndexSupply(contract);
     const userZapBalance = useTokenBalance(zap.contract[process.env.REACT_APP_CHAIN_ID])
     const price = useIndexPrice(contract);
     const components = useIndexComponentPrices(contract);
-    const stableContract = getContract(ERC20,zap.contract[process.env.REACT_APP_CHAIN_ID])
     const totalPrice = components.length > 0 ? components.reduce((a, b) => ({price: a.price.plus(b.price), token :''})) : {price : new BigNumber(0), token : ''};
     // const [totalPrice, setTotalPrices] = useState(new BigNumber(0))
     const { onMint } = useGalaxyMint(contract)
@@ -97,20 +93,6 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
         }
         return '';
     }
-
-    const getUserBalance = useEffect(() => {
-        async function fetchBalance() {
-            try {
-                if(account) {
-                    const _balance = await galaxyBalance(indexContract, account);
-                    setBalance(new BigNumber(_balance).dividedBy(new BigNumber(10).pow(18)));
-                }
-            } catch (ex) {
-                console.error(ex)
-            }
-        }
-        fetchBalance()
-    },[indexContract, account])
 
     return (
         <ICard>

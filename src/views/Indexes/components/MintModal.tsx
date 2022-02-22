@@ -11,12 +11,13 @@ import { useGalaxy } from 'hooks/useContract'
 import ERC20 from 'config/abi/erc20.json'
 import useWeb3 from 'hooks/useWeb3'
 import { galaxyComponentAmounts, approveToAddressNoContract } from 'utils/callHelpers'
-import { useIndexComponentBalances } from 'hooks/useIndexes'
+import { useIndexComponentBalances, useIndexMintAmounts } from 'hooks/useIndexes'
 import { useApproveAddress, useApproveAddressNoContract } from 'hooks/useApprove'
 import useRefresh from 'hooks/useRefresh'
 import { getAllowanceForAddress, getTokenBalance, getContract } from 'utils/erc20'
 import { IndexToken } from 'config/constants/types'
 import { getFullDisplayBalance, getFullDisplayBalanceFixed } from 'utils/formatBalance'
+import { result } from 'lodash'
 
 interface MintModalProps {
     tokens: IndexToken[]
@@ -36,30 +37,43 @@ const MintModal: React.FC<MintModalProps> = ({ tokens, contract, name, onDismiss
     const TranslateString = useI18n()
     const GalaxyContract = useGalaxy(contract);
     const [pendingTxs, setPendingTxs] = useState(Array(tokens.length).fill(false))
-    const [balances, setBalances] = useState(Array(tokens.length).fill(new BigNumber(0)))
-    const [allowances, setAllowances] = useState(Array(tokens.length).fill(new BigNumber(0)))
-    const [tokenApproves, setTokenApproves] = useState();
-    const [tokenMintAmounts, setTokenMintAmounts] = useState(Array(tokens.length));
+    const mintAmounts = useIndexMintAmounts(contract)
     const w3 = useWeb3()
 
-
+    const getTokenNameFromContract = function(addr: string) {
+      const resultx = tokens.filter((x) => x.contract[process.env.REACT_APP_CHAIN_ID] === addr);
+      if(resultx.length > 0) {
+          return resultx[0].name;
+      }
+      return '';
+  }
     // const { onApprove } = useApproveAddressNoContract(contract)
 
     const tokenBalances = useIndexComponentBalances(account, tokens.map((token) => token.contract[process.env.REACT_APP_CHAIN_ID]), contract)
-  console.log(tokenBalances)
+
+  const isBalanceEnough = function(v: number) {
+    if(tokenBalances.length === mintAmounts.length && tokenBalances.length > 0) {
+
+      return mintAmounts.filter((token, index) => new BigNumber(token.amount).times(v).isLessThanOrEqualTo(tokenBalances[index].balance) && token.token === tokenBalances[index].contract).length === mintAmounts.length;
+
+    } 
+    return false;
+
+  }
+
+  const isTokenBalanceEnough = function(i: number, v:number) {
+    if(tokenBalances.length === mintAmounts.length && tokenBalances.length > 0) {
+      return new BigNumber(mintAmounts[i].amount).times(v).isLessThanOrEqualTo(tokenBalances[i].balance)
+    } 
+    return false;
+  }
 
   const handleChange = useCallback(
     async (e: React.FormEvent<HTMLInputElement>) => {
       setVal(e.currentTarget.value)
-      try {
-        const amounts = await galaxyComponentAmounts(GalaxyContract,e.currentTarget.value.replace(',','.'))
-        setTokenMintAmounts(amounts)
-      } catch (ex) {
-        console.error(ex)
-      }
 
     },
-    [setVal, GalaxyContract],
+    [setVal],
   )
 
 
@@ -76,7 +90,7 @@ const MintModal: React.FC<MintModalProps> = ({ tokens, contract, name, onDismiss
                   {
                   console.log(token.contract, contract, account)
                   }
-            <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>{getFullDisplayBalanceFixed(token.balance,18,6)} {tokens[index].name } </Text>
+            <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>{getFullDisplayBalanceFixed(token.balance,18,8)} {tokens[index].name } </Text>
             <Button variant="primary"  size='sm' disabled={token.allowance.isGreaterThan(0) || pendingTxs[index]}
             onClick={async () => {
                     console.log('approve') // buton görünümünü düzenle
@@ -110,9 +124,9 @@ const MintModal: React.FC<MintModalProps> = ({ tokens, contract, name, onDismiss
         <Flex alignItems='center' justifyContent='center' style={{ paddingBottom : 20}}>
             <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>Amounts</Text>
         </Flex>
-        {tokenMintAmounts.map((token,index) => (
+        {mintAmounts.map((token,index) => (
         <Flex alignItems='center' justifyContent='center' style={{paddingTop : 5, paddingBottom : 5}}>
-            <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}> { token[0] ? new BigNumber(token[0]).dividedBy(new BigNumber(10).pow(18)).toFixed(5) : new BigNumber(0)} {tokens[index].name}</Text>
+            <Text  fontSize="16px" bold style={ isTokenBalanceEnough(index, Number(val)) ? { display: 'flex', alignItems: 'center'} : { display: 'flex', alignItems: 'center', color:'red'}}> { token ? getFullDisplayBalanceFixed(new BigNumber(token.amount).times(Number(val)),18,8) : new BigNumber(0).toString()} {getTokenNameFromContract(token.token)}</Text>
         </Flex>
         ))}
 
@@ -121,7 +135,7 @@ const MintModal: React.FC<MintModalProps> = ({ tokens, contract, name, onDismiss
           {TranslateString(462, 'Cancel')}
         </Button>
         <Button
-          disabled={pendingTx}
+          disabled={pendingTx || !isBalanceEnough(Number(val))}
           onClick={async () => {
             setPendingTx(true)
             await onConfirm(val)

@@ -86,6 +86,23 @@ export const useIndexSupply = (indexAddress: string) => {
   return supply
 }
 
+export const useIndexSlippage = (indexAddress: string) => {
+    const [slippage, setSlippage] = useState(new BigNumber(0))
+  
+    useEffect(() => {
+      const fetchSupply = async () => {
+          const indexContract = getContract(indexes, indexAddress)
+          const sup = await indexContract.methods.internalSwapSlippage().call()
+          setSlippage(new BigNumber(sup))
+      }
+  
+      fetchSupply()
+    }, [indexAddress])
+  
+    return slippage
+}
+  
+
 export const useIndexPrice = (indexAddress: string) => {
     const [price, setPrice] = useState(new BigNumber(0))
     const { slowRefresh } = useRefresh()
@@ -237,3 +254,20 @@ export const useIndexZap = (index: string) => {
   )
   return { onZap : handleZap }
 }
+
+export const useIndexMintAmounts = (index: string) => {
+    const [amounts, setAmounts] = useState([])
+  
+    useEffect(() => {
+      const fetchSupply = async () => {
+          const indexContract = getContract(indexes, index)
+          const amount = await indexContract.methods.tokenMintAmounts(new BigNumber(1).times(new BigNumber(10).pow(18)).toString()).call()
+          setAmounts(amount)
+      }
+  
+      fetchSupply()
+    }, [index])
+  
+    return amounts
+}
+
