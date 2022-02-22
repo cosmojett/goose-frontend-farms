@@ -70,8 +70,6 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
     const { tokens, contract, name, account, ethereum, id, zap } = indexProps;
     const tokenNames = tokens.map(x => x.name);
     const indexContract = useGalaxy(contract);
-    const xxx = useIndexUser(id)
-    console.log('index from state')
     const [balance, setBalance] = useState(new BigNumber(0));
     const [tokenPrices, setTokenPrices] = useState(Array(tokens.length).fill(new BigNumber(0)))
     const userBalance = useIndexBalance(contract, account)
@@ -144,7 +142,7 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
                         <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>{getFullDisplayBalance(totalSupply)}</Text>
                 </Flex>
                 <Flex alignItems='center' justifyContent='space-between'>
-                        <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>BUSD Price : </Text>
+                        <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>Unit Price : </Text>
                         <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>{getFullDisplayBalanceFixed(price,18,3)} $</Text>
                 </Flex>
             </CardBody>

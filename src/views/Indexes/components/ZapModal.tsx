@@ -37,15 +37,19 @@ const ZapModal: React.FC<ZapModalProps> = ({ tokens, contract, name, onDismiss, 
       const w3 = useWeb3()
   const [pendingTx, setPendingTx] = useState(false)
   const TranslateString = useI18n()
+  const [bnValue, setBnValue] = useState(new BigNumber(0))
   const mintFee = useIndexMintFee(contract);
   const zapAllowance = useIndexZapAllowance(contract,account,zap.contract[process.env.REACT_APP_CHAIN_ID])
   const stableContract = getContract(ERC20,zap.contract[process.env.REACT_APP_CHAIN_ID])
   console.log(`Current account : ${account}`)
+
   const handleChange = useCallback(
     async (e: React.FormEvent<HTMLInputElement>) => {
-      setVal(e.currentTarget.value)
+      setVal(e.currentTarget.value.replace(',','.'))
+      setBnValue(new BigNumber(e.currentTarget.value.replace(',','.')))
+
     },
-    [setVal],
+    [setVal, setBnValue],
   )
 
   const handleSelectMax = useCallback(async () => {
@@ -65,9 +69,11 @@ const ZapModal: React.FC<ZapModalProps> = ({ tokens, contract, name, onDismiss, 
         targetSymbol={name}
         lotPrice={lotPrice}
       />
-
+      {
+        console.log(bnValue.toString())
+      }
         <Flex alignItems='center' justifyContent='center' style={{ paddingBottom : 20, paddingTop : 10}}>
-            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>With zapping {zap.name} to get {val} amount of {name}.</Text>
+            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>With zapping {!bnValue.isNaN() ? bnValue.times(lotPrice.dividedBy(new BigNumber(10).pow(18))).toFixed(6) : ''} {zap.name} to get {val} amount of {name}.</Text>
         </Flex>
         <Flex alignItems='center' justifyContent='center' style={{ paddingBottom : 20, paddingTop : 10}}>
             <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>There will be %1 slippage.</Text>
