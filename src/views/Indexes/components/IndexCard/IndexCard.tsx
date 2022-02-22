@@ -78,7 +78,7 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
     // const [totalPrice, setTotalPrices] = useState(new BigNumber(0))
     const { onMint } = useGalaxyMint(contract)
     const { onBurn } = useGalaxyBurn(contract)
-    const { onZap } = useIndexZap(contract)
+    const { onZap } = useIndexZap(contract)
 
     const { onApproveAddress } = useApproveAddressNoContract(contract)
 
