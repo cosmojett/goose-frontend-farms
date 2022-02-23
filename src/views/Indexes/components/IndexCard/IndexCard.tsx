@@ -70,6 +70,8 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
     const { tokens, contract, name, account, ethereum, id, zap } = indexProps;
     const tokenNames = tokens.map(x => x.name);
     const userBalance = useIndexBalance(contract, account)
+    console.log(name)
+    console.log(tokens)
     const totalSupply = useIndexSupply(contract);
     const userZapBalance = useTokenBalance(zap.contract[process.env.REACT_APP_CHAIN_ID])
     const price = useIndexPrice(contract);

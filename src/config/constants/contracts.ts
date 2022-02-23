@@ -49,11 +49,11 @@ export default {
     97 : ''
   },
   realCake : {
-    56 : '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
+    56 : '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
     97 : ''
   },
   banana : {
-    56 : '0x603c7f932ed1fc6575303d8fb018fdcbb0f39a95',
+    56 : '0x603c7f932ED1fc6575303D8Fb018fDCBb0f39a95',
     97 : ''
   },
   cosmicFarm : {
