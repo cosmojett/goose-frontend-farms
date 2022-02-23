@@ -30,10 +30,10 @@ const CardHeader: React.FC<IndexHeaderProps> = (props) => {
     return (
         <Wrapper>
             <Background style={{backgroundImage : `url(${image})`}}>
-                <Heading as="h1" size="xl"  color="contrast" style={{ textAlign: 'center' }}>
+                <Heading as="h1" size="lg"  color="contrast" style={{ textAlign: 'center' }}>
                     {name}
                 </Heading>
-                <Heading as="h2" size="md"  color="contrast" style={{ textAlign: 'center' }}>
+                <Heading as="h2" size="sm"  color="contrast" style={{ textAlign: 'center' }}>
                     {tokens.map((_name, index) => (
                         <>{_name} {index < tokens.length -1 ? '-' : ''} </>
                     ))}

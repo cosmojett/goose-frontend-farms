@@ -27,10 +27,10 @@ const Indexes: React.FC = () => {
     return (
         <Page>
             <Heading as="h1" size="lg" mb="24px" color="primary" style={{ textAlign: 'center' }}>
-                Indexes by Cosmosium Finance
+                Galaxies by Cosmosium Finance
             </Heading>
             <Heading as="h2" color="contrast" mb="50px" style={{ textAlign: 'center' }}>
-                Indexes are currently on Beta Stage. Development still in progress.
+                Galaxies are currently on Beta Stage. Development still in progress.
             </Heading>
             <Divider />
             <FlexLayout>

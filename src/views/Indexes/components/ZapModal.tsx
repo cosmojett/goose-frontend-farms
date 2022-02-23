@@ -55,8 +55,9 @@ const ZapModal: React.FC<ZapModalProps> = ({ tokens, contract, name, onDismiss, 
 
   const handleSelectMax = useCallback(async () => {
     setVal(new BigNumber(balance).dividedBy(lotPrice).times(0.99).toFixed(8))
+    setBnValue(new BigNumber(balance).dividedBy(lotPrice).times(0.99))
 
-  }, [balance, setVal, lotPrice])
+  }, [balance, setVal, lotPrice, setBnValue])
 
   return (
     <Modal title={`Zap ${zap.name} to get ${name}`} onDismiss={onDismiss}>

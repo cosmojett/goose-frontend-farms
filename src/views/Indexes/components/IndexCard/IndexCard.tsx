@@ -47,6 +47,7 @@ const ICard = styled.div`
   justify-content: space-around;
   padding: 24px;
   position: relative;
+  min-height: 500px;
   text-align: center;
 `
 
@@ -133,9 +134,9 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
             <Actions>
                 {account ? (<>
                 <Flex alignItems='center' justifyContent='space-between'>
-                    <Button variant='success' onClick={onPresentMint}>Mint</Button>
-                    <Button variant='success' onClick={onPresentZap}>Zap</Button>
-                    <Button variant='danger'  onClick={onPresentBurn}>Burn</Button>
+                    <Button variant='success' size='sm' onClick={onPresentMint}>Mint</Button>
+                    <Button variant='success' size='sm' onClick={onPresentZap}>Zap</Button>
+                    <Button variant='danger'  size='sm' onClick={onPresentBurn}>Burn</Button>
                 </Flex>
                 <Flex style={{marginTop : '20px'}} alignItems='center' justifyContent='space-between'>
                     <Text  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>Your Balance : </Text>
