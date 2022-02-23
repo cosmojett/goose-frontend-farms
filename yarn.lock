@@ -1881,9 +1881,9 @@
     eslint-plugin-react "^7.21.5"
     eslint-plugin-react-hooks "^4.0.0"
 
-"@pancakeswap-libs/uikit@cosmosiumfinance/ui-kit":
+"@pancakeswap-libs/uikit@https://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@github.com/cosmosiumfinance/ui-kit.git":
   version "0.10.2"
-  resolved "https://codeload.github.com/cosmosiumfinance/ui-kit/tar.gz/984d4e59f6c070c98191c7399786999a31b4b8e5"
+  resolved "https://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@github.com/cosmosiumfinance/ui-kit.git#ccabafae3c41564260b974edd2ae27013aaed4c8"
   dependencies:
     "@types/lodash" "^4.14.162"
     "@types/styled-system" "^5.1.10"
