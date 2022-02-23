@@ -22,7 +22,7 @@ const indexes: Indexes[] = [/*
     {
         id: 0,
         name: 'Large Cap Index',
-        image : './images/indexes/2.jpg',
+        image : './images/indexes/large.png',
         creator: 'Verified Astronauts',
         tokens: [
             {
@@ -42,7 +42,7 @@ const indexes: Indexes[] = [/*
                 name : 'BUZZ'
             }
         ],
-        contract: '0xAF932A3fAB0876cAD845C1BBf08E04dA00E665CF',
+        contract: '0xD6C301c6C7f304aa237b64A634e877C504f903B4',
         zap : {
             contract : contract.busd,
             name : 'BUSD'

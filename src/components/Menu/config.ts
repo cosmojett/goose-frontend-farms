@@ -18,7 +18,7 @@ export const links = [
   },
   {
     label: 'Earn',
-    icon: 'FarmIcon',
+    icon: 'RocketIcon',
     items : [
       {
         label : 'Cosmic',
@@ -35,8 +35,8 @@ export const links = [
     ]
   },
   {
-    label: 'Indexes',
-    icon: 'PoolIcon',
+    label: 'Galaxies',
+    icon: 'GalaxyIcon',
     href: '/indexes',
   },
   // {
