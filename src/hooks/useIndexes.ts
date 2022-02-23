@@ -86,6 +86,22 @@ export const useIndexSupply = (indexAddress: string) => {
   return supply
 }
 
+export const useIndexMinimumAmount = (indexAddress: string) => {
+    const [min, setMin] = useState(new BigNumber(0))
+    
+    useEffect(() => {
+        const fetchMin = async () => {
+            const indexContract = getContract(indexes,indexAddress);
+            const minx = await indexContract.methods.minAmount().call();
+            setMin(new BigNumber(minx))
+        }
+
+        fetchMin()
+    }, [indexAddress])
+
+    return min;
+}
+
 export const useIndexSlippage = (indexAddress: string) => {
     const [slippage, setSlippage] = useState(new BigNumber(0))
   

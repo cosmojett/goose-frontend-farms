@@ -28,9 +28,10 @@ interface MintModalProps {
     onApprove: (token: string) => void
     account?: string
     ethereum?: provider
+    minAmount: BigNumber
 }
 
-const MintModal: React.FC<MintModalProps> = ({ tokens, contract, name, onDismiss, onConfirm, onApprove, ethereum, account}) => {
+const MintModal: React.FC<MintModalProps> = ({ tokens, contract, name, onDismiss, onConfirm, onApprove, ethereum, account, minAmount}) => {
     const [val, setVal] = useState('')
   
     const [pendingTx, setPendingTx] = useState(false)
@@ -117,8 +118,10 @@ const MintModal: React.FC<MintModalProps> = ({ tokens, contract, name, onDismiss
         noMax
       />
 
-        <Flex alignItems='center' justifyContent='center' style={{ paddingBottom : 20, paddingTop : 10}}>
+
+        <Flex flexDirection='column' alignItems='center' justifyContent='center' style={{ paddingBottom : 20, paddingTop : 10}}>
             <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center'}}>To mint {val} {name} you have to provide these amount of tokens</Text>
+            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>Minimum amount you can burn is {minAmount.dividedBy(new BigNumber(10).pow(18)).toString()}</Text>
         </Flex>
 
         <Flex alignItems='center' justifyContent='center' style={{ paddingBottom : 20}}>
@@ -135,7 +138,7 @@ const MintModal: React.FC<MintModalProps> = ({ tokens, contract, name, onDismiss
           {TranslateString(462, 'Cancel')}
         </Button>
         <Button
-          disabled={pendingTx || !isBalanceEnough(Number(val))}
+          disabled={pendingTx || !isBalanceEnough(Number(val)) || new BigNumber(val).times(new BigNumber(10).pow(18)).isLessThan(minAmount)}
           onClick={async () => {
             setPendingTx(true)
             await onConfirm(val)

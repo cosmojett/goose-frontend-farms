@@ -22,9 +22,10 @@ interface BurnModalProps {
     account?: string
     ethereum?: provider
     balance? : BigNumber
+    minAmount: BigNumber
 }
 
-const BurnModal: React.FC<BurnModalProps> = ({ tokens, contract, name, onDismiss, onConfirm, ethereum, account, balance}) => {
+const BurnModal: React.FC<BurnModalProps> = ({ tokens, contract, name, onDismiss, onConfirm, ethereum, account, balance, minAmount}) => {
   const [val, setVal] = useState('')
   
   const [pendingTx, setPendingTx] = useState(false)
@@ -75,12 +76,15 @@ const BurnModal: React.FC<BurnModalProps> = ({ tokens, contract, name, onDismiss
         <Flex alignItems='center' justifyContent='center' style={{ paddingBottom : 20, paddingTop : 10}}>
             <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>With burning {val} amount of {name} you will get these amount of tokens.</Text>
         </Flex>
-        <Flex alignItems='center' justifyContent='center' style={{ paddingBottom : 20, paddingTop : 10}}>
+        <Flex flexDirection='column' alignItems='center' justifyContent='center' style={{ paddingBottom : 20, paddingTop : 10}}>
             <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>There will be %{burnFee / 100} burn fee applied. These fees will be used to buy-back BUZZ.</Text>
+            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>Minimum amount you can burn is {minAmount.dividedBy(new BigNumber(10).pow(18)).toString()}</Text>
         </Flex>
+      
         <Flex alignItems='center' justifyContent='center' style={{ paddingBottom : 20}}>
             <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}>Amounts</Text>
         </Flex>
+
         {tokenMintAmounts.map((token,index) => (
         <Flex alignItems='center' justifyContent='center' style={{paddingTop : 5, paddingBottom : 5}}>
             <Text  fontSize="16px" bold style={{ display: 'flex', alignItems: 'center'}}> { token[0] ? new BigNumber(token[0]).dividedBy(new BigNumber(10).pow(18)).toFixed(8) : new BigNumber(0)} {tokens[index].name}</Text>
@@ -92,7 +96,7 @@ const BurnModal: React.FC<BurnModalProps> = ({ tokens, contract, name, onDismiss
           {TranslateString(462, 'Cancel')}
         </Button>
         <Button
-          disabled={pendingTx || new BigNumber(val).isGreaterThan(getFullDisplayBalance(balance))}
+          disabled={pendingTx || new BigNumber(val).isGreaterThan(getFullDisplayBalance(balance)) || new BigNumber(val).times(new BigNumber(10).pow(18)).isLessThan(minAmount)}
           onClick={async () => {
             setPendingTx(true)
             await onConfirm(val.replace(',','.'))

@@ -16,7 +16,7 @@ import { getContract } from 'utils/web3'
 import useTokenBalance from 'hooks/useTokenBalance'
 import { useIndexUser } from 'state/hooks'
 import { galaxyTotalSupply, galaxyPrice, galaxyBalance, galaxyComponentPrices } from 'utils/callHelpers'
-import { useIndexBalance, useIndexSupply, useIndexPrice, useIndexComponentPrices, useIndexZap } from 'hooks/useIndexes'
+import { useIndexBalance, useIndexSupply, useIndexPrice, useIndexComponentPrices, useIndexZap, useIndexMinimumAmount } from 'hooks/useIndexes'
 import UnlockButton from 'components/UnlockButton'
 import styled, { keyframes } from 'styled-components'
 import CardHeader from './CardHeader'
@@ -77,6 +77,7 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
     const userZapBalance = useTokenBalance(zap.contract[process.env.REACT_APP_CHAIN_ID])
     const price = useIndexPrice(contract);
     const components = useIndexComponentPrices(contract);
+    const minimumAmount = useIndexMinimumAmount(contract);
     const totalPrice = components.length > 0 ? components.reduce((a, b) => ({price: a.price.plus(b.price), token :''})) : {price : new BigNumber(0), token : ''};
     // const [totalPrice, setTotalPrices] = useState(new BigNumber(0))
     const { onMint } = useGalaxyMint(contract)
@@ -85,9 +86,9 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
 
     const { onApproveAddress } = useApproveAddressNoContract(contract)
 
-    const [onPresentMint] = useModal(<MintModal tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={onMint} onApprove={onApproveAddress}/>)
-    const [onPresentBurn] = useModal(<BurnModal balance={userBalance} tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={onBurn}/>)
-    const [onPresentZap] = useModal(<ZapModal lotPrice={price} zap={zap} balance={userZapBalance} tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={onZap} onApprove={onApproveAddress}/>)
+    const [onPresentMint] = useModal(<MintModal tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={onMint} onApprove={onApproveAddress} minAmount={minimumAmount}/>)
+    const [onPresentBurn] = useModal(<BurnModal balance={userBalance} tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={onBurn} minAmount={minimumAmount}/>)
+    const [onPresentZap] = useModal(<ZapModal lotPrice={price} zap={zap} balance={userZapBalance} tokens={tokens} contract={contract} name={name} account={account} ethereum={ethereum} onConfirm={onZap} onApprove={onApproveAddress} minAmount={minimumAmount}/>)
 
     const getTokenNameFromContract = function(addr: string) {
         const result = tokens.filter((x) => x.contract[process.env.REACT_APP_CHAIN_ID] === addr);

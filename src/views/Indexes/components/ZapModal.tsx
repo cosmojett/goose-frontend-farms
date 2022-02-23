@@ -30,9 +30,10 @@ interface ZapModalProps {
     balance? : BigNumber
     zap: IndexToken
     lotPrice : BigNumber
+    minAmount: BigNumber
 }
 
-const ZapModal: React.FC<ZapModalProps> = ({ tokens, contract, name, onDismiss, onConfirm, onApprove, ethereum, account, balance, zap, lotPrice}) => {
+const ZapModal: React.FC<ZapModalProps> = ({ tokens, contract, name, onDismiss, onConfirm, onApprove, ethereum, account, balance, zap, lotPrice, minAmount}) => {
   const [val, setVal] = useState('')
       const w3 = useWeb3()
   const [pendingTx, setPendingTx] = useState(false)
@@ -79,6 +80,7 @@ const ZapModal: React.FC<ZapModalProps> = ({ tokens, contract, name, onDismiss, 
         </Flex>
         <Flex flexDirection='column' alignItems='center' justifyContent='center' style={{ paddingBottom : 20, paddingTop : 10}}>
             <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>There will be %{slippage.dividedBy(100).toString()} slippage. </Text>
+            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>Minimum amount you can buy is {minAmount.dividedBy(new BigNumber(10).pow(18)).toString()}</Text>
             <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>The BUSD amount can be different than shown above because of component price difference. </Text>
             <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>There will be %{mintFee / 100} minting fee applied. These fees will be used to buy-back BUZZ.</Text>
             
@@ -91,7 +93,7 @@ const ZapModal: React.FC<ZapModalProps> = ({ tokens, contract, name, onDismiss, 
         {zapAllowance.isGreaterThan(0) ? 
         (        
         <Button
-          disabled={pendingTx || new BigNumber(val).isGreaterThan(getFullDisplayBalance(balance))}
+          disabled={pendingTx || new BigNumber(val).isGreaterThan(getFullDisplayBalance(balance)) || new BigNumber(val).times(new BigNumber(10).pow(18)).isLessThan(minAmount)}
           onClick={async () => {
             setPendingTx(true)
             await onConfirm(val.replace(',','.'))
