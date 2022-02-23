@@ -132,7 +132,7 @@ export const useIndexComponentPrices = (indexAddress: string) => {
         const fetchComponents = async () => {
 
             const indexContract = getContract(indexes, indexAddress);
-            const comp = await indexContract.methods.componentPrices(new BigNumber(1).times(new BigNumber(10).pow(18))).call();
+            const comp = await indexContract.methods.componentPrices(new BigNumber(1).times(new BigNumber(10).pow(18)).toString()).call();
             const comps = comp.map((c) => {
                 return {
                     token : c.token.toString(),
