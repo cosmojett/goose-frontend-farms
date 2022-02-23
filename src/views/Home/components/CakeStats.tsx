@@ -31,15 +31,17 @@ const CakeStats = (props) => {
   const chefBalance = useChefBalance(getCakeAddress()).minus(autoFarmStakes)
   const treasuryBalance = useTreasuryBalance(getCakeAddress(),'0xAd8F748b2e87bDDCbf98f11a63F9f3CbcDD34B38')
   const apeBalance = useTreasuryBalance(getCakeAddress(),'0x907cEc57456ADb5484921771d692a74c2Dd0d107')
+  const apePoolBalance = useTreasuryBalance(getCakeAddress(), '0x6e4ac7608ada81f740090df60b585bd12b30f77c')
   const farms = useFarms();
   const eggPrice = usePriceCakeBusd();
-  const circSupply = totalSupply ? totalSupply.minus(burnedBalance).minus(chefBalance).minus(treasuryBalance).minus(apeBalance) : new BigNumber(0);
+  const circSupply = totalSupply ? totalSupply.minus(burnedBalance).minus(chefBalance).minus(treasuryBalance).minus(apeBalance).minus(apePoolBalance) : new BigNumber(0);
   const cakeSupply = getBalanceNumber(circSupply);
   const marketCap = eggPrice.times(circSupply);
 
   const totalValue = useTotalValue();
   const cluster1 = useAddressBalance('0xa73c15620bfa79646e9a11d0d638d66588456462','0x1770104aa9b1BDB1D1582802b3221a466A2A4f4d').dividedBy(new BigNumber(10).pow(18)).times(eggPrice)
   const cluster2 = useAddressBalance('0xa73c15620bfa79646e9a11d0d638d66588456462','0x027c055560F176A60206B592583927a4DE913FEF').dividedBy(new BigNumber(10).pow(18)).times(eggPrice)
+
   const cosmicBalance = useCosmicBalance('0x79eFe3cC2E2291D9570762d0a6b8Cf00B9d593df').dividedBy(new BigNumber(10).pow(18)).times(eggPrice)
   const tvl = cosmicBalance.plus(cluster2).plus(cluster1).plus(totalValue)
 

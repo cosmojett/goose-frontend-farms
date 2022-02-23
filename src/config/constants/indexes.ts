@@ -42,7 +42,7 @@ const indexes: Indexes[] = [/*
                 name : 'BUZZ'
             }
         ],
-        contract: '0xa5aB98ec0451eF2DBcFeCf9Aa2b8b4a319eDAf9A',
+        contract: '0xE80a55dE13c97D4EF80D41782874eFB0ad6474a0',
         zap : {
             contract : contract.busd,
             name : 'BUSD'
