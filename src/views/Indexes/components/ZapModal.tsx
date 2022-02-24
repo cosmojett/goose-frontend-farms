@@ -79,10 +79,10 @@ const ZapModal: React.FC<ZapModalProps> = ({ tokens, contract, name, onDismiss, 
             <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>You will pay {!bnValue.isNaN() ? bnValue.times(lotPrice.dividedBy(new BigNumber(10).pow(18))).times(slippage.dividedBy(10000).plus(1)).toFixed(6) : ''} {zap.name} to get {val} amount of {name}.</Text>
         </Flex>
         <Flex flexDirection='column' alignItems='center' justifyContent='center' style={{ paddingBottom : 20, paddingTop : 10}}>
-            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>There will be %{slippage.dividedBy(100).toString()} slippage. </Text>
+            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>There will be {slippage.dividedBy(100).toString()}% slippage. </Text>
             <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>Minimum amount you can buy is {minAmount.dividedBy(new BigNumber(10).pow(18)).toString()}</Text>
             <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>The BUSD amount can be different than shown above because of component price difference. </Text>
-            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>There will be %{mintFee / 100} minting fee applied. These fees will be used to buy-back BUZZ.</Text>
+            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>There will be {mintFee / 100}% minting fee applied. These fees will be used to buy-back BUZZ.</Text>
             
         </Flex>
 

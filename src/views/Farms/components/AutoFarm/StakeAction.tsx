@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import BigNumber from 'bignumber.js'
-import { Button, Flex, Heading, IconButton, AddIcon, MinusIcon, useModal } from '@pancakeswap-libs/uikit'
+import { Button, Flex, Heading, IconButton, AddIcon, MinusIcon, useModal, Text } from '@pancakeswap-libs/uikit'
 import useI18n from 'hooks/useI18n'
 import { useAutoFarmStake } from 'hooks/useStake'
 import useUnstake, { useAutoFarmWithdraw } from 'hooks/useUnstake'
@@ -37,9 +37,11 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  sta
   const { onStake } = useAutoFarmStake(farmAddress)
   const { onUnstake } = useAutoFarmWithdraw(farmAddress)
   const [balance, setBalance] = useState(new BigNumber(0))
+  const [balanceUSD, setBalanceUSD] = useState(new BigNumber(0))
   const rawStakedBalance = new BigNumber(stakedBalance).dividedBy(new BigNumber(10).pow(18)).toNumber()
   console.log(`Staked : ${stakedBalance.toString()}`)
   const cakePriceUsd = usePriceCakeBusd()
+  
   const displayBalance = rawStakedBalance.toLocaleString()
   const stakedUSDValue = rawStakedBalance*cakePriceUsd.toNumber()
   // user balanceı getir yazdır
@@ -53,14 +55,16 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  sta
         const shares = _balance.shares;
         console.log(shares)
         const sharePrice = await autoFarmSharePrice(farmContract);
-
-        setBalance(new BigNumber(shares).times(getBalanceNumber(new BigNumber(sharePrice))));
+        const userBal = new BigNumber(shares).times(getBalanceNumber(new BigNumber(sharePrice)))
+        setBalance(userBal);
+        const displayBalanceUSD = cakePriceUsd.times(userBal).dividedBy(new BigNumber(10).pow(18))
+        setBalanceUSD(displayBalanceUSD)
       } catch (e) {
         console.error(e)
       }
     }
     fetchBalance()
-  }, [farmContract, account])
+  }, [farmContract, account, cakePriceUsd])
 
   const [onPresentDeposit] = useModal(<DepositModal max={tokenBalance} onConfirm={onStake} tokenName='BUZZ' depositFeeBP={depositFeeBP} />)
   const [onPresentWithdraw] = useModal(
@@ -88,7 +92,10 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  sta
 
   return (
     <Flex justifyContent="space-between" alignItems="center">
-      <Heading color={rawStakedBalance === 0 ? 'textDisabled' : 'text'}>{displayBalance} $BUZZ</Heading>
+            <Flex mb='8px' mt='8px' justifyContent='space-between' alignItems='flex-start' flexDirection='column'>
+            <Heading color={rawStakedBalance === 0 ? 'textDisabled' : 'text'}>{displayBalance} $BUZZ</Heading>
+            <Text fontSize="16px" color="primary" bold>{balanceUSD.toFixed(2)} $</Text>
+            </Flex>
       {renderStakingButtons()}
     </Flex>
   )

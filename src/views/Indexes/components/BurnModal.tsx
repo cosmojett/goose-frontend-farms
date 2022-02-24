@@ -77,7 +77,7 @@ const BurnModal: React.FC<BurnModalProps> = ({ tokens, contract, name, onDismiss
             <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>With burning {val} amount of {name} you will get these amount of tokens.</Text>
         </Flex>
         <Flex flexDirection='column' alignItems='center' justifyContent='center' style={{ paddingBottom : 20, paddingTop : 10}}>
-            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>There will be %{burnFee / 100} burn fee applied. These fees will be used to buy-back BUZZ.</Text>
+            <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>There will be {burnFee / 100}% burn fee applied. These fees will be used to buy-back BUZZ.</Text>
             <Text  fontSize="12px" bold style={{ display: 'flex', alignItems: 'center', wordWrap : 'break-word'}}>Minimum amount you can burn is {minAmount.dividedBy(new BigNumber(10).pow(18)).toString()}</Text>
         </Flex>
       

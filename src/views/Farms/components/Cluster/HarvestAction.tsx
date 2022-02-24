@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import BigNumber from 'bignumber.js'
-import { Button, Flex, Heading } from '@pancakeswap-libs/uikit'
+import { Button, Flex, Heading, Text } from '@pancakeswap-libs/uikit'
 import useI18n from 'hooks/useI18n'
 import { useHarvest } from 'hooks/useHarvest'
+import { usePriceCakeBusd } from 'state/hooks'
 import { getBalanceNumber } from 'utils/formatBalance'
 import styled from 'styled-components'
 import useStake from '../../../../hooks/useStake'
@@ -24,13 +25,18 @@ const HarvestAction: React.FC<FarmCardActionsProps> = ({ earnings, pid }) => {
   const [pendingTx, setPendingTx] = useState(false)
   const { onReward } = useHarvest(pid)
   const { onStake } = useStake(pid)
+  const buzzPrice = usePriceCakeBusd()
 
   const rawEarningsBalance = getBalanceNumber(earnings)
   const displayBalance = rawEarningsBalance.toLocaleString()
+  const displayBalanceUSD = buzzPrice.times(new BigNumber(rawEarningsBalance)).toFixed(2)
 
   return (
     <Flex mb='8px' justifyContent='space-between' alignItems='center'>
+      <Flex mb='8px' mt='8px' justifyContent='space-between' alignItems='flex-start' flexDirection='column'>
       <Heading color={rawEarningsBalance === 0 ? 'textDisabled' : 'text'}>{displayBalance}</Heading>
+      <Text fontSize="16px" color="primary" bold>{displayBalanceUSD} $</Text>
+      </Flex>
       <BalanceAndCompound>
         {pid === 12 ?
           <Button

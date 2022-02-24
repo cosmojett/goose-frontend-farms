@@ -109,14 +109,14 @@ const IndexCard: React.FC<IndexCardProps> = (indexProps) => {
 
                 <Flex alignItems='center' justifyContent='space-between'>
                             <Text bold  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>Token Name</Text>
-                            <Text bold  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>% USD</Text>
+                            <Text bold  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>USD %</Text>
                 </Flex>
                 <Divider />
                     {components.map((token,index) => (
                         <Flex alignItems='center' justifyContent='space-between'>
                             <Text  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>{getTokenNameFromContract(token.token)} :</Text>
                             <Flex>
-                               <Text  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>% {token.price.dividedBy(new BigNumber(totalPrice.price)).times(100).toFixed(2)}</Text>
+                               <Text  fontSize="16px" style={{ display: 'flex', alignItems: 'center'}}>{token.price.dividedBy(new BigNumber(totalPrice.price)).times(100).toFixed(2)} %</Text>
                             </Flex>
                         </Flex>
                     ))}
