@@ -7,6 +7,7 @@ import { useAutoFarmStake } from 'hooks/useStake'
 import useUnstake, { useAutoFarmWithdraw } from 'hooks/useUnstake'
 import { usePriceCakeBusd } from 'state/hooks'
 import { useAutoFarm } from 'hooks/useContract'
+import { useCosmicBalanceUser } from 'hooks/useFarmsWithBalance'
 import { getBalanceNumber } from 'utils/formatBalance'
 import { userAutoFarmStakes, autoFarmSharePrice } from 'utils/callHelpers'
 import DepositModal from '../DepositModal'
@@ -41,13 +42,13 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  sta
   const rawStakedBalance = new BigNumber(stakedBalance).dividedBy(new BigNumber(10).pow(18)).toNumber()
   console.log(`Staked : ${stakedBalance.toString()}`)
   const cakePriceUsd = usePriceCakeBusd()
-  
+  const userBalance = useCosmicBalanceUser(farmAddress)
   const displayBalance = rawStakedBalance.toLocaleString()
   const stakedUSDValue = rawStakedBalance*cakePriceUsd.toNumber()
   // user balanceı getir yazdır
 
   const farmContract = useAutoFarm(farmAddress);
-
+  /*
   const userBalance = useEffect(() => {
     async function fetchBalance() {
       try {
@@ -64,7 +65,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  sta
       }
     }
     fetchBalance()
-  }, [farmContract, account, cakePriceUsd])
+  }, [farmContract, account, cakePriceUsd]) */
 
   const [onPresentDeposit] = useModal(<DepositModal max={tokenBalance} onConfirm={onStake} tokenName='BUZZ' depositFeeBP={depositFeeBP} />)
   const [onPresentWithdraw] = useModal(

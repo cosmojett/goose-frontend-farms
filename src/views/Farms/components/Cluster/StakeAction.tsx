@@ -5,6 +5,7 @@ import { Button, Flex, Heading, IconButton, AddIcon, MinusIcon, useModal, Text }
 import useI18n from 'hooks/useI18n'
 import { useAutoFarmStake } from 'hooks/useStake'
 import { usePriceCakeBusd } from 'state/hooks'
+import { useClusterBalance } from 'hooks/useFarmsWithBalance'
 import useRefresh from 'hooks/useRefresh'
 import useUnstake, { useAutoFarmWithdraw } from 'hooks/useUnstake'
 import { useAutoFarm } from 'hooks/useContract'
@@ -42,10 +43,12 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  sta
   const { slowRefresh } = useRefresh()
   // user balanceı getir yazdır
   const displayBalance = rawStakedBalance.toLocaleString()
+  const userBalance = useClusterBalance(farmAddress)
 
   const farmContract = useAutoFarm(farmAddress);
 
-  const userBalance = useEffect(() => {
+  /*
+  const userBalancxe = useEffect(() => {
     async function fetchBalance() {
       try {
         const _balance = await userAutoFarmStakes(farmContract,account);
@@ -56,15 +59,13 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  sta
         const sharePrice = new BigNumber(pending).times(new BigNumber(10).pow(18)).dividedBy(new BigNumber(totalShares))
 
         const userBal = new BigNumber(shares).times(getBalanceNumber(new BigNumber(sharePrice)))
-        const displayBalanceUSD = buzzPrice.times(userBal).dividedBy(new BigNumber(10).pow(18))
         setBalance(userBal);
-        setBalanceUSD(displayBalanceUSD);
       } catch (e) {
         console.error(e)
       }
     }
     fetchBalance()
-  }, [farmContract, account, buzzPrice])
+  }, [farmContract, account, balance]) */
 
   const [onPresentDeposit] = useModal(<DepositModal max={tokenBalance} onConfirm={onStake} tokenName='BUZZ' depositFeeBP={depositFeeBP} isCluster/>)
   const [onPresentWithdraw] = useModal(
@@ -93,8 +94,8 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  sta
   return (
     <Flex justifyContent="space-between" alignItems="center">
             <Flex mb='8px' mt='8px' justifyContent='space-between' alignItems='flex-start' flexDirection='column'>
-            <Heading color={rawStakedBalance === 0 ? 'textDisabled' : 'text'}>{displayBalance} $BUZZ</Heading>
-            <Text fontSize="16px" color="primary" bold>{balanceUSD.toFixed(2)} $</Text>
+            <Heading color={userBalance.isEqualTo(0) ? 'textDisabled' : 'text'}>{getBalanceNumber(new BigNumber(userBalance))} $BUZZ</Heading>
+            <Text fontSize="16px" color="primary" bold>{getBalanceNumber(userBalance.times(buzzPrice)).toFixed(2)} $</Text>
             </Flex>
       {renderStakingButtons()}
     </Flex>

@@ -6,8 +6,9 @@ import { getMasterChefAddress } from 'utils/addressHelpers'
 import masterChefABI from 'config/abi/masterchef.json'
 import { farmsConfig } from 'config/constants'
 import { FarmConfig } from 'config/constants/types'
-import { autoFarmStaked } from 'utils/callHelpers'
-import { useMasterchef } from 'hooks/useContract'
+import { autoFarmStaked, userAutoFarmStakes, autoFarmSharePrice, autoFarmPending, autoFarmTotalShares, autoFarmTotalBalance } from 'utils/callHelpers'
+import { useMasterchef, useAutoFarm } from 'hooks/useContract'
+import { getBalanceNumber } from 'utils/formatBalance'
 import useRefresh from './useRefresh'
 
 export interface FarmWithBalance extends FarmConfig {
@@ -58,6 +59,58 @@ export const useCosmicBalance = (cosmicAddress : string) => {
       fetchBalances()
     }
   }, [account, fastRefresh, cosmicAddress, masterchef])
+
+  return cosmicBalance
+}
+
+export const useClusterBalance = (contract) => {
+  const [clusterBalance, setClusterBalance] = useState(new BigNumber(0))
+  const { account } = useWallet()
+  const { fastRefresh } = useRefresh()
+    const cluster = useAutoFarm(contract)
+  useEffect(() => {
+    const fetchBalances = async () => {
+      
+      const _balance = await userAutoFarmStakes(cluster,account);
+      const pending = await autoFarmPending(cluster)
+      const totalShares = await autoFarmTotalShares(cluster)
+      const shares = _balance.shares;
+      console.log(`Share : ${shares.toString()}`)
+      const sharePrice = new BigNumber(pending).times(new BigNumber(10).pow(18)).dividedBy(new BigNumber(totalShares))
+
+      const userBal = new BigNumber(shares).times(getBalanceNumber(new BigNumber(sharePrice)))
+      setClusterBalance(userBal);
+    }
+
+    if (account) {
+      fetchBalances()
+    }
+  }, [account, fastRefresh, cluster])
+
+  return clusterBalance
+}
+
+
+export const useCosmicBalanceUser = (contract) => {
+  const [cosmicBalance, setCosmicBalance] = useState(new BigNumber(0))
+  const { account } = useWallet()
+  const { fastRefresh } = useRefresh()
+    const cosmic = useAutoFarm(contract)
+  useEffect(() => {
+    const fetchBalances = async () => {
+      
+      const _balance = await userAutoFarmStakes(cosmic,account);
+      const shares = _balance.shares;
+      console.log(shares)
+      const sharePrice = await autoFarmSharePrice(cosmic);
+      const userBal = new BigNumber(shares).times(getBalanceNumber(new BigNumber(sharePrice)))
+      setCosmicBalance(userBal);
+    }
+
+    if (account) {
+      fetchBalances()
+    }
+  }, [account, fastRefresh, cosmic])
 
   return cosmicBalance
 }
