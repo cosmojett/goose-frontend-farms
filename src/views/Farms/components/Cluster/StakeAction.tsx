@@ -77,7 +77,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  sta
   }
 
   const renderStakingButtons = () => {
-    return balance.isEqualTo(0) ? (
+    return new BigNumber(userBalance).isEqualTo(0) ? (
       <Button onClick={onPresentDeposit}>{TranslateString(999, 'Stake')}</Button>
     ) : (
       <IconButtonWrapper>
@@ -94,7 +94,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  sta
   return (
     <Flex justifyContent="space-between" alignItems="center">
             <Flex mb='8px' mt='8px' justifyContent='space-between' alignItems='flex-start' flexDirection='column'>
-            <Heading color={userBalance.isEqualTo(0) ? 'textDisabled' : 'text'}>{getBalanceNumber(new BigNumber(userBalance))} $BUZZ</Heading>
+            <Heading color={userBalance.isEqualTo(0) ? 'textDisabled' : 'text'}>{getBalanceNumber(new BigNumber(userBalance)).toFixed(3)} $BUZZ</Heading>
             <Text fontSize="16px" color="primary" bold>{getBalanceNumber(userBalance.times(buzzPrice)).toFixed(2)} $</Text>
             </Flex>
       {renderStakingButtons()}

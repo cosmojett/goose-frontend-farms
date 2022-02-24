@@ -32,3 +32,4 @@ yarn-error.log*
 # gitignore
 sftp-config.json
 /.github/
+NPM.txt

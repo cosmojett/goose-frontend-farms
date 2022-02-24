@@ -77,7 +77,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  sta
   }
 
   const renderStakingButtons = () => {
-    return balance.isEqualTo(0) ? (
+    return stakedBalance.isEqualTo(0) ? (
       <Button onClick={onPresentDeposit}>{TranslateString(999, 'Stake')}</Button>
     ) : (
       <IconButtonWrapper>
@@ -95,7 +95,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  sta
     <Flex justifyContent="space-between" alignItems="center">
             <Flex mb='8px' mt='8px' justifyContent='space-between' alignItems='flex-start' flexDirection='column'>
             <Heading color={rawStakedBalance === 0 ? 'textDisabled' : 'text'}>{displayBalance} $BUZZ</Heading>
-            <Text fontSize="16px" color="primary" bold>{balanceUSD.toFixed(2)} $</Text>
+            <Text fontSize="16px" color="primary" bold>{stakedUSDValue.toFixed(2)} $</Text>
             </Flex>
       {renderStakingButtons()}
     </Flex>
