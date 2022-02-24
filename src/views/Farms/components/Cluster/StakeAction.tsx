@@ -64,7 +64,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  sta
       }
     }
     fetchBalance()
-  }, [farmContract, account, slowRefresh, buzzPrice])
+  }, [farmContract, account, buzzPrice])
 
   const [onPresentDeposit] = useModal(<DepositModal max={tokenBalance} onConfirm={onStake} tokenName='BUZZ' depositFeeBP={depositFeeBP} isCluster/>)
   const [onPresentWithdraw] = useModal(
