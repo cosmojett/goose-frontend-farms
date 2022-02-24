@@ -4,10 +4,11 @@ import BigNumber from 'bignumber.js'
 import { Button, Flex, Heading, IconButton, AddIcon, MinusIcon, useModal } from '@pancakeswap-libs/uikit'
 import useI18n from 'hooks/useI18n'
 import { useAutoFarmStake } from 'hooks/useStake'
+import useRefresh from 'hooks/useRefresh'
 import useUnstake, { useAutoFarmWithdraw } from 'hooks/useUnstake'
 import { useAutoFarm } from 'hooks/useContract'
 import { getBalanceNumber } from 'utils/formatBalance'
-import { userAutoFarmStakes, autoFarmSharePrice } from 'utils/callHelpers'
+import { userAutoFarmStakes, autoFarmSharePrice, autoFarmPending, autoFarmTotalShares, autoFarmTotalBalance } from 'utils/callHelpers'
 import DepositModal from '../DepositModal'
 import WithdrawModal from '../WithdrawModal'
 
@@ -35,6 +36,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  sta
   const { onUnstake } = useAutoFarmWithdraw(farmAddress)
   const [balance, setBalance] = useState(new BigNumber(0))
   const rawStakedBalance = getBalanceNumber(balance)
+  const { slowRefresh } = useRefresh()
   // user balanceı getir yazdır
   const displayBalance = rawStakedBalance.toLocaleString()
 
@@ -44,9 +46,12 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  sta
     async function fetchBalance() {
       try {
         const _balance = await userAutoFarmStakes(farmContract,account);
+        const pending = await autoFarmPending(farmContract)
+        const totalShares = await autoFarmTotalShares(farmContract)
         const shares = _balance.shares;
-        console.log(shares)
-        const sharePrice = await autoFarmSharePrice(farmContract);
+        console.log(`Share : ${shares.toString()}`)
+        const sharePrice = new BigNumber(pending).times(new BigNumber(10).pow(18)).dividedBy(new BigNumber(totalShares))
+
 
         setBalance(new BigNumber(shares).times(getBalanceNumber(new BigNumber(sharePrice))));
       } catch (e) {
@@ -54,7 +59,7 @@ const StakeAction: React.FC<FarmCardActionsProps> = ({account, farmAddress,  sta
       }
     }
     fetchBalance()
-  }, [farmContract, account])
+  }, [farmContract, account, slowRefresh])
 
   const [onPresentDeposit] = useModal(<DepositModal max={tokenBalance} onConfirm={onStake} tokenName='BUZZ' depositFeeBP={depositFeeBP} isCluster/>)
   const [onPresentWithdraw] = useModal(

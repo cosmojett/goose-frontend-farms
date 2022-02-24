@@ -125,6 +125,18 @@ export const userAutoFarmStakes = async(autofarm, account) => {
   .call()
 }
 
+export const autoFarmPending = async(autofarm) => {
+  return autofarm.methods
+  .calculateTotalPendingBuzzRewards()
+  .call()
+}
+
+export const autoFarmTotalShares = async(autofarm) => {
+  return autofarm.methods
+  .totalShares()
+  .call()
+}
+
 export const autoFarmStake = async (contract, amount, account) => {
   return contract.methods
     .deposit(new BigNumber(amount).times(new BigNumber(10).pow(18)).toString())
