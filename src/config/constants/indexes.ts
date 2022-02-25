@@ -73,6 +73,32 @@ const indexes: Indexes[] = [/*
             name : 'BUSD'
         }
     }, 
+    {
+        id : 2,
+        name : 'Sample Community Index',
+        image : './images/indexes/defi.png',
+        creator : 'Cosmo Jett',
+        tokens: [
+            {
+                contract : contract.banana,
+                name : 'BANANA'
+            },
+            {
+                contract : contract.realCake,
+                name : 'CAKE'
+            },
+            {
+                contract : contract.buzz,
+                name : 'BUZZ'
+            }
+        ],
+        contract: '0x3319B3a2809bc6901E5D5534Bc296b4d6C3D5EAC',
+        zap : {
+            contract : contract.busd,
+            name : 'BUSD'
+        },
+        isCommunity : true
+    }
 ]
 
 export default indexes;

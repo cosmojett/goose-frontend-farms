@@ -13,12 +13,11 @@ import Divider from './components/Divider'
 import IndexCard from './components/IndexCard/IndexCard'
 
 
-const Indexes: React.FC = () => {
+const ManageIndex: React.FC = () => {
       const { account, ethereum }: { account: string; ethereum: provider } = useWallet()
 
       const dispatch = useDispatch()
       const { fastRefresh } = useRefresh()
-      const indexList = indexes.filter(i => !i.isCommunity)
 /*
       useEffect(() => {
         if (account) {
@@ -28,29 +27,14 @@ const Indexes: React.FC = () => {
     return (
         <Page>
             <Heading as="h1" size="lg" mb="24px" color="primary" style={{ textAlign: 'center' }}>
-                Galaxies by Cosmosium Finance
+                Create your own Galaxy
             </Heading>
             <Heading as="h2" color="contrast" mb="50px" style={{ textAlign: 'center' }}>
-                Galaxies are currently on Beta Stage. Development still in progress.
+                You can create your own Galaxy on this page and share this index with community.
             </Heading>
             <Divider />
-            <FlexLayout>
-            {indexList.map(i => (
-                    <IndexCard 
-                        id={i.id}
-                        name= {i.name}
-                        image= {i.image}
-                        creator= {i.creator}
-                        tokens= {i.tokens}
-                        contract= {i.contract}
-                        ethereum={ethereum}
-                        account={account}
-                        zap={i.zap}
-                    />
-                ))}
-            </FlexLayout>
         </Page>
     )
 }
 
-export default Indexes
+export default ManageIndex

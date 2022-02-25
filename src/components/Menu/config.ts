@@ -37,7 +37,24 @@ export const links = [
   {
     label: 'Galaxies',
     icon: 'GalaxyIcon',
-    href: '/indexes',
+    items : [
+      {
+        label : 'Protocol',
+        href: '/indexes',
+      },
+      {
+        label : 'Community',
+        href: '/indexes/community'
+      },
+      {
+        label : 'IaaS',
+        href : '/indexes/iaas'
+      },
+      {
+        label : 'Create',
+        href : '/indexes/create'
+      }
+    ]
   },
   // {
   //  label: 'Options',

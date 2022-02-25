@@ -18,6 +18,8 @@ const Ifos = lazy(() => import('./views/Ifos'))
 const NotFound = lazy(() => import('./views/NotFound'))
 const Indexes = lazy(() => import('./views/Indexes'))
 const ComingSoon = lazy(() => import('./views/ComingSoon'));
+const CommunityIndexes = lazy(() => import('./views/CommunityIndexes'))
+const CreateIndex = lazy(() => import('./views/CommunityIndexes/ManageIndex'))
 // const Nft = lazy(() => import('./views/Nft'))
 
 // This config is required for number formating
@@ -57,8 +59,16 @@ const App: React.FC = () => {
              {/*  <Farms tokenMode/> */}
               <Farms />
             </Route>
-            <Route path="/indexes">
+            <Route path="/indexes" exact>
                <Indexes />
+            </Route>
+
+            <Route path="/indexes/community" exact>
+              <CommunityIndexes />
+            </Route>
+            
+            <Route path="/indexes/create" exact>
+              <CreateIndex />
             </Route>
             
             {/* <Route path="/pools"> */}

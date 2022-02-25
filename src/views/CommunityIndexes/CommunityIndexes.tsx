@@ -13,12 +13,12 @@ import Divider from './components/Divider'
 import IndexCard from './components/IndexCard/IndexCard'
 
 
-const Indexes: React.FC = () => {
+const CommunityIndexes: React.FC = () => {
       const { account, ethereum }: { account: string; ethereum: provider } = useWallet()
 
       const dispatch = useDispatch()
       const { fastRefresh } = useRefresh()
-      const indexList = indexes.filter(i => !i.isCommunity)
+      const indexList = indexes.filter(i => i.isCommunity)
 /*
       useEffect(() => {
         if (account) {
@@ -28,10 +28,10 @@ const Indexes: React.FC = () => {
     return (
         <Page>
             <Heading as="h1" size="lg" mb="24px" color="primary" style={{ textAlign: 'center' }}>
-                Galaxies by Cosmosium Finance
+                Galaxies by Cosmosium Community
             </Heading>
             <Heading as="h2" color="contrast" mb="50px" style={{ textAlign: 'center' }}>
-                Galaxies are currently on Beta Stage. Development still in progress.
+                Featured indexes will be shown on this page.
             </Heading>
             <Divider />
             <FlexLayout>
@@ -53,4 +53,4 @@ const Indexes: React.FC = () => {
     )
 }
 
-export default Indexes
+export default CommunityIndexes

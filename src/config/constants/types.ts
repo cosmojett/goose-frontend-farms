@@ -112,4 +112,7 @@ export type Indexes = {
   tokens: IndexToken[]
   contract: string
   zap: IndexToken
+  isCommunity?: boolean
+  isPartner?: boolean
+  path?: string
 }

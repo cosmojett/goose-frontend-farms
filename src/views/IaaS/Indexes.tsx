@@ -18,7 +18,6 @@ const Indexes: React.FC = () => {
 
       const dispatch = useDispatch()
       const { fastRefresh } = useRefresh()
-      const indexList = indexes.filter(i => !i.isCommunity)
 /*
       useEffect(() => {
         if (account) {
@@ -35,7 +34,7 @@ const Indexes: React.FC = () => {
             </Heading>
             <Divider />
             <FlexLayout>
-            {indexList.map(i => (
+            {indexes.map(i => (
                     <IndexCard 
                         id={i.id}
                         name= {i.name}
